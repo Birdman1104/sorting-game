@@ -1,37 +1,36 @@
-import { ItemType } from "../models/ItemModel";
+import { ItemView } from './ItemView';
 
 export class DropDownAreaInfo {
-  public startX: number;
-  public startY: number;
-  public endX: number;
-  public endY: number;
-  public centerX: number;
-  public centerY: number;
-  public isFree: boolean;
-  public answer: string;
-  public insertedItem: ItemType | '';
-  public insertedItemId: string;
+    public startX: number;
+    public startY: number;
+    public endX: number;
+    public endY: number;
+    public insertedItem: ItemView | null;
 
-  constructor(info) {
-      this.startX = info.startX;
-      this.startY = info.startY;
-      this.endX = info.endX;
-      this.endY = info.endY;
-      this.centerX = info.centerX;
-      this.centerY = info.centerY;
-      this.isFree = info.isFree;
-      this.answer = info.answer;
-  }
+    constructor(info) {
+        this.startX = info.startX;
+        this.startY = info.startY;
+        this.endX = info.endX;
+        this.endY = info.endY;
+    }
 
-  public setItemType(type: ItemType, uuid = ''): void {
-      this.insertedItem = type;
-      this.insertedItemId = uuid;
-      this.isFree = false;
-  }
+    get centerX(): number {
+        return this.startX + (this.endX - this.startX) / 2;
+    }
 
-  public empty(): void {
-      this.insertedItem = '';
-      this.insertedItemId = '';
-      this.isFree = true;
-  }
+    get centerY(): number {
+        return this.startY + (this.endY - this.startY) / 2;
+    }
+
+    get isFree(): boolean {
+        return !this.insertedItem
+    }
+
+    public setItem(item: ItemView): void {
+        this.insertedItem = item;
+    }
+
+    public empty(): void {
+        this.insertedItem = null;
+    }
 }

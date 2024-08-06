@@ -32,10 +32,13 @@ class App extends Application {
         this.view.classList.add('app');
         // @ts-ignore
         document.body.appendChild(this.view);
+
+        this.renderer.plugins.interaction.autoPreventDefault = false;
+        
         globalThis.__PIXI_APP__ = this;
         if (process.env.NODE_ENV !== 'production') {
             this.initStats();
-            this.initLego();
+            // this.initLego();
         }
         await this.loadAssets();
         this.onLoadComplete();

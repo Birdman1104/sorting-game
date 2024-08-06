@@ -1,4 +1,5 @@
 import { lego } from '@armathai/lego';
+import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite } from 'pixi.js';
 import { BoardModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
@@ -7,6 +8,7 @@ import { ItemView } from './ItemView';
 
 export class BoardView extends Container {
     private items: ItemView[] = [];
+    private boxes: Sprite[] = [];
     private canDrag = true;
     private dragPoint: Point;
     private dragStarted = false;
@@ -33,21 +35,28 @@ export class BoardView extends Container {
     private onBoxesUpdate(data: BoxModel[]): void {
         data.forEach((box) => {
             const sprite = this.getShelfSprite(box.i, box.j);
+            this.boxes.push(sprite);
+            this.addChild(sprite);
+        });
+        this.setDropAreas();
+
+        data.forEach((box, j) => {
             box.elements.forEach((element, i) => {
+                const dropArea = this.finalPositions[j * 3 + i];
                 const item = new ItemView(element);
-                item.x = sprite.x + 15 + 70 * i;
-                item.y = sprite.y + 50;
+                item.position.set(dropArea.centerX, dropArea.centerY);
+                dropArea.setItem(item);
+                item.setArea(dropArea);
+                item.setOriginalPosition(dropArea.centerX, dropArea.centerY);
                 this.setDragEvents(item);
                 this.items.push(item);
             });
-            this.addChild(sprite);
         });
         this.items.forEach((item) => this.addChild(item));
     }
 
-
     private setDragEvents(item: ItemView): void {
-        item.interactive = true;
+        item.eventMode = 'static';
         item.on('pointerdown', (e) => this.onDragStart(e, item));
         item.on('pointerout', this.stopDrag, this);
         item.on('pointerup', this.stopDrag, this);
@@ -56,10 +65,11 @@ export class BoardView extends Container {
     }
 
     private onDragStart(event, item: ItemView): void {
-        if (!this.canDrag) return;
+        if (!this.canDrag || this.dragStarted) return;
         this.dragStarted = true;
         event.stopPropagation();
-        
+
+        this.draggingItem && this.draggingItem.emptyArea()
         this.draggingItem = item;
         this.draggingItem.startDrag();
         this.dragPoint = event.data.getLocalPosition(item.parent);
@@ -75,6 +85,17 @@ export class BoardView extends Container {
         if (!this.draggingItem) return;
         this.draggingItem.off('pointermove', this.onDragMove, this);
 
+        const dropArea = this.findDropArea();
+        this.draggingItem.emptyArea()
+        const area = this.draggingItem.area;
+        if (dropArea) {
+            area?.empty()
+            this.draggingItem.emptyArea()
+            this.dropItemToArea(dropArea, this.draggingItem);
+        } else {
+            this.dropItemToOriginalPosition()
+        }
+
         this.draggingItem = null;
     }
 
@@ -86,11 +107,58 @@ export class BoardView extends Container {
         this.draggingItem.y = newPoint.y - this.dragPoint.y;
     }
 
+    private setDropAreas(): void {
+        this.boxes.forEach((box) => {
+            let startingX = box.x + 10;
+            for (let i = 0; i < 3; i++) {
+                const startX = startingX + 80 * i;
+                const startY = box.y + 20;
+                const endX = startingX + 80 * i + 80;
+                const endY = box.y + 20 + 130;
+                const area = new DropDownAreaInfo({ startX, startY, endX, endY });
+                this.finalPositions.push(area);
+            }
+        });
+    }
+
+    private findDropArea(): DropDownAreaInfo | undefined {
+        if (!this.draggingItem) return;
+        const { x, y } = this.draggingItem;
+        let dropArea = this.finalPositions.find((area) => x > area.startX && x < area.endX && y > area.startY && y <= area.endY && area.isFree);
+
+        return dropArea;
+    }
+
+    private dropItemToArea(dropArea: DropDownAreaInfo, item: ItemView): void {
+        anime({
+            targets: item,
+            x: dropArea.centerX,
+            y: dropArea.centerY,
+            duration: 50,
+            easing: 'easeInOutSine',
+        });
+        item.emptyArea();
+        item.dropTo(dropArea);
+        dropArea.setItem(item);
+    }
+
+    private dropItemToOriginalPosition(): void {
+        if (!this.draggingItem) return;
+        anime({
+            targets: this.draggingItem,
+            x: this.draggingItem.originalX,
+            y: this.draggingItem.originalY,
+            duration: 200,
+            easing: 'easeInOutSine',
+        });
+    }
+
     private getShelfSprite(i: number, j: number): Sprite {
         const img = i === 0 ? 'top.png' : i === 2 ? 'bottom.png' : 'middle.png';
         const shelf = Sprite.from(img);
-        const x = shelf.width * j;
-        const y = i === 2 ? 308 : shelf.height * i;
+        const x = (shelf.width + 30) * j;
+        const y = i === 2 ? 368 : (shelf.height + 40) * i;
+        // const y = i === 2 ? 308 : shelf.height * i;
         shelf.x = x;
         shelf.y = y;
         return shelf;

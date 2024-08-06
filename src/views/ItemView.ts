@@ -30,9 +30,18 @@ export class ItemView extends Container {
         this.originalY = y;
     }
 
-    public dropTo(dropArea: DropDownAreaInfo): void {
+    public emptyArea(): void {
+        this.dropArea?.empty()
+        this.dropArea = null;
+    }
+
+    public setArea(dropArea): void {
         this.dropArea = dropArea;
-        this.dropArea.setItemType(this.type, this.config.uuid);
+    }
+
+    public dropTo(dropArea: DropDownAreaInfo): void {
+        this.dropArea?.empty()
+        this.dropArea = dropArea;
         this.originalX = dropArea.centerX;
         this.originalY = dropArea.centerY;
     }
@@ -42,11 +51,10 @@ export class ItemView extends Container {
         this.dropArea = null;
     }
 
-
     private build(): void {
         this.sprite = Sprite.from(`${this.type}.png`);
+        this.sprite.anchor.set(0.5)
         this.sprite.scale.set(0.5)
-        this.sprite.interactive = true;
         this.addChild(this.sprite);
     }
 }
