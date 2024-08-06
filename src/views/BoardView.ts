@@ -25,7 +25,7 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, 0, 738, 478);
+        return new Rectangle(0, 0, 738 + 60, 478 + 60);
     }
 
     private build(): void {
