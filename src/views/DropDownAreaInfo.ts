@@ -1,3 +1,5 @@
+import { ItemType } from "../models/ItemModel";
+
 export class DropDownAreaInfo {
   public startX: number;
   public startY: number;
@@ -7,7 +9,7 @@ export class DropDownAreaInfo {
   public centerY: number;
   public isFree: boolean;
   public answer: string;
-  public insertedItem: string;
+  public insertedItem: ItemType | '';
   public insertedItemId: string;
 
   constructor(info) {
@@ -21,8 +23,8 @@ export class DropDownAreaInfo {
       this.answer = info.answer;
   }
 
-  public setLetter(letter: string, uuid = ''): void {
-      this.insertedItem = letter;
+  public setItemType(type: ItemType, uuid = ''): void {
+      this.insertedItem = type;
       this.insertedItemId = uuid;
       this.isFree = false;
   }

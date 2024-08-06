@@ -1,7 +1,7 @@
 import { shuffle } from '../Utils';
-import { ITEM_TYPE } from '../models/ItemModel';
+import { ItemType } from '../models/ItemModel';
 
-const ITEMS = [ITEM_TYPE.A, ITEM_TYPE.B, ITEM_TYPE.C, ITEM_TYPE.D, ITEM_TYPE.E];
+const ITEMS = [ItemType.A, ItemType.B, ItemType.C, ItemType.D, ItemType.E];
 
 const boxes: any[][] = [
     [[], [], []],

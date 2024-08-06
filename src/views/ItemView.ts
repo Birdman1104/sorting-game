@@ -1,5 +1,5 @@
 import { Container, Sprite } from 'pixi.js';
-import { ItemModel } from '../models/ItemModel';
+import { ItemModel, ItemType } from '../models/ItemModel';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
 
 export class ItemView extends Container {
@@ -17,7 +17,7 @@ export class ItemView extends Container {
         return this.config.uuid;
     }
 
-    get type(): string {
+    get type(): ItemType {
         return this.config.type;
     }
 
@@ -25,11 +25,28 @@ export class ItemView extends Container {
         return this.dropArea;
     }
 
+    public setOriginalPosition(x: number, y: number): void {
+        this.originalX = x;
+        this.originalY = y;
+    }
+
+    public dropTo(dropArea: DropDownAreaInfo): void {
+        this.dropArea = dropArea;
+        this.dropArea.setItemType(this.type, this.config.uuid);
+        this.originalX = dropArea.centerX;
+        this.originalY = dropArea.centerY;
+    }
+
+    public startDrag(): void {
+        this.dropArea?.empty()
+        this.dropArea = null;
+    }
+
+
     private build(): void {
         this.sprite = Sprite.from(`${this.type}.png`);
         this.sprite.scale.set(0.5)
         this.sprite.interactive = true;
         this.addChild(this.sprite);
-        // drawBounds(this);
     }
 }

@@ -1,6 +1,6 @@
 import { ObservableModel } from './ObservableModel';
 
-export enum ITEM_TYPE {
+export enum ItemType {
     A = '1',
     B = '2',
     C = '3',
@@ -9,16 +9,16 @@ export enum ITEM_TYPE {
 }
 
 export class ItemModel extends ObservableModel {
-    constructor(private _type: ITEM_TYPE) {
+    constructor(private _type: ItemType) {
         super('ItemModel');
         this.makeObservable();
     }
 
-    get type(): ITEM_TYPE {
+    get type(): ItemType {
         return this._type;
     }
 
-    set type(value: ITEM_TYPE) {
+    set type(value: ItemType) {
         this._type = value;
     }
 }
