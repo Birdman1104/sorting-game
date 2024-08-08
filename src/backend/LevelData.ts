@@ -9,8 +9,26 @@ const boxes: any[][] = [
     [[], [], []],
 ];
 
+function isValid(array) {
+    for (let i = 0; i < array.length - 2; i++) {
+        if (array[i] === array[i + 1] && array[i + 1] === array[i + 2]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function shuffleWithValidation(array) {
+    let shuffledArray = [...array];
+    do {
+        shuffle(shuffledArray);
+    } while (!isValid(shuffledArray));
+
+    return shuffledArray;
+}
+
 export function getElementsData(): string[][][] {
-    const elements: any[] = [];
+    let elements: any[] = [];
     const amount = 27;
 
     for (let i = 0; i < amount; i++) {
@@ -18,7 +36,7 @@ export function getElementsData(): string[][][] {
         elements.push(ITEMS[item]);
     }
 
-    shuffle(elements);
+    elements = shuffleWithValidation(elements);
 
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
@@ -34,9 +52,9 @@ export function getElementsData(): string[][][] {
 }
 
 function getItemsAmount(): number {
-    // 10% chance for 1 items
-    // 65% chance for 2 items
-    // 25% chance for 3 items
+    // 5% chance for 1 items
+    // 60% chance for 2 items
+    // 35% chance for 3 items
     const rnd = Math.random();
-    return rnd < 0.1 ? 1 : rnd < 0.75 ? 2 : 3;
+    return rnd < 0.05 ? 1 : rnd < 0.65 ? 2 : 3;
 }
