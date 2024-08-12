@@ -77,7 +77,7 @@ export const KEYBOARD_CONFIG = [
 
     // BOTTOM ROW
     [
-        { value: KEYS.SPACE, x: 255 },
+        { value: KEYS.SPACE, x: 375 },
         { value: KEYS.ENTER, x: 755 },
     ],
 ];

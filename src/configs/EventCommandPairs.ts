@@ -1,9 +1,11 @@
 import { lego } from '@armathai/lego';
-import { KeyboardEvents, MainGameEvents } from '../events/MainEvents';
-import { GameModelEvents } from '../events/ModelEvents';
+import { ForegroundEvents, KeyboardEvents, MainGameEvents, ValidationPopupEvents } from '../events/MainEvents';
+import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import Head from '../models/HeadModel';
+import { onRightAnimationCompleteCommand } from './commands/ForegroundCommands';
 import { onGameStateUpdateCommand } from './commands/GameModelCommands';
 import { onKeyClickedCommand } from './commands/KeyboardCommands';
+import { isConfirmedUpdateCommand, onSubmitButtonClickedCommand } from './commands/ValidationPopupCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -34,5 +36,17 @@ const eventCommandPairs = Object.freeze([
     {
         event: KeyboardEvents.KeyClicked,
         command: onKeyClickedCommand,
+    },
+    {
+        event: ValidationPopupEvents.SubmitButtonClicked,
+        command: onSubmitButtonClickedCommand,
+    },
+    {
+        event: ValidationModelEvents.IsConfirmedUpdate,
+        command: isConfirmedUpdateCommand,
+    },
+    {
+        event: ForegroundEvents.RightAnimationComplete,
+        command: onRightAnimationCompleteCommand,
     },
 ]);

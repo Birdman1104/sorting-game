@@ -3,6 +3,7 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
 import { tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
+import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import { ValidationModel } from '../models/ValidationModel';
@@ -20,6 +21,7 @@ export class ForegroundView extends PixiGrid {
         lego.event
             .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(ValidationModelEvents.TypedTextUpdate, this.onValidationTypedTextUpdate, this)
+            .on(ValidationModelEvents.IsConfirmedUpdate, this.onConfirmationUpdate, this)
             .on(GameModelEvents.ValidationUpdate, this.onValidationStateUpdate, this);
 
         this.build();
@@ -78,5 +80,26 @@ export class ForegroundView extends PixiGrid {
 
     private onValidationTypedTextUpdate(text: string): void {
         this.validationPopup.setTypedText(text);
+    }
+
+    private onConfirmationUpdate(confirmed: boolean | ''): void {
+        if (confirmed === '') return;
+        if (confirmed) {
+            const cb = () => {
+                this.keyboard.canType(false);
+                tweenToCell(this, this.keyboard, 'keyboard2');
+                tweenToCell(this, this.keyboardBkg, 'keyboard_bkg2');
+                tweenToCell(this, this.validationPopup, 'validation_popup_hide');
+                lego.event.emit(ForegroundEvents.RightAnimationComplete);
+            };
+            this.validationPopup.rightCode(cb);
+        } else {
+            this.keyboard.canType(false);
+            const cb = () => {
+                this.keyboard.canType(true);
+                this.validationPopup.enableButton();
+            };
+            this.validationPopup.wrongCode(cb);
+        }
     }
 }

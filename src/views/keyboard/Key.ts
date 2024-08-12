@@ -19,8 +19,18 @@ export class Key extends Container {
         this.bkg = Sprite.from(this.getBkgImage());
         // makeSprite({ texture: Images[this.getBkgImage()], anchor: new Point(0, 0) });
         this.bkg.interactive = true;
+        this.bkg.anchor.set(0.5);
         this.bkg.scale.set(1.5);
-        this.bkg.on('pointerdown', () => this.emit('key_down', this._value));
+        this.bkg.on('pointerdown', () => {
+            this.scale.set(0.9);
+            this.emit('key_down', this._value);
+        });
+        this.bkg.on('pointerup', () => {
+            this.scale.set(1);
+        });
+        this.bkg.on('pointerupoutside', () => {
+            this.scale.set(1);
+        });
         this.addChild(this.bkg);
     }
 
@@ -29,7 +39,7 @@ export class Key extends Container {
 
         let icon;
         if (this._value === KEYS.BACKSPACE || this._value === KEYS.ENTER) {
-            icon = Sprite.from(`${KEYS[this._value].toLowerCase()}.png`)
+            icon = Sprite.from(`${KEYS[this._value].toLowerCase()}.png`);
             icon.scale.set(1.4);
         } else if (this._value === KEYS.CLOSE) {
             icon = new Text('X', { fontSize: 56 });
@@ -38,7 +48,7 @@ export class Key extends Container {
         }
 
         icon.anchor.set(0.5);
-        icon.position.set(this.bkg.width / 2, this.bkg.height / 2);
+        icon.position.set(0, 0);
         this.addChild(icon);
     }
 

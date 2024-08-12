@@ -3,7 +3,7 @@ import { ObservableModel } from './ObservableModel';
 
 export class ValidationModel extends ObservableModel {
     private _typedText = '';
-    private _isConfirmed = false;
+    private _isConfirmed: boolean | '' = '';
 
     constructor() {
         super('ValidationModel');
@@ -19,13 +19,14 @@ export class ValidationModel extends ObservableModel {
         this._typedText = value;
     }
 
-    get isConfirmed(): boolean {
+    get isConfirmed(): boolean | '' {
         return this._isConfirmed;
     }
 
     set isConfirmed(value: boolean) {
         this._isConfirmed = value;
     }
+
     public updateTypedText(keyCode: string): void {
         if (this._typedText.length === 16) return;
         const char = keyCode === ' ' ? keyCode : KEYS[keyCode];
@@ -45,20 +46,18 @@ export class ValidationModel extends ObservableModel {
         //
     }
 
-    public async checkCode(code: string): Promise<boolean> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(code === '1234');
-            }, 1000);
-        });
+    public async checkCode(): Promise<boolean> {
+        const res = await codeCheckingImitation(this._typedText);
+        this._isConfirmed = res;
+        return res;
     }
 }
 
 const codeCheckingImitation = (code: string): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const rnd = Math.random();
         setTimeout(() => {
-            rnd > 0.7 ? resolve(true) : reject(false);
-        }, 1000);
+            resolve(rnd > 0.1);
+        }, 100);
     });
 };

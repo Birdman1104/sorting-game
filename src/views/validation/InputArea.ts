@@ -14,6 +14,8 @@ export class InputArea extends Container {
     private typedTextCopy: Text;
     private indicator: Text;
 
+    private animationInProcess = false
+
     constructor() {
         super();
 
@@ -25,9 +27,11 @@ export class InputArea extends Container {
     }
 
     public setTypedText(text: string): void {
-        this.typedText.text = text;
-        fitText(this.typedText, INPUT_WIDTH * 0.925, INPUT_HEIGHT);
-        this.indicator.x = this.typedText.x + this.typedText.width / 2 + (text.length === 0 ? 0 : 5);
+        if (!this.animationInProcess && text.length !== 0) {
+            this.typedText.text = text;
+            fitText(this.typedText, INPUT_WIDTH * 0.925, INPUT_HEIGHT);
+            this.indicator.x = this.typedText.x + this.typedText.width / 2 + (text.length === 0 ? 0 : 5);
+        }
     }
 
     public show(): void {
@@ -65,6 +69,7 @@ export class InputArea extends Container {
 
     public rightCodeAnimation(cb?): void {
         this.copyTypedText(0x00ff00);
+        this.animationInProcess = true
         anime({
             targets: this.typedTextCopy,
             alpha: 1,
@@ -79,6 +84,7 @@ export class InputArea extends Container {
                     this.typedTextCopy.style.fontSize = DEFAULT_FONT_SIZE;
                     this.indicator.position.set(0, 0);
                     callIfExists(cb);
+                    this.animationInProcess = false
                 });
             },
         });
@@ -86,7 +92,7 @@ export class InputArea extends Container {
 
     public wrongCodeAnimation(cb?): void {
         this.copyTypedText(0xffffff);
-        this;
+        this.animationInProcess = true
         anime({
             targets: [this.typedTextCopy, this.bkgCopy],
             alpha: 1,
@@ -101,6 +107,7 @@ export class InputArea extends Container {
                     this.typedText.text = '';
                     this.indicator.position.set(0, 0);
                     callIfExists(cb);
+                    this.animationInProcess = false
                 });
             },
         });
@@ -124,13 +131,13 @@ export class InputArea extends Container {
     }
 
     private buildBkg(): void {
-        this.bkg = Sprite.from('input_area.png')
+        this.bkg = Sprite.from('input_area.png');
         this.bkg.anchor.set(0.5);
         this.addChild(this.bkg);
     }
 
     private buildBkgCopy(): void {
-        this.bkgCopy = Sprite.from('input_area.png')
+        this.bkgCopy = Sprite.from('input_area.png');
         this.bkgCopy.anchor.set(0.5);
         this.bkgCopy.tint = 0xff0000;
         this.bkgCopy.alpha = 0;
@@ -138,7 +145,7 @@ export class InputArea extends Container {
     }
 
     private buildTypedText(): void {
-        this.typedText = new Text('', {fontSize: DEFAULT_FONT_SIZE, fontWeight: 'bold' });
+        this.typedText = new Text('', { fontSize: DEFAULT_FONT_SIZE, fontWeight: 'bold' });
         this.typedText.anchor.set(0.5);
         this.typedText.position.set(0, 0);
         this.addChild(this.typedText);

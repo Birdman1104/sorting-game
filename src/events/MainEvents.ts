@@ -11,3 +11,11 @@ export const MainGameEvents = {
 export const KeyboardEvents = {
     KeyClicked: 'KeyboardEventsKeyClicked',
 };
+
+export const ValidationPopupEvents = {
+    SubmitButtonClicked: 'ValidationPopupEventsSubmitButtonClicked',
+};
+
+export const ForegroundEvents = {
+    RightAnimationComplete: 'ForegroundEventsRightAnimationComplete',
+};

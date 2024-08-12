@@ -12,7 +12,7 @@ export enum GameState {
 
 export class GameModel extends ObservableModel {
     private _state: GameState;
-    private _board: BoardModel;
+    private _board: BoardModel | null = null;
     private _validation: ValidationModel | null = null;
 
     constructor() {
@@ -22,7 +22,7 @@ export class GameModel extends ObservableModel {
         this.makeObservable();
     }
 
-    get board(): BoardModel {
+    get board(): BoardModel | null {
         return this._board;
     }
 
@@ -48,6 +48,10 @@ export class GameModel extends ObservableModel {
 
     public init(): void {
         this._state = GameState.Validation;
+    }
+
+    public initializeForGame(): void {
+        this.initBoardModel();
     }
 
     public initBoardModel(): void {

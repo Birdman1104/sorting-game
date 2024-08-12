@@ -7,12 +7,23 @@ export const onGameStateUpdateCommand = (state: GameState) => {
         case GameState.Validation:
             lego.command.execute(initValidationCommand);
             break;
+        case GameState.Game:
+            lego.command.execute(initializeForGameCommand);
+            break;
 
         default:
             break;
     }
 };
 
+export const setGameStateCommand = (state: GameState) => {
+    Head.gameModel.state = state;
+};
+
 const initValidationCommand = () => {
     Head.gameModel.initValidationModel();
+};
+
+const initializeForGameCommand = () => {
+    Head.gameModel.initializeForGame();
 };
