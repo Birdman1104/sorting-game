@@ -57,7 +57,7 @@ const codeCheckingImitation = (code: string): Promise<boolean> => {
     return new Promise((resolve) => {
         const rnd = Math.random();
         setTimeout(() => {
-            resolve(rnd > 0.1);
+            resolve(code === '' || rnd > 0.1);
         }, 100);
     });
 };

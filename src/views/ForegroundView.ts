@@ -1,7 +1,8 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
+import anime from 'animejs';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
-import { tweenToCell } from '../Utils';
+import { delayRunnable, tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
@@ -14,6 +15,7 @@ export class ForegroundView extends PixiGrid {
     private keyboardBkg: Sprite;
     private keyboard: KeyboardView;
     private validationPopup: ValidationPopup;
+    private blocker: Graphics;
 
     constructor() {
         super();
@@ -36,8 +38,18 @@ export class ForegroundView extends PixiGrid {
     }
 
     private build(): void {
+        this.buildBlocker()
         this.buildKeyboardBkg();
         this.buildKeyboard();
+    }
+
+    private buildBlocker(): void {
+        this.blocker = new Graphics();
+        this.blocker.beginFill(0xffffff, 1);
+        this.blocker.drawRect(0, 0, 10, 10);
+        this.blocker.endFill();
+        // this.blocker.alpha = 0;
+        this.setChild('blocker', this.blocker);
     }
 
     private buildKeyboardBkg(): void {
@@ -59,8 +71,27 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onGameStateUpdate(state: GameState): void {
-        if (state === GameState.Validation) {
-            this.buildValidationPopup();
+        switch (state) {
+            case GameState.Validation:
+                this.buildValidationPopup();
+                break;
+            case GameState.Game:
+                anime({
+                    targets: this.blocker,
+                    alpha: 0,
+                    duration: 200,
+                    easing: 'linear',
+                    complete: () => {
+                        this.blocker.eventMode = 'none'
+                        this.blocker.visible = false}
+                })
+                delayRunnable(1, () => {
+                    this.validationPopup?.destroy();
+                })
+                break;
+        
+            default:
+                break;
         }
     }
 
