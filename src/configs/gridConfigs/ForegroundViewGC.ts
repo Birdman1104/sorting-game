@@ -17,6 +17,14 @@ const getForegroundGridLandscapeConfig = () => {
                 bounds: { x: 0.9, y: 0, width: 0.1, height: 0.1 },
             },
             {
+                name: 'validation_popup_hide',
+                bounds: { x: 0.05, y: -0.6, width: 0.9, height: 0.58 },
+            },
+            {
+                name: 'validation_popup_show',
+                bounds: { x: 0.05, y: 0, width: 0.9, height: 0.58 },
+            },
+            {
                 name: 'keyboard',
                 bounds: { x: 0.05, y: 0.6, width: 0.9, height: 0.39 },
             },
@@ -48,6 +56,14 @@ const getForegroundGridPortraitConfig = () => {
             {
                 name: 'logo',
                 bounds: { x: 0.9, y: 0, width: 0.1, height: 0.1 },
+            },
+            {
+                name: 'validation_popup_hide',
+                bounds: { x: 0.05, y: -0.7, width: 0.9, height: 0.68 },
+            },
+            {
+                name: 'validation_popup_show',
+                bounds: { x: 0.05, y: 0, width: 0.9, height: 0.68 },
             },
             {
                 name: 'keyboard',

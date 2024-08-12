@@ -1,6 +1,9 @@
 import { lego } from '@armathai/lego';
-import { MainGameEvents } from '../events/MainEvents';
+import { KeyboardEvents, MainGameEvents } from '../events/MainEvents';
+import { GameModelEvents } from '../events/ModelEvents';
 import Head from '../models/HeadModel';
+import { onGameStateUpdateCommand } from './commands/GameModelCommands';
+import { onKeyClickedCommand } from './commands/KeyboardCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -23,5 +26,13 @@ const eventCommandPairs = Object.freeze([
     {
         event: MainGameEvents.MainViewReady,
         command: onMainViewReadyCommand,
+    },
+    {
+        event: GameModelEvents.StateUpdate,
+        command: onGameStateUpdateCommand,
+    },
+    {
+        event: KeyboardEvents.KeyClicked,
+        command: onKeyClickedCommand,
     },
 ]);

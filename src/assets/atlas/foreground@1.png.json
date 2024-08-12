@@ -1,0 +1,87 @@
+{
+  "frames": {
+    "validation_bkg.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 510,
+        "h": 281
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 510,
+        "h": 281
+      },
+      "sourceSize": {
+        "w": 510,
+        "h": 281
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "input_area.png": {
+      "frame": {
+        "x": 3,
+        "y": 290,
+        "w": 375,
+        "h": 55
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 375,
+        "h": 55
+      },
+      "sourceSize": {
+        "w": 375,
+        "h": 55
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "submit_btn.png": {
+      "frame": {
+        "x": 3,
+        "y": 351,
+        "w": 193,
+        "h": 55
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 193,
+        "h": 55
+      },
+      "sourceSize": {
+        "w": 193,
+        "h": 55
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "foreground.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 516,
+      "h": 409
+    },
+    "scale": 1
+  }
+}

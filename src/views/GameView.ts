@@ -1,10 +1,15 @@
+import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
+import { GameModelEvents } from '../events/ModelEvents';
+import { GameState } from '../models/GameModel';
 import { BoardView } from './BoardView';
 
 export class GameView extends PixiGrid {
     constructor() {
         super();
+
+        lego.event.on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this);
         this.build();
     }
 
@@ -17,7 +22,16 @@ export class GameView extends PixiGrid {
     }
 
     private build(): void {
+        //
+    }
+
+    private buildBoard(): void {
         const board = new BoardView()
         this.setChild('board', board)
+    }
+
+    private onGameStateUpdate(state: GameState): void {
+        console.warn(state);
+        
     }
 }

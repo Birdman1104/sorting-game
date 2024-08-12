@@ -1,13 +1,19 @@
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
+import { ValidationModel } from './ValidationModel';
 
 export enum GameState {
-    Unknown,
+    Unknown = 'Unknown',
+    Validation = 'Validation',
+    Game = 'Game',
+    GameOver = 'GameOver',
+    GameResult = 'GameResult',
 }
 
 export class GameModel extends ObservableModel {
     private _state: GameState;
     private _board: BoardModel;
+    private _validation: ValidationModel | null = null;
 
     constructor() {
         super('GameModel');
@@ -24,6 +30,14 @@ export class GameModel extends ObservableModel {
         this._board = value;
     }
 
+    get validation(): ValidationModel | null {
+        return this._validation;
+    }
+
+    set validation(value: ValidationModel) {
+        this._validation = value;
+    }
+
     get state(): GameState {
         return this._state;
     }
@@ -33,8 +47,16 @@ export class GameModel extends ObservableModel {
     }
 
     public init(): void {
-        this._state = GameState.Unknown;
+        this._state = GameState.Validation;
+    }
+
+    public initBoardModel(): void {
         this.board = new BoardModel();
         this.board.initialize();
+    }
+
+    public initValidationModel(): void {
+        this.validation = new ValidationModel();
+        this.validation.initialize();
     }
 }
