@@ -3,12 +3,6 @@ import { ItemType } from '../models/ItemModel';
 
 const ITEMS = [ItemType.A, ItemType.B, ItemType.C, ItemType.D, ItemType.E];
 
-const boxes: any[][] = [
-    [[], [], []],
-    [[], [], []],
-    [[], [], []],
-];
-
 function isValid(array) {
     for (let i = 0; i < array.length - 2; i++) {
         if (array[i] === array[i + 1] && array[i + 1] === array[i + 2]) {
@@ -30,10 +24,14 @@ function shuffleWithValidation(array) {
 export function getElementsData(): string[][][] {
     let elements: any[] = [];
     const amount = 27;
+    const boxes: any[][] = [
+        [[], [], []],
+        [[], [], []],
+        [[], [], []],
+    ];
 
     for (let i = 0; i < amount; i++) {
-        const item = Math.floor(Math.random() * ITEMS.length);
-        elements.push(ITEMS[item]);
+        elements.push(ITEMS[Math.floor(Math.random() * ITEMS.length)]);
     }
 
     elements = shuffleWithValidation(elements);

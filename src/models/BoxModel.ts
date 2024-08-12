@@ -5,6 +5,7 @@ export class BoxModel extends ObservableModel {
     private _i: number;
     private _j: number;
     private _elements: ItemModel[] = [];
+    private _reserve: ItemModel[][] = [];
 
     constructor(private config: BoxModelConfig) {
         super('BoxModel');
@@ -29,5 +30,9 @@ export class BoxModel extends ObservableModel {
 
     public initialize(): void {
         this._elements = this.config.elements.map((element) => new ItemModel(element));
+    }
+
+    public addReserveItems(items: ItemModel[]): void {
+        this._reserve.push(items);
     }
 }
