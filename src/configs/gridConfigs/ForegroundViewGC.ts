@@ -1,3 +1,4 @@
+import { CellScale } from '@armathai/pixi-grid';
 import { lp } from '../../Utils';
 
 export const getForegroundGridConfig = () => {
@@ -15,6 +16,24 @@ const getForegroundGridLandscapeConfig = () => {
                 name: 'logo',
                 bounds: { x: 0.9, y: 0, width: 0.1, height: 0.1 },
             },
+            {
+                name: 'keyboard',
+                bounds: { x: 0.05, y: 0.6, width: 0.9, height: 0.39 },
+            },
+            {
+                name: 'keyboard_bkg',
+                scale: CellScale.fill,
+                bounds: { x: 0, y: 0.59, width: 1, height: 0.41 },
+            },
+            {
+                name: 'keyboard2',
+                bounds: { x: 0.05, y: 1, width: 0.9, height: 0.39 },
+            },
+            {
+                name: 'keyboard_bkg2',
+                scale: CellScale.fill,
+                bounds: { x: 0, y: 1, width: 1, height: 0.41 },
+            },
         ],
     };
 };
@@ -29,6 +48,24 @@ const getForegroundGridPortraitConfig = () => {
             {
                 name: 'logo',
                 bounds: { x: 0.9, y: 0, width: 0.1, height: 0.1 },
+            },
+            {
+                name: 'keyboard',
+                bounds: { x: 0.05, y: 0.7, width: 0.9, height: 0.29 },
+            },
+            {
+                name: 'keyboard_bkg',
+                scale: CellScale.fill,
+                bounds: { x: 0, y: 0.69, width: 1, height: 0.31 },
+            },
+            {
+                name: 'keyboard2',
+                bounds: { x: 0.05, y: 1, width: 0.9, height: 0.29 },
+            },
+            {
+                name: 'keyboard_bkg2',
+                scale: CellScale.fill,
+                bounds: { x: 0, y: 1, width: 1, height: 0.31 },
             },
         ],
     };
