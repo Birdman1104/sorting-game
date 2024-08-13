@@ -1,16 +1,18 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Point, Rectangle, Sprite } from 'pixi.js';
+import { Container, Point, Rectangle } from 'pixi.js';
 import { BoardEvents } from '../events/MainEvents';
-import { BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
+import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
+import { ItemModel } from '../models/ItemModel';
+import { BoxView } from './BoxView';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
 import { ItemView } from './ItemView';
 import { TimerView } from './TimerView';
 
 export class BoardView extends Container {
     private items: ItemView[] = [];
-    private boxes: Sprite[] = [];
+    private boxes: BoxView[] = [];
     private canDrag = true;
     private dragPoint: Point;
     private dragStarted = false;
@@ -21,11 +23,14 @@ export class BoardView extends Container {
 
     private timer: TimerView;
 
+    private addingElementsQueue: { box: BoxView; elements: ItemModel[]; index: number }[] = [];
+
     constructor() {
         super();
 
         lego.event
             .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
+            .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this);
         this.build();
     }
@@ -50,7 +55,9 @@ export class BoardView extends Container {
 
     private onBoxesUpdate(data: BoxModel[]): void {
         data.forEach((box) => {
-            const sprite = this.getShelfSprite(box.i, box.j);
+            const sprite = new BoxView(box.i, box.j, box.uuid);
+            const { x, y } = this.getShelfPosition(sprite);
+            sprite.position.set(x, y);
             this.boxes.push(sprite);
             this.addChild(sprite);
         });
@@ -179,32 +186,69 @@ export class BoardView extends Container {
             const b3 = this.finalPositions[i * 3 + 2];
 
             if (this.checkMatch(b1, b2, b3)) {
+                const elements = [b1, b2, b3].map((el) => el.insertedItem).filter((el) => el) as ItemView[];
+                b1.empty();
+                b2.empty();
+                b3.empty();
                 lego.event.emit(BoardEvents.Match, b1.insertedItem?.type, i);
-                anime({
-                    targets: [b1.insertedItem?.scale, b2.insertedItem?.scale, b3.insertedItem?.scale],
-                    x: 0,
-                    y: 0,
-                    duration: 200,
-                    easing: 'easeInOutSine',
-                    complete: () => {
-                        b1.empty();
-                        b2.empty();
-                        b3.empty();
-                    },
-                });
+                this.animateMatch(elements);
             }
         }
     }
 
-    private getShelfSprite(i: number, j: number): Sprite {
-        const img = i === 0 ? 'top.png' : i === 2 ? 'bottom.png' : 'middle.png';
-        const shelf = Sprite.from(img);
-        const x = (shelf.width + 30) * j;
-        const y = i === 2 ? 368 : (shelf.height + 40) * i;
-        // const y = i === 2 ? 308 : shelf.height * i;
-        shelf.x = x;
-        shelf.y = y;
-        return shelf;
+    private animateMatch(elements: ItemView[]): void {
+        const targets = elements.map((el) => el.scale);
+        anime({
+            targets,
+            x: 0,
+            y: 0,
+            duration: 300,
+            easing: 'easeInOutSine',
+            complete: () => {
+                elements.forEach((el) => {
+                    el.emptyArea();
+                    el.destroy();
+                });
+
+                elements = []
+
+                this.addingElementsQueue.forEach(({ box, elements, index }) => {
+                    elements.forEach((element, i) => {
+                        const area = this.finalPositions[index * 3 + i];
+                        const item = new ItemView(element);
+                        item.position.set(area.centerX, area.centerY);
+                        area.setItem(item);
+                        item.setArea(area);
+                        item.setOriginalPosition(area.centerX, area.centerY);
+                        this.setDragEvents(item);
+                        this.items.push(item);
+                        this.addChild(item);
+                    });
+                });
+                this.addingElementsQueue = [];
+            },
+        });
+    }
+
+    private onBoxElementsUpdate(elements: ItemModel[], oldElement: ItemModel[], uuid): void {
+        const box = this.boxes.find((box) => box.uuid === uuid);
+        if (!box) return;
+        const index = this.boxes.indexOf(box);
+
+        if (elements.length === 0) {
+            for (let i = 0; i < 3; i++) {
+                const area = this.finalPositions[index * 3 + i];
+                area.empty();
+            }
+        } else {
+            this.addingElementsQueue.push({ box, elements, index });
+        }
+    }
+
+    private getShelfPosition(box: BoxView): { x: number; y: number } {
+        const x = (box.width + 30) * box.j;
+        const y = box.i === 2 ? 368 : (box.height + 40) * box.i;
+        return { x, y };
     }
 
     private checkMatch(c1: DropDownAreaInfo, c2: DropDownAreaInfo, c3: DropDownAreaInfo): boolean {

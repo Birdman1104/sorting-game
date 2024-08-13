@@ -12,7 +12,12 @@ export class TimerView extends Container {
     }
 
     public updateTime(time: number): void {
-        const text = convertMilliseconds(time)
+        const text = convertMilliseconds(Math.max(0, time));
+
+        if(time < 10000) {
+            this.timeText.tint = '#ff6969';   
+        }
+
         this.timeText.text = text;
     }
 

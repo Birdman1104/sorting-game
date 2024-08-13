@@ -13,7 +13,7 @@ const getGameViewGridLandscapeConfig = () => {
         cells: [
             {
                 name: 'board',
-                bounds: { x: 0.025, y: 0.025, width: 0.95, height: 0.95 },
+                bounds: { x: 0.025, y: 0.2, width: 0.95, height: 0.76 },
             },
         ],
     };

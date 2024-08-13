@@ -18,6 +18,7 @@ export class GameModel extends ObservableModel {
     private _validation: ValidationModel | null = null;
 
     private _timerRunnable: any;
+    private _prize = '';
     private _gameTime = TIMER; // ms
 
     constructor() {
@@ -59,6 +60,14 @@ export class GameModel extends ObservableModel {
         this._timerRunnable = value;
     }
 
+    get prize(): string {
+        return this._prize;
+    }
+
+    set prize(value: string) {
+        this._prize = value;
+    }
+
     get gameTime(): number {
         return this._gameTime;
     }
@@ -81,6 +90,11 @@ export class GameModel extends ObservableModel {
         this.board.initialize();
     }
 
+    public destroyBoardModel(): void {
+        this._board?.destroy();
+        this._board = null;
+    }
+
     public initValidationModel(): void {
         this.validation = new ValidationModel();
         this.validation.initialize();
@@ -88,21 +102,35 @@ export class GameModel extends ObservableModel {
 
     public startTimer(): void {
         this._timerRunnable = loopRunnable(this.updateGameTime, this);
+    }
+
+    private updateGameTime(ms: number): void {
+        if (this._gameTime > 0) {
+            this._gameTime -= window.game.ticker.elapsedMS;
         }
-        
-        private updateGameTime(ms: number): void {
-            if(this._gameTime > 0) {
-                this._gameTime -= window.game.ticker.elapsedMS;
-            }
-    
-            if(this.gameTime <= 0) {
-                this._state = GameState.TimeOver;
-                this.stopTimer()
-            }
+
+        if (this.gameTime <= 0) {
+            this._state = GameState.TimeOver;
+            this.stopTimer();
+        }
     }
 
     public stopTimer(): void {
         removeRunnable(this._timerRunnable);
         this._timerRunnable = null;
     }
+
+    public async getPrize(): Promise<void> {
+        this._prize = await getPrize()
+    }
 }
+
+
+const getPrize = (): Promise<string> => {
+    return new Promise((resolve) => {
+        const rnd = Math.random();
+        setTimeout(() => {
+            resolve('prize');
+        }, 1000);
+    });
+};

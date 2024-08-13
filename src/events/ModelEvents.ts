@@ -3,11 +3,14 @@ export const BoardModelEvents = {
     MatchedItemsUpdate: 'BoardModelMatchedItemsUpdate',
 };
 
+export const BoxModelEvents = { ElementsUpdate: 'BoxModelElementsUpdate' };
+
 export const GameModelEvents = {
     BoardUpdate: 'GameModelBoardUpdate',
     ValidationUpdate: 'GameModelValidationUpdate',
     StateUpdate: 'GameModelStateUpdate',
     TimerRunnableUpdate: 'GameModelTimerRunnableUpdate',
+    PrizeUpdate: 'GameModelPrizeUpdate',
     GameTimeUpdate: 'GameModelGameTimeUpdate',
 };
 

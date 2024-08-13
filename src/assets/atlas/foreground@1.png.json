@@ -48,10 +48,34 @@
         "y": 0.5
       }
     },
-    "submit_btn.png": {
+    "prize.png": {
       "frame": {
         "x": 3,
         "y": 351,
+        "w": 344,
+        "h": 367
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 23,
+        "w": 344,
+        "h": 367
+      },
+      "sourceSize": {
+        "w": 360,
+        "h": 404
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "submit_btn.png": {
+      "frame": {
+        "x": 519,
+        "y": 3,
         "w": 193,
         "h": 55
       },
@@ -79,8 +103,8 @@
     "image": "foreground.png",
     "format": "RGBA8888",
     "size": {
-      "w": 516,
-      "h": 409
+      "w": 715,
+      "h": 721
     },
     "scale": 1
   }

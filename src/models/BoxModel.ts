@@ -28,6 +28,10 @@ export class BoxModel extends ObservableModel {
         return this._elements;
     }
 
+    set elements(value: ItemModel[]) {
+        this._elements = value;
+    }
+
     get reserve(): ItemModel[] {
         return this._reserve;
     }
@@ -35,8 +39,13 @@ export class BoxModel extends ObservableModel {
     public initialize(): void {
         this._elements = this.config.elements.map((element) => new ItemModel(element));
     }
-    
-    public addReserveItems(items: ItemType[]): void {
-        this._reserve = items.map((item) => new ItemModel(item));
+
+    public empty(): void {
+        this._elements = [];
+    }
+
+    public addElements(items: ItemType[]): void {
+        const temp = items.map((item) => new ItemModel(item));
+        this._elements = temp
     }
 }

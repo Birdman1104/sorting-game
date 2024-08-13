@@ -21,7 +21,7 @@ function shuffleWithValidation(array) {
     return shuffledArray;
 }
 
-export function getElementsData(): ItemType[][][] {
+export function getElementsData(get3Elements = false): ItemType[][][] {
     let elements: any[] = [];
     const amount = 27;
     const boxes: any[][] = [
@@ -38,7 +38,7 @@ export function getElementsData(): ItemType[][][] {
 
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-            const itemsAmount = getItemsAmount();
+            const itemsAmount = getItemsAmount(get3Elements);
             const box = boxes[i][j];
             for (let k = 0; k < itemsAmount; k++) {
                 box.push(elements.pop());
@@ -49,10 +49,10 @@ export function getElementsData(): ItemType[][][] {
     return boxes;
 }
 
-function getItemsAmount(): number {
-    // 5% chance for 1 items
-    // 60% chance for 2 items
-    // 35% chance for 3 items
+function getItemsAmount(get3Elements = false): number {
+    // 30% chance for 2 items
+    // 70% chance for 3 items
+    if(get3Elements) return 3;
     const rnd = Math.random();
-    return rnd < 0.05 ? 1 : rnd < 0.65 ? 2 : 3;
+    return rnd < 0.3 ? 2 : 3;
 }

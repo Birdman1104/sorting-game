@@ -5,7 +5,7 @@ import { ObservableModel } from './ObservableModel';
 
 export class BoardModel extends ObservableModel {
     private _boxes: BoxModel[] = [];
-    private _matchedItems: ItemType[] = []
+    private _matchedItems: ItemType[] = [];
 
     constructor() {
         super('BoardModel');
@@ -39,21 +39,15 @@ export class BoardModel extends ObservableModel {
                 temp.push(boxModel);
             }
         }
-        // const reserveData = getElementsData();
-        // for (let i = 0; i < data.length; i++) {
-        //     for (let j = 0; j < data[i].length; j++) {
-        //         this._reserve.push(reserveData[i][j]);
-        //     }
-        // }
-
-        // const reserveData = getElementsData();
-        // for (let i = 0; i < data.length; i++) {
-        //     for (let j = 0; j < data[i].length; j++) {
-        //         temp[i * 3 + j].addReserveItems(reserveData[i][j]);
-        //     }
-        // }
 
         this._boxes = temp;
+    }
 
+    public addNewItems(index: number): void {
+        const box = this._boxes[index];
+        const data = getElementsData(true)[0][0];
+
+        box?.empty();
+        box?.addElements(data);
     }
 }

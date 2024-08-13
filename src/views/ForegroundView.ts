@@ -4,7 +4,7 @@ import anime from 'animejs';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
 import { delayRunnable, tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
-import { ForegroundEvents } from '../events/MainEvents';
+import { ForegroundEvents, ValidationPopupEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import { ValidationModel } from '../models/ValidationModel';
@@ -76,18 +76,10 @@ export class ForegroundView extends PixiGrid {
                 this.buildValidationPopup();
                 break;
             case GameState.Game:
-                anime({
-                    targets: this.blocker,
-                    alpha: 0,
-                    duration: 200,
-                    easing: 'linear',
-                    complete: () => {
-                        this.blocker.eventMode = 'none'
-                        this.blocker.visible = false}
-                })
-                delayRunnable(1, () => {
-                    this.validationPopup?.destroy();
-                })
+                this.onGameStart()
+                break;
+            case GameState.TimeOver:
+                this.onTimerOver()
                 break;
         
             default:
@@ -100,6 +92,8 @@ export class ForegroundView extends PixiGrid {
             tweenToCell(this, this.keyboard, 'keyboard', () => this.keyboard.canType(true));
             tweenToCell(this, this.keyboardBkg, 'keyboard_bkg');
             tweenToCell(this, this.validationPopup, 'validation_popup_show');
+            // TODO - remove the bottom line
+            lego.event.emit(ValidationPopupEvents.SubmitButtonClicked);
         }
     }
 
@@ -132,5 +126,33 @@ export class ForegroundView extends PixiGrid {
             };
             this.validationPopup.wrongCode(cb);
         }
+    }
+
+    private onGameStart(): void {
+        anime({
+            targets: this.blocker,
+            alpha: 0,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.blocker.eventMode = 'none'
+                this.blocker.visible = false}
+        })
+        delayRunnable(1, () => {
+            this.validationPopup?.destroy();
+        })
+    }
+
+    private onTimerOver(): void {
+        this.blocker.visible = true
+        anime({
+            targets: this.blocker,
+            alpha: 1,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.blocker.eventMode = 'static'
+            }
+        })
     }
 }
