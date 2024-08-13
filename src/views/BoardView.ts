@@ -2,10 +2,11 @@ import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite } from 'pixi.js';
 import { BoardEvents } from '../events/MainEvents';
-import { BoardModelEvents } from '../events/ModelEvents';
+import { BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
 import { ItemView } from './ItemView';
+import { TimerView } from './TimerView';
 
 export class BoardView extends Container {
     private items: ItemView[] = [];
@@ -18,10 +19,14 @@ export class BoardView extends Container {
 
     private finalPositions: DropDownAreaInfo[] = [];
 
+    private timer: TimerView;
+
     constructor() {
         super();
 
-        lego.event.on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this);
+        lego.event
+            .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
+            .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this);
         this.build();
     }
 
@@ -30,7 +35,17 @@ export class BoardView extends Container {
     }
 
     private build(): void {
-        //
+        this.buildTimer();
+    }
+
+    private buildTimer(): void {
+        this.timer = new TimerView();
+        this.timer.position.set(798 / 2, -100);
+        this.addChild(this.timer);
+    }
+
+    private onTimerUpdate(time: number): void {
+        this.timer?.updateTime(time);
     }
 
     private onBoxesUpdate(data: BoxModel[]): void {
@@ -162,7 +177,7 @@ export class BoardView extends Container {
             const b1 = this.finalPositions[i * 3];
             const b2 = this.finalPositions[i * 3 + 1];
             const b3 = this.finalPositions[i * 3 + 2];
-            
+
             if (this.checkMatch(b1, b2, b3)) {
                 lego.event.emit(BoardEvents.Match, b1.insertedItem?.type, i);
                 anime({
@@ -193,7 +208,7 @@ export class BoardView extends Container {
     }
 
     private checkMatch(c1: DropDownAreaInfo, c2: DropDownAreaInfo, c3: DropDownAreaInfo): boolean {
-        if(!c1.insertedItem || !c2.insertedItem || !c3.insertedItem) return false;
-        return (c1.insertedItem?.type === c2.insertedItem?.type && c2.insertedItem?.type === c3.insertedItem?.type)
+        if (!c1.insertedItem || !c2.insertedItem || !c3.insertedItem) return false;
+        return c1.insertedItem?.type === c2.insertedItem?.type && c2.insertedItem?.type === c3.insertedItem?.type;
     }
 }

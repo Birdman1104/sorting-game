@@ -1,3 +1,5 @@
+import { loopRunnable, removeRunnable } from '../Utils';
+import { TIMER } from '../configs/constants';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
 import { ValidationModel } from './ValidationModel';
@@ -6,7 +8,7 @@ export enum GameState {
     Unknown = 'Unknown',
     Validation = 'Validation',
     Game = 'Game',
-    GameOver = 'GameOver',
+    TimeOver = 'TimeOver',
     GameResult = 'GameResult',
 }
 
@@ -14,6 +16,9 @@ export class GameModel extends ObservableModel {
     private _state: GameState;
     private _board: BoardModel | null = null;
     private _validation: ValidationModel | null = null;
+
+    private _timerRunnable: any;
+    private _gameTime = TIMER; // ms
 
     constructor() {
         super('GameModel');
@@ -46,12 +51,29 @@ export class GameModel extends ObservableModel {
         this._state = value;
     }
 
+    get timerRunnable(): any {
+        return this._timerRunnable;
+    }
+
+    set timerRunnable(value: any) {
+        this._timerRunnable = value;
+    }
+
+    get gameTime(): number {
+        return this._gameTime;
+    }
+
+    set gameTime(value: number) {
+        this._gameTime = value;
+    }
+
     public init(): void {
         this._state = GameState.Validation;
     }
 
     public initializeForGame(): void {
         this.initBoardModel();
+        this.startTimer();
     }
 
     public initBoardModel(): void {
@@ -62,5 +84,25 @@ export class GameModel extends ObservableModel {
     public initValidationModel(): void {
         this.validation = new ValidationModel();
         this.validation.initialize();
+    }
+
+    public startTimer(): void {
+        this._timerRunnable = loopRunnable(this.updateGameTime, this);
+        }
+        
+        private updateGameTime(ms: number): void {
+            if(this._gameTime > 0) {
+                this._gameTime -= window.game.ticker.elapsedMS;
+            }
+    
+            if(this.gameTime <= 0) {
+                this._state = GameState.TimeOver;
+                this.stopTimer()
+            }
+    }
+
+    public stopTimer(): void {
+        removeRunnable(this._timerRunnable);
+        this._timerRunnable = null;
     }
 }

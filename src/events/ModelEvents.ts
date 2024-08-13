@@ -7,6 +7,8 @@ export const GameModelEvents = {
     BoardUpdate: 'GameModelBoardUpdate',
     ValidationUpdate: 'GameModelValidationUpdate',
     StateUpdate: 'GameModelStateUpdate',
+    TimerRunnableUpdate: 'GameModelTimerRunnableUpdate',
+    GameTimeUpdate: 'GameModelGameTimeUpdate',
 };
 
 export const HeadModelEvents = { GameModelUpdate: 'HeadModelGameModelUpdate' };
