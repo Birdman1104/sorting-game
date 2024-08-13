@@ -57,7 +57,7 @@ const codeCheckingImitation = (code: string): Promise<boolean> => {
     return new Promise((resolve) => {
         const rnd = Math.random();
         setTimeout(() => {
-            resolve(code === '' || rnd > 0.1);
-        }, 100);
+            resolve(code === '' || code.toUpperCase() === 'BIRDMAN' || code.toUpperCase() === 'SORT');
+        }, 500);
     });
 };

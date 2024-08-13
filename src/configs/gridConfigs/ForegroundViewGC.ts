@@ -13,8 +13,8 @@ const getForegroundGridLandscapeConfig = () => {
         bounds,
         cells: [
             {
-                name: 'logo',
-                bounds: { x: 0.9, y: 0, width: 0.1, height: 0.1 },
+                name: 'prize',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
             {
                 name: 'blocker',
@@ -59,8 +59,8 @@ const getForegroundGridPortraitConfig = () => {
         bounds,
         cells: [
             {
-                name: 'logo',
-                bounds: { x: 0.9, y: 0, width: 0.1, height: 0.1 },
+                name: 'prize',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
             {
                 name: 'blocker',

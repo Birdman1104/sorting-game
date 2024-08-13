@@ -107,7 +107,6 @@ class App extends Application {
 
     private initLego(): void {
         legoLogger.start(lego, Object.freeze({}));
-        // TODO GAMEINITCOMMAND
         // lego.command.execute(onGameInitCommand);
         // lego.event.emit(MainGameEvents.Init);
     }
