@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite } from 'pixi.js';
+import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
@@ -69,7 +70,7 @@ export class BoardView extends Container {
         this.dragStarted = true;
         event.stopPropagation();
 
-        this.draggingItem && this.draggingItem.emptyArea()
+        this.draggingItem && this.draggingItem.emptyArea();
         this.draggingItem = item;
         this.draggingItem.startDrag();
         this.dragPoint = event.data.getLocalPosition(item.parent);
@@ -86,14 +87,15 @@ export class BoardView extends Container {
         this.draggingItem.off('pointermove', this.onDragMove, this);
 
         const dropArea = this.findDropArea();
-        this.draggingItem.emptyArea()
+        this.draggingItem.emptyArea();
         const area = this.draggingItem.area;
         if (dropArea) {
-            area?.empty()
-            this.draggingItem.emptyArea()
+            area?.empty();
+            this.draggingItem.emptyArea();
             this.dropItemToArea(dropArea, this.draggingItem);
+            this.checkMatches();
         } else {
-            this.dropItemToOriginalPosition()
+            this.dropItemToOriginalPosition();
         }
 
         this.draggingItem = null;
@@ -124,7 +126,9 @@ export class BoardView extends Container {
     private findDropArea(): DropDownAreaInfo | undefined {
         if (!this.draggingItem) return;
         const { x, y } = this.draggingItem;
-        let dropArea = this.finalPositions.find((area) => x > area.startX && x < area.endX && y > area.startY && y <= area.endY && area.isFree);
+        let dropArea = this.finalPositions.find(
+            (area) => x > area.startX && x < area.endX && y > area.startY && y <= area.endY && area.isFree,
+        );
 
         return dropArea;
     }
@@ -153,6 +157,30 @@ export class BoardView extends Container {
         });
     }
 
+    private checkMatches(): void {
+        for (let i = 0; i < 9; i++) {
+            const b1 = this.finalPositions[i * 3];
+            const b2 = this.finalPositions[i * 3 + 1];
+            const b3 = this.finalPositions[i * 3 + 2];
+            
+            if (this.checkMatch(b1, b2, b3)) {
+                lego.event.emit(BoardEvents.Match, b1.insertedItem?.type, i);
+                anime({
+                    targets: [b1.insertedItem?.scale, b2.insertedItem?.scale, b3.insertedItem?.scale],
+                    x: 0,
+                    y: 0,
+                    duration: 200,
+                    easing: 'easeInOutSine',
+                    complete: () => {
+                        b1.empty();
+                        b2.empty();
+                        b3.empty();
+                    },
+                });
+            }
+        }
+    }
+
     private getShelfSprite(i: number, j: number): Sprite {
         const img = i === 0 ? 'top.png' : i === 2 ? 'bottom.png' : 'middle.png';
         const shelf = Sprite.from(img);
@@ -162,5 +190,10 @@ export class BoardView extends Container {
         shelf.x = x;
         shelf.y = y;
         return shelf;
+    }
+
+    private checkMatch(c1: DropDownAreaInfo, c2: DropDownAreaInfo, c3: DropDownAreaInfo): boolean {
+        if(!c1.insertedItem || !c2.insertedItem || !c3.insertedItem) return false;
+        return (c1.insertedItem?.type === c2.insertedItem?.type && c2.insertedItem?.type === c3.insertedItem?.type)
     }
 }

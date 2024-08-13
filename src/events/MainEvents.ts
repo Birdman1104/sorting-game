@@ -19,3 +19,7 @@ export const ValidationPopupEvents = {
 export const ForegroundEvents = {
     RightAnimationComplete: 'ForegroundEventsRightAnimationComplete',
 };
+
+export const BoardEvents = {
+    Match: 'BoardEventsMatch',
+};

@@ -21,7 +21,7 @@ function shuffleWithValidation(array) {
     return shuffledArray;
 }
 
-export function getElementsData(): string[][][] {
+export function getElementsData(): ItemType[][][] {
     let elements: any[] = [];
     const amount = 27;
     const boxes: any[][] = [

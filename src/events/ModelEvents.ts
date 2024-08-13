@@ -1,4 +1,7 @@
-export const BoardModelEvents = { BoxesUpdate: 'BoardModelBoxesUpdate' };
+export const BoardModelEvents = {
+    BoxesUpdate: 'BoardModelBoxesUpdate',
+    MatchedItemsUpdate: 'BoardModelMatchedItemsUpdate',
+};
 
 export const GameModelEvents = {
     BoardUpdate: 'GameModelBoardUpdate',
