@@ -1,9 +1,33 @@
 {
   "frames": {
-    "validation_bkg.png": {
+    "idle_text.png": {
       "frame": {
         "x": 3,
         "y": 3,
+        "w": 795,
+        "h": 129
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 795,
+        "h": 129
+      },
+      "sourceSize": {
+        "w": 795,
+        "h": 129
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "validation_bkg.png": {
+      "frame": {
+        "x": 3,
+        "y": 138,
         "w": 510,
         "h": 281
       },
@@ -27,7 +51,7 @@
     "input_area.png": {
       "frame": {
         "x": 3,
-        "y": 290,
+        "y": 425,
         "w": 375,
         "h": 55
       },
@@ -51,7 +75,7 @@
     "prize.png": {
       "frame": {
         "x": 3,
-        "y": 351,
+        "y": 486,
         "w": 344,
         "h": 367
       },
@@ -75,7 +99,7 @@
     "submit_btn.png": {
       "frame": {
         "x": 519,
-        "y": 3,
+        "y": 138,
         "w": 193,
         "h": 55
       },
@@ -103,8 +127,8 @@
     "image": "foreground.png",
     "format": "RGBA8888",
     "size": {
-      "w": 715,
-      "h": 721
+      "w": 801,
+      "h": 856
     },
     "scale": 1
   }
