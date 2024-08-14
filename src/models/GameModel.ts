@@ -1,4 +1,4 @@
-import { delayRunnable, loopRunnable, removeRunnable } from '../Utils';
+import { loopRunnable, removeRunnable } from '../Utils';
 import { IDLE_TIME, TIMER } from '../configs/constants';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
@@ -26,7 +26,7 @@ export class GameModel extends ObservableModel {
     private _prize = '';
     private _gameTime = TIMER; // ms
 
-    private idleTimer: any;
+    private _idleTime = IDLE_TIME;
     private _idleState: IdleState;
 
     constructor() {
@@ -93,6 +93,14 @@ export class GameModel extends ObservableModel {
         this._gameTime = value;
     }
 
+    get idleTime(): number {
+        return this._idleTime;
+    }
+
+    set idleTime(value: number) {
+        this._idleTime = value;
+    }
+
     public init(): void {
         this._state = GameState.Validation;
     }
@@ -101,7 +109,6 @@ export class GameModel extends ObservableModel {
         this.initBoardModel();
         this.startTimer();
         this._idleState = IdleState.Play;
-        this.startIdleTimer();
     }
 
     public initBoardModel(): void {
@@ -123,8 +130,16 @@ export class GameModel extends ObservableModel {
         this._timerRunnable = loopRunnable(this.updateGameTime, this);
     }
 
-    private updateGameTime(ms: number): void {
+    private updateGameTime(): void {
         if (this._idleState === IdleState.Idle) return;
+
+        if (this._idleState === IdleState.Play && this._idleTime > 0 && this._state === GameState.Game) {
+            this._idleTime -= window.game.ticker.elapsedMS;
+        }
+
+        if (this._idleTime <= 0) {
+            this.setToIdleState();
+        }
 
         if (this._gameTime > 0 && this._state === GameState.Game) {
             this._gameTime -= window.game.ticker.elapsedMS;
@@ -145,18 +160,15 @@ export class GameModel extends ObservableModel {
         this._prize = await getPrize();
     }
 
-    public startIdleTimer(): void {
-        this.idleTimer = delayRunnable(IDLE_TIME, () => {
-            if (this._state === GameState.Game) {
-                this._idleState = IdleState.Idle;
-            }
-        });
+    private setToIdleState(): void {
+        if (this._state === GameState.Game) {
+            this._idleState = IdleState.Idle;
+        }
     }
 
-    public stopIdleTimer(): void {
-        removeRunnable(this.idleTimer, this);
+    public resetIdleTime(): void {
         this._idleState = IdleState.Play;
-        this.idleTimer = null;
+        this._idleTime = IDLE_TIME;
     }
 }
 

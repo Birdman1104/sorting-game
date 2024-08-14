@@ -88,10 +88,10 @@ export class BoardView extends Container {
     }
 
     private onDragStart(event, item: ItemView): void {
+        lego.event.emit(BoardEvents.Click);
         if (!this.canDrag || this.dragStarted) return;
         this.dragStarted = true;
         event.stopPropagation();
-
         this.draggingItem && this.draggingItem.emptyArea();
         this.draggingItem = item;
         this.draggingItem.startDrag();
@@ -129,6 +129,7 @@ export class BoardView extends Container {
         const newPoint = event.data.getLocalPosition(this.draggingItem.parent);
         this.draggingItem.x = newPoint.x - this.dragPoint.x;
         this.draggingItem.y = newPoint.y - this.dragPoint.y;
+        lego.event.emit(BoardEvents.Click);
     }
 
     private setDropAreas(): void {

@@ -45,6 +45,5 @@ export class GameView extends PixiGrid {
 
     private onGameStateUpdate(state: GameState): void {
         // console.warn(state);
-        
     }
 }

@@ -50,10 +50,9 @@ export class ForegroundView extends PixiGrid {
 
     private buildWhiteBlocker(): void {
         this.whiteBlocker = new Graphics();
-        this.whiteBlocker.beginFill(0xff0000, 1);
+        this.whiteBlocker.beginFill(0xaeaeae, 1);
         this.whiteBlocker.drawRect(0, 0, 10, 10);
         this.whiteBlocker.endFill();
-        // this.blocker.alpha = 0;
         this.setChild('blocker', this.whiteBlocker);
     }
 

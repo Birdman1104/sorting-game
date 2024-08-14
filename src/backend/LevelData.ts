@@ -54,5 +54,5 @@ function getItemsAmount(get3Elements = false): number {
     // 70% chance for 3 items
     if(get3Elements) return 3;
     const rnd = Math.random();
-    return rnd < 0.3 ? 2 : 3;
+    return rnd < 0.5 ? 2 : 3;
 }

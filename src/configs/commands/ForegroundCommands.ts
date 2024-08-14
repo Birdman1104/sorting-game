@@ -9,5 +9,5 @@ export const onRightAnimationCompleteCommand = () => {
 
 export const onBlackBlockerClickedCommand = () => {
     Head.gameModel.idleState = IdleState.Play;
-    Head.gameModel.startIdleTimer();
+    Head.gameModel.resetIdleTime();
 }

@@ -22,5 +22,6 @@ export const ForegroundEvents = {
 };
 
 export const BoardEvents = {
+    Click: 'BoardEventsClick',
     Match: 'BoardEventsMatch',
 };

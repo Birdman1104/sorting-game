@@ -2,7 +2,7 @@ import { lego } from '@armathai/lego';
 import { BoardEvents, ForegroundEvents, KeyboardEvents, MainGameEvents, ValidationPopupEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import Head from '../models/HeadModel';
-import { onMatchCommand } from './commands/BoardCommands';
+import { onBoardClickCommand, onMatchCommand } from './commands/BoardCommands';
 import { onBlackBlockerClickedCommand, onRightAnimationCompleteCommand } from './commands/ForegroundCommands';
 import { onGameStateUpdateCommand, onIdleStateUpdateCommand } from './commands/GameModelCommands';
 import { onKeyClickedCommand } from './commands/KeyboardCommands';
@@ -57,6 +57,10 @@ const eventCommandPairs = Object.freeze([
     {
         event: ForegroundEvents.BlackBlockerClicked,
         command: onBlackBlockerClickedCommand,
+    },
+    {
+        event: BoardEvents.Click,
+        command: onBoardClickCommand,
     },
     {
         event: BoardEvents.Match,

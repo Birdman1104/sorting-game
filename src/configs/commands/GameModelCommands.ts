@@ -38,7 +38,6 @@ const initializeForGameCommand = () => {
 };
 
 const onTimerOverCommand = () => {
-    Head.gameModel.stopIdleTimer();
     Head.gameModel.destroyBoardModel();
     Head.gameModel.getPrize();
 };
