@@ -41,8 +41,8 @@ export class Key extends Container {
         if (this._value === KEYS.BACKSPACE || this._value === KEYS.ENTER) {
             icon = Sprite.from(`${KEYS[this._value].toLowerCase()}.png`);
             icon.scale.set(1.4);
-        } else if (this._value === KEYS.CLOSE) {
-            icon = new Text('X', { fontSize: 56 });
+        } else  if(this.isNumberKey(this._value)) {
+            icon = new Text(this._value, { fontSize: 56 });
         } else {
             icon = new Text(KEYS[this._value], { fontSize: 56 });
         }
@@ -57,12 +57,15 @@ export class Key extends Container {
             case KEYS.ENTER:
                 return 'enter_bkg.png';
             case KEYS.BACKSPACE:
-            case KEYS.CLOSE:
                 return 'backspace_bkg.png';
             case KEYS.SPACE:
                 return 'space_bkg.png';
             default:
                 return 'key_bkg.png';
         }
+    }
+
+    private isNumberKey(value: KEYS): boolean {
+        return value === KEYS.ONE || value === KEYS.TWO || value === KEYS.THREE || value === KEYS.FOUR || value === KEYS.FIVE || value === KEYS.SIX || value === KEYS.SEVEN || value === KEYS.EIGHT || value === KEYS.NINE || value === KEYS.ZERO;
     }
 }

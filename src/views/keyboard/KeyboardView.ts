@@ -40,7 +40,11 @@ export class KeyboardView extends Container {
 
     private onKeyClick(value: KEYS): void {
         if (this.emitEvent) {
-            lego.event.emit(KeyboardEvents.KeyClicked, value);
+            if (value === KEYS.ENTER) {
+                this.emit('enter_clicked');
+            } else {
+                lego.event.emit(KeyboardEvents.KeyClicked, value);
+            }
         }
     }
 }

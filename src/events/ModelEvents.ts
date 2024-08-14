@@ -13,6 +13,7 @@ export const GameModelEvents = {
     TimerRunnableUpdate: 'GameModelTimerRunnableUpdate',
     PrizeUpdate: 'GameModelPrizeUpdate',
     GameTimeUpdate: 'GameModelGameTimeUpdate',
+    IdleTimeUpdate: 'GameModelIdleTimeUpdate',
 };
 
 export const HeadModelEvents = { GameModelUpdate: 'HeadModelGameModelUpdate' };

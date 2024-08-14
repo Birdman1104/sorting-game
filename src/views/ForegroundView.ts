@@ -4,7 +4,7 @@ import anime from 'animejs';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
 import { delayRunnable, tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
-import { ForegroundEvents } from '../events/MainEvents';
+import { ForegroundEvents, ValidationPopupEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import { GameState, IdleState } from '../models/GameModel';
 import { ValidationModel } from '../models/ValidationModel';
@@ -85,6 +85,10 @@ export class ForegroundView extends PixiGrid {
 
     private buildKeyboard(): void {
         this.keyboard = new KeyboardView();
+        this.keyboard.on('enter_clicked', () => {
+            this.validationPopup?.disableButton();
+            lego.event.emit(ValidationPopupEvents.SubmitButtonClicked);
+        })
         this.setChild('keyboard2', this.keyboard);
     }
 

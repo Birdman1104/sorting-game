@@ -88,7 +88,7 @@ const getForegroundGridPortraitConfig = () => {
                 bounds: { x: 0.1, y: 0.2, width: 0.8, height: 0.6 },
             },
             {
-                name: 'idle_text_left',
+                name: 'idle_text_right',
                 bounds: { x: 1, y: 0.2, width: 0.8, height: 0.6 },
             },
             {

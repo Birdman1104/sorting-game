@@ -1,4 +1,5 @@
 import { KEYS } from '../configs/KeyboardViewConfig';
+import { isNumberKey } from '../configs/commands/KeyboardCommands';
 import { ObservableModel } from './ObservableModel';
 
 export class ValidationModel extends ObservableModel {
@@ -29,7 +30,7 @@ export class ValidationModel extends ObservableModel {
 
     public updateTypedText(keyCode: string): void {
         if (this._typedText.length === 16) return;
-        const char = keyCode === ' ' ? keyCode : KEYS[keyCode];
+        const char = keyCode === ' ' ? keyCode : isNumberKey(keyCode) ? keyCode : KEYS[keyCode];
         this._typedText = `${this._typedText}${char}`;
     }
 
@@ -57,7 +58,7 @@ const codeCheckingImitation = (code: string): Promise<boolean> => {
     return new Promise((resolve) => {
         const rnd = Math.random();
         setTimeout(() => {
-            resolve(code === '' || code.toUpperCase() === 'BIRDMAN' || code.toUpperCase() === 'SORT');
+            resolve(code === '' || code.toUpperCase() === 'BIRDMAN' || code.toUpperCase() === 'SORT' || code === '1W2');
         }, 500);
     });
 };
