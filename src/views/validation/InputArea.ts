@@ -27,7 +27,7 @@ export class InputArea extends Container {
     }
 
     public setTypedText(text: string): void {
-        if (!this.animationInProcess && text.length !== 0) {
+        if (!this.animationInProcess) {
             this.typedText.text = text;
             fitText(this.typedText, INPUT_WIDTH * 0.925, INPUT_HEIGHT);
             this.indicator.x = this.typedText.x + this.typedText.width / 2 + (text.length === 0 ? 0 : 5);

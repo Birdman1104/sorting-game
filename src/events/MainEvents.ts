@@ -18,6 +18,7 @@ export const ValidationPopupEvents = {
 
 export const ForegroundEvents = {
     RightAnimationComplete: 'ForegroundEventsRightAnimationComplete',
+    BlackBlockerClicked: 'ForegroundEventsBlackBlockerClicked',
 };
 
 export const BoardEvents = {

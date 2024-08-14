@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { GameState } from '../../models/GameModel';
+import { GameState, IdleState } from '../../models/GameModel';
 import Head from '../../models/HeadModel';
 
 export const onGameStateUpdateCommand = (state: GameState) => {
@@ -23,6 +23,12 @@ export const setGameStateCommand = (state: GameState) => {
     Head.gameModel.state = state;
 };
 
+export const onIdleStateUpdateCommand = (state: IdleState) => {
+    // if (state === IdleState.Idle) {
+        // Head.gameModel.stopTimer();
+    // }
+};
+
 const initValidationCommand = () => {
     Head.gameModel.initValidationModel();
 };
@@ -32,6 +38,7 @@ const initializeForGameCommand = () => {
 };
 
 const onTimerOverCommand = () => {
+    Head.gameModel.stopIdleTimer();
     Head.gameModel.destroyBoardModel();
     Head.gameModel.getPrize();
 };

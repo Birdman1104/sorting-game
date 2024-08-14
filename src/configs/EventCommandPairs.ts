@@ -3,8 +3,8 @@ import { BoardEvents, ForegroundEvents, KeyboardEvents, MainGameEvents, Validati
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import Head from '../models/HeadModel';
 import { onMatchCommand } from './commands/BoardCommands';
-import { onRightAnimationCompleteCommand } from './commands/ForegroundCommands';
-import { onGameStateUpdateCommand } from './commands/GameModelCommands';
+import { onBlackBlockerClickedCommand, onRightAnimationCompleteCommand } from './commands/ForegroundCommands';
+import { onGameStateUpdateCommand, onIdleStateUpdateCommand } from './commands/GameModelCommands';
 import { onKeyClickedCommand } from './commands/KeyboardCommands';
 import { isConfirmedUpdateCommand, onSubmitButtonClickedCommand } from './commands/ValidationPopupCommands';
 
@@ -49,6 +49,14 @@ const eventCommandPairs = Object.freeze([
     {
         event: ForegroundEvents.RightAnimationComplete,
         command: onRightAnimationCompleteCommand,
+    },
+    {
+        event: GameModelEvents.IdleStateUpdate,
+        command: onIdleStateUpdateCommand,
+    },
+    {
+        event: ForegroundEvents.BlackBlockerClicked,
+        command: onBlackBlockerClickedCommand,
     },
     {
         event: BoardEvents.Match,

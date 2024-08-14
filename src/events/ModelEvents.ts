@@ -9,6 +9,7 @@ export const GameModelEvents = {
     BoardUpdate: 'GameModelBoardUpdate',
     ValidationUpdate: 'GameModelValidationUpdate',
     StateUpdate: 'GameModelStateUpdate',
+    IdleStateUpdate: 'GameModelIdleStateUpdate',
     TimerRunnableUpdate: 'GameModelTimerRunnableUpdate',
     PrizeUpdate: 'GameModelPrizeUpdate',
     GameTimeUpdate: 'GameModelGameTimeUpdate',

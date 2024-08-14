@@ -1,5 +1,5 @@
-import { loopRunnable, removeRunnable } from '../Utils';
-import { TIMER } from '../configs/constants';
+import { delayRunnable, loopRunnable, removeRunnable } from '../Utils';
+import { IDLE_TIME, TIMER } from '../configs/constants';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
 import { ValidationModel } from './ValidationModel';
@@ -12,6 +12,11 @@ export enum GameState {
     GameResult = 'GameResult',
 }
 
+export enum IdleState {
+    Idle = 'Idle',
+    Play = 'Play',
+}
+
 export class GameModel extends ObservableModel {
     private _state: GameState;
     private _board: BoardModel | null = null;
@@ -21,10 +26,14 @@ export class GameModel extends ObservableModel {
     private _prize = '';
     private _gameTime = TIMER; // ms
 
+    private idleTimer: any;
+    private _idleState: IdleState;
+
     constructor() {
         super('GameModel');
 
         this._state = GameState.Unknown;
+        this._idleState = IdleState.Play;
         this.makeObservable();
     }
 
@@ -50,6 +59,14 @@ export class GameModel extends ObservableModel {
 
     set state(value: GameState) {
         this._state = value;
+    }
+
+    get idleState(): IdleState {
+        return this._idleState;
+    }
+
+    set idleState(value: IdleState) {
+        this._idleState = value;
     }
 
     get timerRunnable(): any {
@@ -83,6 +100,8 @@ export class GameModel extends ObservableModel {
     public initializeForGame(): void {
         this.initBoardModel();
         this.startTimer();
+        this._idleState = IdleState.Play;
+        this.startIdleTimer();
     }
 
     public initBoardModel(): void {
@@ -105,26 +124,41 @@ export class GameModel extends ObservableModel {
     }
 
     private updateGameTime(ms: number): void {
-        if (this._gameTime > 0) {
+        if (this._idleState === IdleState.Idle) return;
+
+        if (this._gameTime > 0 && this._state === GameState.Game) {
             this._gameTime -= window.game.ticker.elapsedMS;
         }
 
-        if (this.gameTime <= 0) {
+        if (this.gameTime <= 0 && this._state !== GameState.TimeOver) {
             this._state = GameState.TimeOver;
             this.stopTimer();
         }
     }
 
     public stopTimer(): void {
-        removeRunnable(this._timerRunnable);
+        removeRunnable(this._timerRunnable, this);
         this._timerRunnable = null;
     }
 
     public async getPrize(): Promise<void> {
-        this._prize = await getPrize()
+        this._prize = await getPrize();
+    }
+
+    public startIdleTimer(): void {
+        this.idleTimer = delayRunnable(IDLE_TIME, () => {
+            if (this._state === GameState.Game) {
+                this._idleState = IdleState.Idle;
+            }
+        });
+    }
+
+    public stopIdleTimer(): void {
+        removeRunnable(this.idleTimer, this);
+        this._idleState = IdleState.Play;
+        this.idleTimer = null;
     }
 }
-
 
 const getPrize = (): Promise<string> => {
     return new Promise((resolve) => {

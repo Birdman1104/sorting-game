@@ -6,7 +6,7 @@ import { delayRunnable, tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
-import { GameState } from '../models/GameModel';
+import { GameState, IdleState } from '../models/GameModel';
 import { ValidationModel } from '../models/ValidationModel';
 import { KeyboardView } from './keyboard/KeyboardView';
 import { ValidationPopup } from './validation/ValidationPopup';
@@ -15,13 +15,16 @@ export class ForegroundView extends PixiGrid {
     private keyboardBkg: Sprite;
     private keyboard: KeyboardView;
     private validationPopup: ValidationPopup;
-    private blocker: Graphics;
+    private whiteBlocker: Graphics;
+    private blackBlocker: Graphics;
+    private idleText: Sprite;
 
     constructor() {
         super();
 
         lego.event
             .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
+            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
             .on(ValidationModelEvents.TypedTextUpdate, this.onValidationTypedTextUpdate, this)
             .on(ValidationModelEvents.IsConfirmedUpdate, this.onConfirmationUpdate, this)
             .on(GameModelEvents.ValidationUpdate, this.onValidationStateUpdate, this);
@@ -38,18 +41,34 @@ export class ForegroundView extends PixiGrid {
     }
 
     private build(): void {
-        this.buildBlocker();
+        this.buildWhiteBlocker();
+        this.buildBlackBlocker();
         this.buildKeyboardBkg();
         this.buildKeyboard();
+        this.buildIdleText();
     }
 
-    private buildBlocker(): void {
-        this.blocker = new Graphics();
-        this.blocker.beginFill(0xffffff, 1);
-        this.blocker.drawRect(0, 0, 10, 10);
-        this.blocker.endFill();
+    private buildWhiteBlocker(): void {
+        this.whiteBlocker = new Graphics();
+        this.whiteBlocker.beginFill(0xff0000, 1);
+        this.whiteBlocker.drawRect(0, 0, 10, 10);
+        this.whiteBlocker.endFill();
         // this.blocker.alpha = 0;
-        this.setChild('blocker', this.blocker);
+        this.setChild('blocker', this.whiteBlocker);
+    }
+
+    private buildBlackBlocker(): void {
+        this.blackBlocker = new Graphics();
+        this.blackBlocker.beginFill(0x000000, 1);
+        this.blackBlocker.drawRect(0, 0, 10, 10);
+        this.blackBlocker.endFill();
+        this.blackBlocker.alpha = 0;
+        this.setChild('blocker', this.blackBlocker);
+    }
+
+    private buildIdleText(): void {
+        this.idleText = Sprite.from('idle_text.png');
+        this.setChild('idle_text_left', this.idleText);
     }
 
     private buildKeyboardBkg(): void {
@@ -127,35 +146,84 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onGameStart(): void {
-        anime({
-            targets: this.blocker,
-            alpha: 0,
-            duration: 200,
-            easing: 'linear',
-            complete: () => {
-                this.blocker.eventMode = 'none';
-                this.blocker.visible = false;
-            },
-        });
+        this.hideWhiteBlocker();
         delayRunnable(1, () => {
             this.validationPopup?.destroy();
         });
     }
 
     private onTimerOver(): void {
-        this.blocker.visible = true;
-        anime({
-            targets: this.blocker,
-            alpha: 1,
-            duration: 200,
-            easing: 'linear',
-            complete: () => {
-                this.blocker.eventMode = 'static';
-            },
-        });
+        this.showWhiteBlocker();
 
         const img = Sprite.from('prize.png');
         img.anchor.set(0.5);
         this.setChild('prize', img);
+    }
+
+    private onGameIdleStateUpdate(state: IdleState): void {
+        if (state === IdleState.Idle) {
+            this.showBlackBlocker();
+            tweenToCell(this, this.idleText, 'idle_text');
+        } else {
+            this.hideBlackBlocker();
+            tweenToCell(this, this.idleText, 'idle_text_right', () => {
+                this.setChild('idle_text_left', this.idleText);
+            });
+        }
+    }
+
+    private showBlackBlocker(): void {
+        this.blackBlocker.visible = true;
+        anime({
+            targets: this.blackBlocker,
+            alpha: 0.7,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.blackBlocker.eventMode = 'static';
+                this.blackBlocker.on('pointerdown', () => {
+                    lego.event.emit(ForegroundEvents.BlackBlockerClicked);
+                });
+            },
+        });
+    }
+
+    private hideBlackBlocker(): void {
+        anime({
+            targets: this.blackBlocker,
+            alpha: 0,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.blackBlocker.eventMode = 'none';
+                this.blackBlocker.visible = false;
+            },
+        });
+    }
+
+    private hideWhiteBlocker(): void {
+        anime({
+            targets: this.whiteBlocker,
+            alpha: 0,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.whiteBlocker.eventMode = 'none';
+                this.whiteBlocker.visible = false;
+            },
+        });
+    }
+
+    private showWhiteBlocker(): void {
+        this.whiteBlocker.visible = true;
+        anime({
+            targets: this.whiteBlocker,
+            alpha: 1,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.whiteBlocker.eventMode = 'static';
+            },
+        });
     }
 }
