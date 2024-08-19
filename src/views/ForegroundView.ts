@@ -2,7 +2,7 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
-import { tweenToCell } from '../Utils';
+import { delayRunnable, tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents, ValidationPopupEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
@@ -41,7 +41,7 @@ export class ForegroundView extends PixiGrid {
     }
 
     private build(): void {
-        // this.buildWhiteBlocker();
+        this.buildWhiteBlocker();
         this.buildBlackBlocker();
         this.buildKeyboardBkg();
         this.buildKeyboard();
@@ -53,6 +53,7 @@ export class ForegroundView extends PixiGrid {
         this.whiteBlocker.beginFill(0xaeaeae, 1);
         this.whiteBlocker.drawRect(0, 0, 10, 10);
         this.whiteBlocker.endFill();
+        this.whiteBlocker.alpha = 0;
         this.setChild('blocker', this.whiteBlocker);
     }
 
@@ -111,6 +112,7 @@ export class ForegroundView extends PixiGrid {
 
     private onValidationStateUpdate(validation: ValidationModel): void {
         if (validation) {
+            this.showWhiteBlocker()
             tweenToCell(this, this.keyboard, 'keyboard', () => this.keyboard.canType(true));
             tweenToCell(this, this.keyboardBkg, 'keyboard_bkg');
             tweenToCell(this, this.validationPopup, 'validation_popup_show');
@@ -119,7 +121,6 @@ export class ForegroundView extends PixiGrid {
 
     private buildValidationPopup(): void {
         this.validationPopup = new ValidationPopup();
-        // this.validationPopup.show();
         this.setChild('validation_popup_hide', this.validationPopup);
     }
 
@@ -150,13 +151,13 @@ export class ForegroundView extends PixiGrid {
 
     private onGameStart(): void {
         this.hideWhiteBlocker();
-        // delayRunnable(1, () => {
-        //     this.validationPopup?.destroy();
-        // });
+        delayRunnable(1, () => {
+            this.validationPopup?.destroy();
+        });
     }
 
     private onTimerOver(): void {
-        this.showWhiteBlocker();
+        this.showBlackBlocker(0.3);
 
         const img = Sprite.from('prize.png');
         img.anchor.set(0.5);
@@ -175,11 +176,11 @@ export class ForegroundView extends PixiGrid {
         }
     }
 
-    private showBlackBlocker(): void {
+    private showBlackBlocker(alpha = 0.7): void {
         this.blackBlocker.visible = true;
         anime({
             targets: this.blackBlocker,
-            alpha: 0.7,
+            alpha,
             duration: 200,
             easing: 'linear',
             complete: () => {
@@ -221,7 +222,7 @@ export class ForegroundView extends PixiGrid {
         this.whiteBlocker.visible = true;
         anime({
             targets: this.whiteBlocker,
-            alpha: 1,
+            alpha: 0.4,
             duration: 200,
             easing: 'linear',
             complete: () => {

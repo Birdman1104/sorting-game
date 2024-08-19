@@ -32,7 +32,6 @@ export class GameModel extends ObservableModel {
     constructor() {
         super('GameModel');
 
-        this._state = GameState.Game;
         this._idleState = IdleState.Play;
         this.makeObservable();
     }
@@ -102,8 +101,8 @@ export class GameModel extends ObservableModel {
     }
 
     public init(): void {
-        this.initializeForGame()
-        // this._state = GameState.Validation;
+        // this.initializeForGame()
+        this._state = GameState.Game;
     }
 
     public initializeForGame(): void {
