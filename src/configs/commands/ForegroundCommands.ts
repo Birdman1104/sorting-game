@@ -7,6 +7,10 @@ export const onRightAnimationCompleteCommand = () => {
     lego.command.payload(GameState.Game).execute(setGameStateCommand);
 };
 
+export const onTimeOverTextHideCompleteCommand = () => {
+    lego.command.payload(GameState.GameResult).execute(setGameStateCommand);
+};
+
 export const onBlackBlockerClickedCommand = () => {
     Head.gameModel.idleState = IdleState.Play;
     Head.gameModel.resetIdleTime();

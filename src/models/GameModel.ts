@@ -129,7 +129,7 @@ export class GameModel extends ObservableModel {
     }
 
     private updateGameTime(): void {
-        if (this._idleState === IdleState.Idle) return;
+        if (this._idleState === IdleState.Idle || this._state === GameState.GameResult || this._state === GameState.TimeOver) return;
 
         if (this._idleState === IdleState.Play && this._idleTime > 0 && this._state === GameState.Game) {
             this._idleTime -= window.game.ticker.elapsedMS;
@@ -143,7 +143,7 @@ export class GameModel extends ObservableModel {
             this._gameTime -= window.game.ticker.elapsedMS;
         }
 
-        if (this.gameTime <= 0 && this._state !== GameState.TimeOver) {
+        if (this.gameTime <= 0) {
             this._state = GameState.TimeOver;
             this.stopTimer();
         }

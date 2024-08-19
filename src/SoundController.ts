@@ -57,8 +57,6 @@ class SoundControl {
     }
 
     private onGameStateUpdate(state): void {
-        console.warn(state);
-        
         if(state === GameState.Game) {
             this.sounds.theme.play();
         } else {

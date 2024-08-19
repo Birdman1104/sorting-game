@@ -3,7 +3,7 @@ import { BoardEvents, ForegroundEvents, MainGameEvents } from '../events/MainEve
 import { GameModelEvents } from '../events/ModelEvents';
 import Head from '../models/HeadModel';
 import { onBoardClickCommand, onMatchCommand } from './commands/BoardCommands';
-import { onBlackBlockerClickedCommand } from './commands/ForegroundCommands';
+import { onBlackBlockerClickedCommand, onTimeOverTextHideCompleteCommand } from './commands/ForegroundCommands';
 import { onGameStateUpdateCommand, onIdleStateUpdateCommand } from './commands/GameModelCommands';
 
 export const mapCommands = () => {
@@ -47,6 +47,10 @@ const eventCommandPairs = Object.freeze([
     {
         event: BoardEvents.Move,
         command: onBoardClickCommand,
+    },
+    {
+        event: ForegroundEvents.TimeOverTextHideComplete,
+        command: onTimeOverTextHideCompleteCommand,
     },
     {
         event: BoardEvents.Match,

@@ -8,7 +8,10 @@ export const onGameStateUpdateCommand = (state: GameState) => {
             lego.command.execute(initializeForGameCommand);
             break;
         case GameState.TimeOver:
-            lego.command.execute(onTimerOverCommand);
+            // lego.command.execute(onTimerOverCommand);
+            break;
+        case GameState.GameResult:
+            lego.command.execute(onGameResultCommand);
             break;
 
         default:
@@ -30,7 +33,7 @@ const initializeForGameCommand = () => {
     Head.gameModel.initializeForGame();
 };
 
-const onTimerOverCommand = () => {
+const onGameResultCommand = () => {
     Head.gameModel.destroyBoardModel();
     Head.gameModel.getPrize();
 };

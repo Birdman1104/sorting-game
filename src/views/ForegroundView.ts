@@ -2,7 +2,7 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { Graphics, Sprite } from 'pixi.js';
-import { tweenToCell } from '../Utils';
+import { delayRunnable, tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
@@ -12,13 +12,14 @@ export class ForegroundView extends PixiGrid {
     private whiteBlocker: Graphics;
     private blackBlocker: Graphics;
     private idleText: Sprite;
+    private timeOverText: Sprite;
 
     constructor() {
         super();
 
         lego.event
             .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
-            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
+            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this);
 
         this.build();
     }
@@ -35,6 +36,7 @@ export class ForegroundView extends PixiGrid {
         this.buildWhiteBlocker();
         this.buildBlackBlocker();
         this.buildIdleText();
+        this.buildTimeOverText();
     }
 
     private buildWhiteBlocker(): void {
@@ -60,6 +62,11 @@ export class ForegroundView extends PixiGrid {
         this.setChild('text_left', this.idleText);
     }
 
+    private buildTimeOverText(): void {
+        this.timeOverText = Sprite.from('time_over_text.png');
+        this.setChild('text_left', this.timeOverText);
+    }
+
     private onGameStateUpdate(state: GameState): void {
         switch (state) {
             case GameState.Game:
@@ -78,7 +85,16 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onTimerOver(): void {
-        this.showBlackBlocker(0.3);
+        this.showBlackBlocker(false);
+        tweenToCell(this, this.timeOverText, 'text_show');
+
+        delayRunnable(3, () => {
+            this.hideBlackBlocker();
+            tweenToCell(this, this.timeOverText, 'text_right', () => {
+                lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
+                this.setChild('text_left', this.timeOverText);
+            });
+        })
 
         // const prize = new PrizeContainer()
         // lego.event.emit(ForegroundEvents.PrizeShown);
@@ -100,18 +116,20 @@ export class ForegroundView extends PixiGrid {
         }
     }
 
-    private showBlackBlocker(alpha = 0.7): void {
+    private showBlackBlocker(emitEvent = true): void {
         this.blackBlocker.visible = true;
         anime({
             targets: this.blackBlocker,
-            alpha,
+            alpha: 0.7,
             duration: 200,
             easing: 'linear',
             complete: () => {
                 this.blackBlocker.eventMode = 'static';
-                this.blackBlocker.on('pointerdown', () => {
-                    lego.event.emit(ForegroundEvents.BlackBlockerClicked);
-                });
+                if (emitEvent) {
+                    this.blackBlocker.on('pointerdown', () => {
+                        lego.event.emit(ForegroundEvents.BlackBlockerClicked);
+                    });
+                }
             },
         });
     }
@@ -142,11 +160,11 @@ export class ForegroundView extends PixiGrid {
         });
     }
 
-    private showWhiteBlocker(): void {
+    private showWhiteBlocker(alpha = 0.4): void {
         this.whiteBlocker.visible = true;
         anime({
             targets: this.whiteBlocker,
-            alpha: 0.4,
+            alpha,
             duration: 200,
             easing: 'linear',
             complete: () => {

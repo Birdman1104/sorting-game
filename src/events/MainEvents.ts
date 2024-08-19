@@ -9,6 +9,7 @@ export const MainGameEvents = {
 };
 
 export const ForegroundEvents = {
+    TimeOverTextHideComplete: 'ForegroundEventsTimeOverTextHideComplete',
     BlackBlockerClicked: 'ForegroundEventsBlackBlockerClicked',
     PrizeShown: 'ForegroundEventsPrizeShown',
 };
