@@ -7,7 +7,6 @@ import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState, IdleState } from '../models/GameModel';
-import { PrizeContainer } from './PrizeContainer';
 
 export class ForegroundView extends PixiGrid {
     private whiteBlocker: Graphics;
@@ -58,7 +57,7 @@ export class ForegroundView extends PixiGrid {
 
     private buildIdleText(): void {
         this.idleText = Sprite.from('idle_text.png');
-        this.setChild('idle_text_left', this.idleText);
+        this.setChild('text_left', this.idleText);
     }
 
     private onGameStateUpdate(state: GameState): void {
@@ -81,9 +80,9 @@ export class ForegroundView extends PixiGrid {
     private onTimerOver(): void {
         this.showBlackBlocker(0.3);
 
-        const prize = new PrizeContainer()
-        lego.event.emit(ForegroundEvents.PrizeShown);
-        this.setChild('prize', prize);
+        // const prize = new PrizeContainer()
+        // lego.event.emit(ForegroundEvents.PrizeShown);
+        // this.setChild('prize', prize);
         // const img = Sprite.from('prize.png');
         // img.anchor.set(0.5);
         // this.setChild('prize', img);
@@ -92,11 +91,11 @@ export class ForegroundView extends PixiGrid {
     private onGameIdleStateUpdate(state: IdleState): void {
         if (state === IdleState.Idle) {
             this.showBlackBlocker();
-            tweenToCell(this, this.idleText, 'idle_text');
+            tweenToCell(this, this.idleText, 'text_show');
         } else {
             this.hideBlackBlocker();
-            tweenToCell(this, this.idleText, 'idle_text_right', () => {
-                this.setChild('idle_text_left', this.idleText);
+            tweenToCell(this, this.idleText, 'text_right', () => {
+                this.setChild('text_left', this.idleText);
             });
         }
     }
