@@ -7,6 +7,7 @@ import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState, IdleState } from '../models/GameModel';
+import { PrizeContainer } from './PrizeContainer';
 
 export class ForegroundView extends PixiGrid {
     private whiteBlocker: Graphics;
@@ -75,6 +76,9 @@ export class ForegroundView extends PixiGrid {
             case GameState.TimeOver:
                 this.onTimerOver();
                 break;
+            case GameState.GameResult:
+                this.onGameResult();
+                break;
 
             default:
                 break;
@@ -95,13 +99,12 @@ export class ForegroundView extends PixiGrid {
                 this.setChild('text_left', this.timeOverText);
             });
         })
+    }
 
-        // const prize = new PrizeContainer()
-        // lego.event.emit(ForegroundEvents.PrizeShown);
-        // this.setChild('prize', prize);
-        // const img = Sprite.from('prize.png');
-        // img.anchor.set(0.5);
-        // this.setChild('prize', img);
+    private onGameResult(): void {
+        const prize = new PrizeContainer()
+        lego.event.emit(ForegroundEvents.PrizeShown);
+        this.setChild('prize', prize);
     }
 
     private onGameIdleStateUpdate(state: IdleState): void {
