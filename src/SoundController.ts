@@ -1,7 +1,12 @@
 import { lego } from '@armathai/lego';
 import { Howl } from 'howler';
 import { delayRunnable } from './Utils';
-import { audioAssets } from './assets/assetsNames/audio';
+import { MATCH_SOUND } from './base64/sounds/match';
+import { PRIZE_SOUND } from './base64/sounds/prize';
+import { TAP_SOUND } from './base64/sounds/tap';
+import { THEME_SOUND } from './base64/sounds/theme';
+import { TIMER_SOUND } from './base64/sounds/timer';
+import { DROP_SOUND } from './base64/sounds/wrongDrop';
 import { BoardEvents, ForegroundEvents, MainGameEvents } from './events/MainEvents';
 import { GameModelEvents } from './events/ModelEvents';
 import { GameState } from './models/GameModel';
@@ -24,9 +29,12 @@ class SoundControl {
     }
 
     public loadSounds(): void {
-        audioAssets.forEach(({ name, path }) => {
-            this.sounds[name] = new Howl({ src: path, volume: this.getVolume(name), loop: this.getLoop(name) });
-        });
+        this.sounds.timer = new Howl({ src: TIMER_SOUND, volume: 0.8 });
+        this.sounds.match = new Howl({ src: MATCH_SOUND });
+        this.sounds.prize = new Howl({ src: PRIZE_SOUND });
+        this.sounds.tap = new Howl({ src: TAP_SOUND });
+        this.sounds.theme = new Howl({ src: THEME_SOUND, loop: true, volume: 0.2 });
+        this.sounds.wrongDrop = new Howl({ src: DROP_SOUND, volume: 0.5 });  
     }
 
     private onTimerUpdate(time: number): void {
@@ -73,10 +81,6 @@ class SoundControl {
 
     private getVolume(name: string): number {
         return name === 'wrongDrop' ? 0.5 : name === 'theme' ? 0.2 : 1;
-    }
-
-    private getLoop(name: string): boolean {
-        return name === 'theme';
     }
 }
 
