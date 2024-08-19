@@ -5,6 +5,7 @@ export const WindowEvent = {
 
 export const MainGameEvents = {
     Resize: 'MainGameEventsResize',
+    Mute: 'MainGameEventsMute',
     MainViewReady: 'MainGameEventsMainViewReady',
 };
 

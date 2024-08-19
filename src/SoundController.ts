@@ -2,7 +2,7 @@ import { lego } from '@armathai/lego';
 import { Howl } from 'howler';
 import { delayRunnable } from './Utils';
 import { audioAssets } from './assets/assetsNames/audio';
-import { BoardEvents, ForegroundEvents } from './events/MainEvents';
+import { BoardEvents, ForegroundEvents, MainGameEvents } from './events/MainEvents';
 import { GameModelEvents } from './events/ModelEvents';
 import { GameState } from './models/GameModel';
 
@@ -19,13 +19,13 @@ class SoundControl {
             .on(ForegroundEvents.PrizeShown, this.onPrizeShown, this)
             .on(BoardEvents.Match, this.onMatch, this)
             .on(BoardEvents.Drop, this.onWrongDrop, this)
+            .on(MainGameEvents.Mute, this.onMute, this)
             .on(BoardEvents.Click, this.onClick, this);
     }
 
     public loadSounds(): void {
         audioAssets.forEach(({ name, path }) => {
-            const volume = name === 'wrongDrop' ? 0.5 : name === 'theme' ? 0.2 : 1;
-            this.sounds[name] = new Howl({ src: path, volume });
+            this.sounds[name] = new Howl({ src: path, volume: this.getVolume(name) });
         });
     }
 
@@ -62,6 +62,17 @@ class SoundControl {
         } else {
             this.sounds.theme.stop();
         }
+    }
+
+    private onMute(muted: boolean): void {
+        for (const [key, value] of Object.entries(this.sounds)) {
+            // @ts-ignore
+            value.volume(muted ? 0 : this.getVolume(key));
+        }
+    }
+
+    private getVolume(name: string): number {
+        return name === 'wrongDrop' ? 0.5 : name === 'theme' ? 0.2 : 1;
     }
 }
 

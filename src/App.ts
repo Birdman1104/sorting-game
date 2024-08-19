@@ -58,9 +58,18 @@ class App extends Application {
 
         lego.event.emit(MainGameEvents.Resize);
     }
-
+    
     public onFocusChange(focus: boolean): void {
         lego.event.emit(WindowEvent.FocusChange, focus);
+        this.muteSound(!focus);
+    }
+
+    public onVisibilityChange(): void {
+        this.muteSound(document.visibilityState !== 'visible');
+    }
+
+    public muteSound(value: boolean): void {
+        lego.event.emit(MainGameEvents.Mute, value);
     }
 
     private async loadAssets(): Promise<void> {
