@@ -1,2 +1,2 @@
-export const TIMER = 13200; // milliseconds
-export const IDLE_TIME = 20000; // milliseconds
+export const TIMER = 120000; // milliseconds
+export const IDLE_TIME = 5000; // milliseconds

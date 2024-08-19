@@ -55,7 +55,7 @@ const getForegroundGridPortraitConfig = () => {
             },
             {
                 name: 'text_left',
-                bounds: { x: -1, y: 0.2, width: 0.8, height: 0.6 },
+                bounds: { x: -2, y: 0.2, width: 0.3, height: 0.6 },
             },
             {
                 name: 'text_show',
