@@ -1,4 +1,1 @@
-export const audioAssets: AssetNameAndPath[] = [
-    { name: 'audio', path: 'assets/audio/audio.mp3' },
-    { name: 'sound', path: 'assets/audio/sound.mp3' },
-];
+export const audioAssets: AssetNameAndPath[] = [{ name: 'timer', path: 'assets/audio/timer.mp3' }];
