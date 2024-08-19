@@ -8,16 +8,7 @@ export const MainGameEvents = {
     MainViewReady: 'MainGameEventsMainViewReady',
 };
 
-export const KeyboardEvents = {
-    KeyClicked: 'KeyboardEventsKeyClicked',
-};
-
-export const ValidationPopupEvents = {
-    SubmitButtonClicked: 'ValidationPopupEventsSubmitButtonClicked',
-};
-
 export const ForegroundEvents = {
-    RightAnimationComplete: 'ForegroundEventsRightAnimationComplete',
     BlackBlockerClicked: 'ForegroundEventsBlackBlockerClicked',
     PrizeShown: 'ForegroundEventsPrizeShown',
 };

@@ -6,8 +6,8 @@ export const BoardModelEvents = {
 export const BoxModelEvents = { ElementsUpdate: 'BoxModelElementsUpdate' };
 
 export const GameModelEvents = {
+    ScoreUpdate: 'GameModelScoreUpdate',
     BoardUpdate: 'GameModelBoardUpdate',
-    ValidationUpdate: 'GameModelValidationUpdate',
     StateUpdate: 'GameModelStateUpdate',
     IdleStateUpdate: 'GameModelIdleStateUpdate',
     TimerRunnableUpdate: 'GameModelTimerRunnableUpdate',
@@ -19,8 +19,3 @@ export const GameModelEvents = {
 export const HeadModelEvents = { GameModelUpdate: 'HeadModelGameModelUpdate' };
 
 export const ItemModelEvents = { TypeUpdate: 'ItemModelTypeUpdate' };
-
-export const ValidationModelEvents = {
-    TypedTextUpdate: 'ValidationModelTypedTextUpdate',
-    IsConfirmedUpdate: 'ValidationModelIsConfirmedUpdate',
-};

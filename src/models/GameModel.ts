@@ -2,11 +2,9 @@ import { loopRunnable, removeRunnable } from '../Utils';
 import { IDLE_TIME, TIMER } from '../configs/constants';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
-import { ValidationModel } from './ValidationModel';
 
 export enum GameState {
     Unknown = 'Unknown',
-    Validation = 'Validation',
     Game = 'Game',
     TimeOver = 'TimeOver',
     GameResult = 'GameResult',
@@ -20,7 +18,6 @@ export enum IdleState {
 export class GameModel extends ObservableModel {
     private _state: GameState = GameState.Unknown;
     private _board: BoardModel | null = null;
-    private _validation: ValidationModel | null = null;
 
     private _timerRunnable: any;
     private _prize = '';
@@ -29,11 +26,21 @@ export class GameModel extends ObservableModel {
     private _idleTime = IDLE_TIME;
     private _idleState: IdleState;
 
+    private _score = 0;
+
     constructor() {
         super('GameModel');
 
         this._idleState = IdleState.Play;
         this.makeObservable();
+    }
+
+    get score(): number {
+        return this._score;
+    }
+
+    set score(value: number) {
+        this._score = value;
     }
 
     get board(): BoardModel | null {
@@ -42,14 +49,6 @@ export class GameModel extends ObservableModel {
 
     set board(value: BoardModel) {
         this._board = value;
-    }
-
-    get validation(): ValidationModel | null {
-        return this._validation;
-    }
-
-    set validation(value: ValidationModel) {
-        this._validation = value;
     }
 
     get state(): GameState {
@@ -121,13 +120,12 @@ export class GameModel extends ObservableModel {
         this._board = null;
     }
 
-    public initValidationModel(): void {
-        this.validation = new ValidationModel();
-        this.validation.initialize();
-    }
-
     public startTimer(): void {
         this._timerRunnable = loopRunnable(this.updateGameTime, this);
+    }
+
+    public updateScore(value: number): void {
+        this._score += value;
     }
 
     private updateGameTime(): void {

@@ -24,48 +24,24 @@
         "y": 0.5
       }
     },
-    "validation_bkg.png": {
+    "time_over_text.png": {
       "frame": {
         "x": 3,
         "y": 138,
-        "w": 510,
-        "h": 281
+        "w": 786,
+        "h": 381
       },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 510,
-        "h": 281
+        "w": 786,
+        "h": 381
       },
       "sourceSize": {
-        "w": 510,
-        "h": 281
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "input_area.png": {
-      "frame": {
-        "x": 3,
-        "y": 425,
-        "w": 375,
-        "h": 55
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 375,
-        "h": 55
-      },
-      "sourceSize": {
-        "w": 375,
-        "h": 55
+        "w": 786,
+        "h": 381
       },
       "pivot": {
         "x": 0.5,
@@ -75,7 +51,7 @@
     "prize.png": {
       "frame": {
         "x": 3,
-        "y": 486,
+        "y": 525,
         "w": 344,
         "h": 367
       },
@@ -95,30 +71,6 @@
         "x": 0.5,
         "y": 0.5
       }
-    },
-    "submit_btn.png": {
-      "frame": {
-        "x": 519,
-        "y": 138,
-        "w": 193,
-        "h": 55
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 193,
-        "h": 55
-      },
-      "sourceSize": {
-        "w": 193,
-        "h": 55
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
     }
   },
   "meta": {
@@ -128,7 +80,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 801,
-      "h": 856
+      "h": 895
     },
     "scale": 1
   }

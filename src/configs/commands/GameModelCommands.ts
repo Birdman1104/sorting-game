@@ -4,9 +4,6 @@ import Head from '../../models/HeadModel';
 
 export const onGameStateUpdateCommand = (state: GameState) => {
     switch (state) {
-        case GameState.Validation:
-            lego.command.execute(initValidationCommand);
-            break;
         case GameState.Game:
             lego.command.execute(initializeForGameCommand);
             break;
@@ -27,10 +24,6 @@ export const onIdleStateUpdateCommand = (state: IdleState) => {
     // if (state === IdleState.Idle) {
         // Head.gameModel.stopTimer();
     // }
-};
-
-const initValidationCommand = () => {
-    Head.gameModel.initValidationModel();
 };
 
 const initializeForGameCommand = () => {
