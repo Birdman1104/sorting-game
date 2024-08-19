@@ -25,7 +25,7 @@ class SoundControl {
 
     public loadSounds(): void {
         audioAssets.forEach(({ name, path }) => {
-            this.sounds[name] = new Howl({ src: path, volume: this.getVolume(name) });
+            this.sounds[name] = new Howl({ src: path, volume: this.getVolume(name), loop: this.getLoop(name) });
         });
     }
 
@@ -73,6 +73,10 @@ class SoundControl {
 
     private getVolume(name: string): number {
         return name === 'wrongDrop' ? 0.5 : name === 'theme' ? 0.2 : 1;
+    }
+
+    private getLoop(name: string): boolean {
+        return name === 'theme';
     }
 }
 

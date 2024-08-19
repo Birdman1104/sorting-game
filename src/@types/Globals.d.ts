@@ -33,3 +33,13 @@ type BoxModelConfig = {
     j: number;
     elements: ITEM_TYPE[] | string[];
 };
+
+type AssetConfig = {
+    image: string;
+    url: string;
+    priority: number;
+};
+
+type GlobalData = {
+    ASSETS: AssetConfig[];
+}
