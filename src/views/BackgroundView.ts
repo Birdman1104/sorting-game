@@ -1,11 +1,15 @@
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
-import { Sprite } from 'pixi.js';
+import { Rectangle, Sprite } from 'pixi.js';
 import { getBackgroundGridConfig } from '../configs/gridConfigs/BackgroundViewGC';
 
 export class BackgroundView extends PixiGrid {
     constructor() {
         super();
-        // this.build();
+        this.build();
+    }
+    
+    public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
+        return new Rectangle(0,0, 1280, 661)
     }
 
     public getGridConfig(): ICellConfig {
@@ -17,7 +21,8 @@ export class BackgroundView extends PixiGrid {
     }
 
     private build(): void {
-        const bkg = Sprite.from('bkg.jpg');
-        this.setChild('background', bkg);
+        const bkg = Sprite.from('bkg.jpeg');
+        // bkg.anchor.set(0.5);
+        this.setChild('bkg', bkg);
     }
 }

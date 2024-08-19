@@ -137,9 +137,9 @@ export class BoardView extends Container {
             let startingX = box.x + 10;
             for (let i = 0; i < 3; i++) {
                 const startX = startingX + 80 * i;
-                const startY = box.y + 20;
+                const startY = box.y - 80;
                 const endX = startingX + 80 * i + 80;
-                const endY = box.y + 20 + 130;
+                const endY = box.y + 20;
                 const area = new DropDownAreaInfo({ startX, startY, endX, endY });
                 this.finalPositions.push(area);
             }
@@ -248,7 +248,7 @@ export class BoardView extends Container {
 
     private getShelfPosition(box: BoxView): { x: number; y: number } {
         const x = (box.width + 30) * box.j;
-        const y = box.i === 2 ? 368 : (box.height + 40) * box.i;
+        const y = box.i * 184 + 80;
         return { x, y };
     }
 

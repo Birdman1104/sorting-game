@@ -25,7 +25,7 @@ export class BoxView extends Container {
     }
 
     private getShelfSprite(i: number, j: number): Sprite {
-      const img = i === 0 ? 'top.png' : i === 2 ? 'bottom.png' : 'middle.png';
+      const img = 'shelf.png';
       const shelf = Sprite.from(img);
       return shelf;
     }

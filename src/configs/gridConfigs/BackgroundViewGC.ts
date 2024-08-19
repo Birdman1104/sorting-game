@@ -13,7 +13,7 @@ const getBackgroundGridLandscapeConfig = () => {
         bounds,
         cells: [
             {
-                name: 'background',
+                name: 'bkg',
                 scale: CellScale.envelop,
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
@@ -29,7 +29,7 @@ const getBackgroundGridPortraitConfig = () => {
         bounds,
         cells: [
             {
-                name: 'background',
+                name: 'bkg',
                 scale: CellScale.envelop,
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },

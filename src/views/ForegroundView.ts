@@ -2,7 +2,7 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
-import { delayRunnable, tweenToCell } from '../Utils';
+import { tweenToCell } from '../Utils';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents, ValidationPopupEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
@@ -41,7 +41,7 @@ export class ForegroundView extends PixiGrid {
     }
 
     private build(): void {
-        this.buildWhiteBlocker();
+        // this.buildWhiteBlocker();
         this.buildBlackBlocker();
         this.buildKeyboardBkg();
         this.buildKeyboard();
@@ -150,9 +150,9 @@ export class ForegroundView extends PixiGrid {
 
     private onGameStart(): void {
         this.hideWhiteBlocker();
-        delayRunnable(1, () => {
-            this.validationPopup?.destroy();
-        });
+        // delayRunnable(1, () => {
+        //     this.validationPopup?.destroy();
+        // });
     }
 
     private onTimerOver(): void {
