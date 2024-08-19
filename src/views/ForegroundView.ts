@@ -3,6 +3,8 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { Graphics, Sprite } from 'pixi.js';
 import { delayRunnable, tweenToCell } from '../Utils';
+import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
+import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
@@ -59,12 +61,12 @@ export class ForegroundView extends PixiGrid {
     }
 
     private buildIdleText(): void {
-        this.idleText = Sprite.from('idle_text.png');
+        this.idleText = Sprite.from(IDLE_TEXT_IMAGE);
         this.setChild('text_left', this.idleText);
     }
 
     private buildTimeOverText(): void {
-        this.timeOverText = Sprite.from('time_over_text.png');
+        this.timeOverText = Sprite.from(TIME_OVER_TEXT_IMAGE);
         this.setChild('text_left', this.timeOverText);
     }
 

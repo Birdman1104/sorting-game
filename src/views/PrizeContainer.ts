@@ -1,5 +1,6 @@
 import anime from 'animejs';
 import { Container, Rectangle, Sprite } from "pixi.js";
+import { PRIZE_IMAGE } from '../base64/images/prize';
 
 export class PrizeContainer extends Container {
   constructor() {
@@ -13,7 +14,7 @@ export class PrizeContainer extends Container {
   }
 
   private build(): void {
-    const prize = Sprite.from('prize.png');
+    const prize = Sprite.from(PRIZE_IMAGE);
     prize.anchor.set(0.5);  
     prize.position.set(this.width / 2, this.height / 2)
     this.addChild(prize);

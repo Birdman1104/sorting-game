@@ -1,10 +1,15 @@
-import { Container, Sprite } from "pixi.js";
+import { Container, Rectangle, Sprite } from "pixi.js";
+import { SHELF_IMAGE } from "../base64/images/shelf";
 
 export class BoxView extends Container {
     constructor(private _i: number, private _j: number, private _uuid: string) {
         super();
 
         this.build()
+    }
+    
+    public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
+        return new Rectangle(0, 0, 250, 31)
     }
 
     get i(): number {
@@ -20,14 +25,7 @@ export class BoxView extends Container {
     }
 
     private build(): void {
-        const shelf = this.getShelfSprite(this._i, this._j);
+        const shelf = Sprite.from(SHELF_IMAGE)
         this.addChild(shelf);
     }
-
-    private getShelfSprite(i: number, j: number): Sprite {
-      const img = 'shelf.png';
-      const shelf = Sprite.from(img);
-      return shelf;
-    }
-
 }

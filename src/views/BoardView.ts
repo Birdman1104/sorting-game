@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite } from 'pixi.js';
+import { BKG_IMAGE } from '../base64/images/bkg';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
@@ -45,7 +46,7 @@ export class BoardView extends Container {
     }
 
     private buildBkg(): void {
-        const bkg = Sprite.from('bkg.jpeg');
+        const bkg = Sprite.from(BKG_IMAGE);
         this.addChild(bkg);
     }
 
@@ -60,12 +61,12 @@ export class BoardView extends Container {
     }
 
     private onBoxesUpdate(data: BoxModel[]): void {
-        data.forEach((box) => {
-            const sprite = new BoxView(box.i, box.j, box.uuid);
-            const { x, y } = this.getShelfPosition(sprite);
-            sprite.position.set(x, y);
-            this.boxes.push(sprite);
-            this.addChild(sprite);
+        data.forEach((b) => {
+            const box = new BoxView(b.i, b.j, b.uuid);
+            const { x, y } = this.getShelfPosition(box);
+            box.position.set(x, y);
+            this.boxes.push(box);
+            this.addChild(box);
         });
         this.setDropAreas();
 
