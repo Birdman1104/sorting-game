@@ -2,8 +2,9 @@ import { lego } from '@armathai/lego';
 import { Howl } from 'howler';
 import { delayRunnable } from './Utils';
 import { audioAssets } from './assets/assetsNames/audio';
-import { BoardEvents } from './events/MainEvents';
+import { BoardEvents, ForegroundEvents } from './events/MainEvents';
 import { GameModelEvents } from './events/ModelEvents';
+import { GameState } from './models/GameModel';
 
 class SoundControl {
     private sounds: any;
@@ -13,13 +14,18 @@ class SoundControl {
         this.sounds = {};
 
         lego.event
+            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this)
-            .on(BoardEvents.Match, this.onMatch, this);
+            .on(ForegroundEvents.PrizeShown, this.onPrizeShown, this)
+            .on(BoardEvents.Match, this.onMatch, this)
+            .on(BoardEvents.Drop, this.onWrongDrop, this)
+            .on(BoardEvents.Click, this.onClick, this);
     }
 
     public loadSounds(): void {
         audioAssets.forEach(({ name, path }) => {
-            this.sounds[name] = new Howl({ src: path });
+            const volume = name === 'wrongDrop' ? 0.5 : name === 'theme' ? 0.2 : 1;
+            this.sounds[name] = new Howl({ src: path, volume });
         });
     }
 
@@ -36,6 +42,28 @@ class SoundControl {
 
     private onMatch(): void {
         this.sounds.match.play();
+    }
+
+    private onPrizeShown(): void {
+        this.sounds.prize.play();
+    }
+
+    private onClick(): void {
+        this.sounds.tap.play();
+    }
+
+    private onWrongDrop(): void {
+        this.sounds.wrongDrop.play();
+    }
+
+    private onGameStateUpdate(state): void {
+        console.warn(state);
+        
+        if(state === GameState.Game) {
+            this.sounds.theme.play();
+        } else {
+            this.sounds.theme.stop();
+        }
     }
 }
 
