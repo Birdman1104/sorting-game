@@ -118,6 +118,7 @@ export class BoardView extends Container {
         this.draggingItem.emptyArea();
         const area = this.draggingItem.area;
         if (dropArea) {
+            lego.event.emit(BoardEvents.Drop);
             area?.empty();
             this.draggingItem.emptyArea();
             this.dropItemToArea(dropArea, this.draggingItem);
@@ -135,7 +136,7 @@ export class BoardView extends Container {
         const newPoint = event.data.getLocalPosition(this.draggingItem.parent);
         this.draggingItem.x = newPoint.x - this.dragPoint.x;
         this.draggingItem.y = newPoint.y - this.dragPoint.y;
-        lego.event.emit(BoardEvents.Click);
+        lego.event.emit(BoardEvents.Move);
     }
 
     private setDropAreas(): void {
@@ -177,6 +178,7 @@ export class BoardView extends Container {
 
     private dropItemToOriginalPosition(): void {
         if (!this.draggingItem) return;
+        lego.event.emit(BoardEvents.Drop);
         anime({
             targets: this.draggingItem,
             x: this.draggingItem.originalX,

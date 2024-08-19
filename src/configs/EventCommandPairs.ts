@@ -63,6 +63,10 @@ const eventCommandPairs = Object.freeze([
         command: onBoardClickCommand,
     },
     {
+        event: BoardEvents.Move,
+        command: onBoardClickCommand,
+    },
+    {
         event: BoardEvents.Match,
         command: onMatchCommand,
     },
