@@ -15,7 +15,7 @@ const getGameViewGridLandscapeConfig = () => {
             {
                 name: 'board',
                 scale: CellScale.showAll,
-                bounds: { x: 0.1, y: 0.1, width: 0.8, height: 0.8 },
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
         ],
     };
@@ -31,7 +31,7 @@ const getGameViewGridPortraitConfig = () => {
             {
                 name: 'board',
                 scale: CellScale.showAll,
-                bounds: { x: 0.025, y: 0.025, width: 0.95, height: 0.95 },
+                bounds: { x: 0.15, y: 0.025, width: 0.7, height: 0.95 },
             },
         ],
     };

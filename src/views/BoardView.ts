@@ -1,6 +1,6 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Point, Rectangle } from 'pixi.js';
+import { Container, Point, Rectangle, Sprite } from 'pixi.js';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
@@ -36,16 +36,22 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, -140, 768, 540);
+        return new Rectangle(0, 0, 1280, 661);
     }
 
     private build(): void {
+        this.buildBkg();
         this.buildTimer();
+    }
+
+    private buildBkg(): void {
+        const bkg = Sprite.from('bkg.jpeg');
+        this.addChild(bkg);
     }
 
     private buildTimer(): void {
         this.timer = new TimerView();
-        this.timer.position.set(798 / 2, -100);
+        this.timer.position.set(this.width / 2, 60);
         this.addChild(this.timer);
     }
 
@@ -247,8 +253,8 @@ export class BoardView extends Container {
     }
 
     private getShelfPosition(box: BoxView): { x: number; y: number } {
-        const x = (box.width + 10) * box.j;
-        const y = box.i * 160 + 50;
+        const x = (box.width + 10) * box.j + 250;
+        const y = box.i * 160 + 230;
         return { x, y };
     }
 

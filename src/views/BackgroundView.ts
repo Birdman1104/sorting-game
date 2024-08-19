@@ -5,7 +5,7 @@ import { getBackgroundGridConfig } from '../configs/gridConfigs/BackgroundViewGC
 export class BackgroundView extends PixiGrid {
     constructor() {
         super();
-        this.build();
+        // this.build();
     }
     
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {

@@ -8,6 +8,7 @@ import { ForegroundEvents, ValidationPopupEvents } from '../events/MainEvents';
 import { GameModelEvents, ValidationModelEvents } from '../events/ModelEvents';
 import { GameState, IdleState } from '../models/GameModel';
 import { ValidationModel } from '../models/ValidationModel';
+import { PrizeContainer } from './PrizeContainer';
 import { KeyboardView } from './keyboard/KeyboardView';
 import { ValidationPopup } from './validation/ValidationPopup';
 
@@ -43,8 +44,8 @@ export class ForegroundView extends PixiGrid {
     private build(): void {
         this.buildWhiteBlocker();
         this.buildBlackBlocker();
-        this.buildKeyboardBkg();
-        this.buildKeyboard();
+        // this.buildKeyboardBkg();
+        // this.buildKeyboard();
         this.buildIdleText();
     }
 
@@ -113,8 +114,8 @@ export class ForegroundView extends PixiGrid {
     private onValidationStateUpdate(validation: ValidationModel): void {
         if (validation) {
             this.showWhiteBlocker()
-            tweenToCell(this, this.keyboard, 'keyboard', () => this.keyboard.canType(true));
-            tweenToCell(this, this.keyboardBkg, 'keyboard_bkg');
+            // tweenToCell(this, this.keyboard, 'keyboard', () => this.keyboard.canType(true));
+            // tweenToCell(this, this.keyboardBkg, 'keyboard_bkg');
             tweenToCell(this, this.validationPopup, 'validation_popup_show');
         }
     }
@@ -132,9 +133,9 @@ export class ForegroundView extends PixiGrid {
         if (confirmed === '') return;
         if (confirmed) {
             const cb = () => {
-                this.keyboard.canType(false);
-                tweenToCell(this, this.keyboard, 'keyboard2');
-                tweenToCell(this, this.keyboardBkg, 'keyboard_bkg2');
+                // this.keyboard.canType(false);
+                // tweenToCell(this, this.keyboard, 'keyboard2');
+                // tweenToCell(this, this.keyboardBkg, 'keyboard_bkg2');
                 tweenToCell(this, this.validationPopup, 'validation_popup_hide');
                 lego.event.emit(ForegroundEvents.RightAnimationComplete);
             };
@@ -159,9 +160,11 @@ export class ForegroundView extends PixiGrid {
     private onTimerOver(): void {
         this.showBlackBlocker(0.3);
 
-        const img = Sprite.from('prize.png');
-        img.anchor.set(0.5);
-        this.setChild('prize', img);
+        const prize = new PrizeContainer()
+        this.setChild('prize', prize);
+        // const img = Sprite.from('prize.png');
+        // img.anchor.set(0.5);
+        // this.setChild('prize', img);
     }
 
     private onGameIdleStateUpdate(state: IdleState): void {
