@@ -36,7 +36,7 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, 0, 738 + 60, 478 + 60);
+        return new Rectangle(0, -140, 768, 540);
     }
 
     private build(): void {
@@ -247,8 +247,8 @@ export class BoardView extends Container {
     }
 
     private getShelfPosition(box: BoxView): { x: number; y: number } {
-        const x = (box.width + 30) * box.j;
-        const y = box.i * 184 + 80;
+        const x = (box.width + 10) * box.j;
+        const y = box.i * 160 + 50;
         return { x, y };
     }
 
