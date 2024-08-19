@@ -36,9 +36,12 @@ export function getElementsData(get3Elements = false): ItemType[][][] {
 
     elements = shuffleWithValidation(elements);
 
+    const random1 = Math.floor(Math.random() * 3);
+    const random2 = Math.floor(Math.random() * 3);
+
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-            const itemsAmount = getItemsAmount(get3Elements);
+            const itemsAmount = get3Elements ? 3 : getItemsAmount(i === random1 && j === random2);
             const box = boxes[i][j];
             for (let k = 0; k < itemsAmount; k++) {
                 box.push(elements.pop());
@@ -49,10 +52,10 @@ export function getElementsData(get3Elements = false): ItemType[][][] {
     return boxes;
 }
 
-function getItemsAmount(get3Elements = false): number {
+function getItemsAmount(get2Elements = false): number {
     // 30% chance for 2 items
     // 70% chance for 3 items
-    if(get3Elements) return 3;
+    if(get2Elements) return 2; // just to make sure we have at least on box with 2 elements
     const rnd = Math.random();
     return rnd < 0.5 ? 2 : 3;
 }
