@@ -186,58 +186,9 @@ async function generateUncompressedSprites() {
     }
 }
 
-async function generateFonts() {
-    const { path } = paths.fonts;
-    try {
-        const files = await getFolderContent(path, true);
-        let filesNamesAndPath = [];
-        if (files.length !== 0) {
-            filesNamesAndPath = files.map((el) => {
-                const name = getFileNameWithoutExtension(el);
-                return { name, path: el };
-            });
-        }
-        const file = join(assetsPath, 'assetsNames/fonts.ts');
-        const data = `export const fonts: AssetNameAndPath[] = ${JSON.stringify(filesNamesAndPath)}`;
-        await fs.writeFile(file, data);
-        await runPrettierOn(file);
-    } catch (e) {
-        console.log(e.message);
-    }
-}
-
-async function generateSpines() {
-    const { path } = paths.spines;
-    try {
-        const spines = await fs.readdir(path, 'utf8');
-        let spineFiles = [];
-        if (spines.length !== 0) {
-            spineFiles = await Promise.all(
-                spines.map(async (s) => {
-                    const files = await getFolderContent(join(path, s));
-                    return {
-                        key: s,
-                        jsonURL: findFileWithExtension(files, 'json'),
-                        atlasURL: findFileWithExtension(files, 'atlas'),
-                        preMultipliedAlpha: true,
-                    };
-                }),
-            );
-        }
-        const file = join(assetsPath, 'assetsNames/spines.ts');
-        const data = `export const spines: SpineFiles[] = ${JSON.stringify(spineFiles)}`;
-        await fs.writeFile(file, data);
-        await runPrettierOn(file);
-    } catch (e) {
-        console.log(e.message);
-    }
-}
-
 async function start() {
     console.log('removing current sprite sheets');
     await emptyAtlasFolder();
-    console.log('generating atlases');
-    await generateAtlases();
     console.log('generating uncompressed sprites');
     await generateUncompressedSprites();
     console.log('asset generation complete');

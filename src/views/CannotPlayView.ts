@@ -8,7 +8,7 @@ export class CannotPlayView extends PixiGrid {
         super();
         this.build();
     }
-    
+
     public getGridConfig(): ICellConfig {
         return getCannotPlayGridConfig();
     }

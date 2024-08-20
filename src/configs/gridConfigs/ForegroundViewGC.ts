@@ -32,7 +32,7 @@ const getForegroundGridLandscapeConfig = () => {
             {
                 name: 'text_right',
                 bounds: { x: 1, y: 0.1, width: 0.6, height: 0.8 },
-            }
+            },
         ],
     };
 };
@@ -64,7 +64,7 @@ const getForegroundGridPortraitConfig = () => {
             {
                 name: 'text_right',
                 bounds: { x: 1, y: 0.2, width: 0.8, height: 0.6 },
-            }
+            },
         ],
     };
 };

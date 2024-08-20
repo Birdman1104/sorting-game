@@ -121,7 +121,7 @@ export class GameModel extends ObservableModel {
     }
 
     public startTimer(): void {
-        if(GAME_CONFIG.FREE) return
+        if (GAME_CONFIG.FREE) return;
         this._timerRunnable = loopRunnable(this.updateGameTime, this);
     }
 
@@ -130,7 +130,12 @@ export class GameModel extends ObservableModel {
     }
 
     private updateGameTime(): void {
-        if (this._idleState === IdleState.Idle || this._state === GameState.GameResult || this._state === GameState.TimeOver) return;
+        if (
+            this._idleState === IdleState.Idle ||
+            this._state === GameState.GameResult ||
+            this._state === GameState.TimeOver
+        )
+            return;
 
         if (this._idleState === IdleState.Play && this._idleTime > 0 && this._state === GameState.Game) {
             this._idleTime -= window.game.ticker.elapsedMS;

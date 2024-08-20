@@ -32,7 +32,7 @@ export class ItemView extends Container {
     }
 
     public emptyArea(): void {
-        this.dropArea?.empty()
+        this.dropArea?.empty();
         this.dropArea = null;
     }
 
@@ -41,23 +41,23 @@ export class ItemView extends Container {
     }
 
     public dropTo(dropArea: DropDownAreaInfo): void {
-        this.dropArea?.empty()
+        this.dropArea?.empty();
         this.dropArea = dropArea;
         this.originalX = dropArea.centerX;
         this.originalY = dropArea.centerY;
     }
 
     public startDrag(): void {
-        this.dropArea?.empty()
+        this.dropArea?.empty();
         this.dropArea = null;
     }
 
     private build(): void {
-        const data = GLOBAL_DATA.TEXTURES.find((t) => t.key === this.type)
+        const data = GLOBAL_DATA.TEXTURES.find((t) => t.key === this.type);
         const texture = data?.texture;
         this.sprite = Sprite.from(texture);
-        this.sprite.anchor.set(0.5)
-        this.sprite.scale.set(0.5)
+        this.sprite.anchor.set(0.5);
+        this.sprite.scale.set(0.5);
         this.addChild(this.sprite);
     }
 }

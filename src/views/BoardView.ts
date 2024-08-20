@@ -225,7 +225,7 @@ export class BoardView extends Container {
                     el.destroy();
                 });
 
-                elements = []
+                elements = [];
 
                 this.addingElementsQueue.forEach(({ box, elements, index }) => {
                     elements.forEach((element, i) => {

@@ -46,6 +46,6 @@ export class BoxModel extends ObservableModel {
 
     public addElements(items: ItemType[]): void {
         const temp = items.map((item) => new ItemModel(item));
-        this._elements = temp
+        this._elements = temp;
     }
 }

@@ -25,7 +25,7 @@ export const setGameStateCommand = (state: GameState) => {
 
 export const onIdleStateUpdateCommand = (state: IdleState) => {
     // if (state === IdleState.Idle) {
-        // Head.gameModel.stopTimer();
+    // Head.gameModel.stopTimer();
     // }
 };
 

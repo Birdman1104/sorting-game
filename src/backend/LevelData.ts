@@ -55,7 +55,7 @@ export function getElementsData(get3Elements = false): ItemType[][][] {
 function getItemsAmount(get2Elements = false): number {
     // 30% chance for 2 items
     // 70% chance for 3 items
-    if(get2Elements) return 2; // just to make sure we have at least on box with 2 elements
+    if (get2Elements) return 2; // just to make sure we have at least on box with 2 elements
     const rnd = Math.random();
     return rnd < 0.5 ? 2 : 3;
 }

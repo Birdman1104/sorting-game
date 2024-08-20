@@ -23,7 +23,7 @@ export class DropDownAreaInfo {
     }
 
     get isFree(): boolean {
-        return !this.insertedItem
+        return !this.insertedItem;
     }
 
     public setItem(item: ItemView): void {

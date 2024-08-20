@@ -8,9 +8,9 @@ export class BackgroundView extends PixiGrid {
         super();
         // this.build();
     }
-    
+
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0,0, 1280, 661)
+        return new Rectangle(0, 0, 1280, 661);
     }
 
     public getGridConfig(): ICellConfig {

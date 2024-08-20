@@ -33,7 +33,7 @@ class SoundControl {
         this.sounds.prize = new Howl({ src: PRIZE_SOUND });
         this.sounds.tap = new Howl({ src: TAP_SOUND });
         this.sounds.theme = new Howl({ src: THEME_SOUND, loop: true, volume: 0.2 });
-        this.sounds.wrongDrop = new Howl({ src: DROP_SOUND, volume: 0.5 });  
+        this.sounds.wrongDrop = new Howl({ src: DROP_SOUND, volume: 0.5 });
     }
 
     private onTimerUpdate(time: number): void {

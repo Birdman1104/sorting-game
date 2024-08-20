@@ -14,4 +14,4 @@ export const onTimeOverTextHideCompleteCommand = () => {
 export const onBlackBlockerClickedCommand = () => {
     Head.gameModel.idleState = IdleState.Play;
     Head.gameModel.resetIdleTime();
-}
+};

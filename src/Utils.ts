@@ -169,7 +169,13 @@ export const drawBounds = (container: any, color = 0xffffff * Math.random(), alp
     return gr;
 };
 
-export const drawPoint = (container: any, x: number, y: number, color = 0xffffff * Math.random(), alpha = 0.5): Graphics => {
+export const drawPoint = (
+    container: any,
+    x: number,
+    y: number,
+    color = 0xffffff * Math.random(),
+    alpha = 0.5,
+): Graphics => {
     const gr = new Graphics();
     gr.beginFill(color, alpha);
     gr.drawCircle(x, y, 12);
@@ -203,4 +209,4 @@ export const convertMilliseconds = (ms: number): string => {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-}
+};

@@ -47,7 +47,6 @@ class App extends Application {
             // this.initLego();
         }
         const { start, free } = await check();
-        console.warn('start', start, 'free', free);
 
         GAME_CONFIG.CAN_PLAY = start;
         GAME_CONFIG.FREE = free;
