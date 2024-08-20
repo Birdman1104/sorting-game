@@ -1,7 +1,6 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite } from 'pixi.js';
-import { BKG_IMAGE } from '../base64/images/bkg';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
@@ -34,10 +33,13 @@ export class BoardView extends Container {
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this);
         this.build();
+
+        // drawBounds(this);
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, 0, 1280, 661);
+        return new Rectangle(0, 0, 800, 1280);
+        // return new Rectangle(0, 0, 1280, 661);
     }
 
     private build(): void {
@@ -46,13 +48,15 @@ export class BoardView extends Container {
     }
 
     private buildBkg(): void {
-        const bkg = Sprite.from(BKG_IMAGE);
+        const bkg = Sprite.from('bkgP.jpg');
+        // const bkg = Sprite.from(BKG_IMAGE);
         this.addChild(bkg);
     }
 
     private buildTimer(): void {
         this.timer = new TimerView();
-        this.timer.position.set(this.width / 2, 60);
+        this.timer.position.set(this.width / 2, 260);
+        // this.timer.position.set(this.width / 2, 60);
         this.addChild(this.timer);
     }
 
@@ -256,8 +260,10 @@ export class BoardView extends Container {
     }
 
     private getShelfPosition(box: BoxView): { x: number; y: number } {
-        const x = (box.width + 10) * box.j + 250;
-        const y = box.i * 160 + 230;
+        const x = (box.width + 10) * box.j + 10;
+        const y = box.i * 160 + 500;
+        // const x = (box.width + 10) * box.j + 250;
+        // const y = box.i * 160 + 230;
         return { x, y };
     }
 

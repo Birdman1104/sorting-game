@@ -11,7 +11,7 @@ import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
 
-export const GLOBAL_DATA:GlobalData = {
+export const GLOBAL_DATA: GlobalData = {
     ASSETS: [],
 };
 class App extends Application {
@@ -31,9 +31,12 @@ class App extends Application {
     public async init(): Promise<void> {
         this.stage = new PixiStage();
         // @ts-ignore
-        this.view.classList.add('app');
+        this.view.classList.add('gameCss');
+        
         // @ts-ignore
-        document.body.appendChild(this.view);
+        const div = document.getElementsByClassName('canvas-game')[0];
+        // @ts-ignore
+        div.appendChild(this.view);
 
         this.renderer.plugins.interaction.autoPreventDefault = false;
 
