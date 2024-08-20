@@ -1,5 +1,6 @@
 import { Container } from 'pixi.js';
 import { BackgroundView } from './views/BackgroundView';
+import { CannotPlayView } from './views/CannotPlayView';
 import { ForegroundView } from './views/ForegroundView';
 import { GameView } from './views/GameView';
 import { UIView } from './views/UIView';
@@ -9,6 +10,7 @@ class PixiStage extends Container {
     private gameView: GameView;
     private uiView: UIView;
     private foregroundView: ForegroundView;
+    private cannotPlay: CannotPlayView;
 
     constructor() {
         super();
@@ -19,9 +21,15 @@ class PixiStage extends Container {
         this.gameView?.rebuild();
         this.uiView?.rebuild();
         this.foregroundView?.rebuild();
+        this.cannotPlay?.rebuild();
     }
 
-    public start(): void {
+    public showCannotPlay(): void {
+        this.cannotPlay = new CannotPlayView();
+        this.addChild(this.cannotPlay);
+    }
+
+    public startGame(): void {
         this.bgView = new BackgroundView();
         this.addChild(this.bgView);
         this.gameView = new GameView();

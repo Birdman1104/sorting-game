@@ -8,6 +8,7 @@ import { assets } from './assets/assetsNames/assets';
 import { check, fetchProductsData } from './backend/fetch';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
+import { GAME_CONFIG } from './configs/constants';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
 
 export const GLOBAL_DATA: GlobalData = {
@@ -48,10 +49,18 @@ class App extends Application {
         const { start, free } = await check();
         console.warn('start', start, 'free', free);
 
-        const { data } = await fetchProductsData();
-        GLOBAL_DATA.ASSETS = data;
-        await this.loadAssets();
-        this.onLoadComplete();
+        GAME_CONFIG.CAN_PLAY = start;
+        GAME_CONFIG.FREE = free;
+
+        if(!GAME_CONFIG.CAN_PLAY) {
+            this.showCannotPlay();
+        } else {
+            const { data } = await fetchProductsData();
+            GLOBAL_DATA.ASSETS = data;
+            await this.loadAssets();
+            this.startGame();
+        }
+
     }
 
     private async loadAssets(): Promise<void> {
@@ -104,10 +113,15 @@ class App extends Application {
         lego.event.emit(MainGameEvents.Mute, value);
     }
 
-    private onLoadComplete(): void {
+    private showCannotPlay(): void {
+        this.appResize();
+        this.stage.showCannotPlay();
+    }
+
+    private startGame(): void {
         this.muteSound(document.visibilityState !== 'visible');
         this.appResize();
-        this.stage.start();
+        this.stage.startGame();
         lego.command.execute(mapCommands);
         lego.event.emit(MainGameEvents.MainViewReady);
     }
