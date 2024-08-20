@@ -22,4 +22,30 @@
             canvas,
             html {
                 user-select: none;
-            }</style><script defer="defer" src="main.bundle.js"></script></head><body><div class="canvas-game"></div></body></html>
+            }
+
+            #myButton {
+                background-color: #4caf50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                /* margin: auto; */
+            }
+
+            .button-div {
+                user-select: none;
+                height: 100%; /* Ensure the full height is used */
+                margin: 0; /* Remove default margin */
+                display: flex; /* Use flexbox to center children */
+                justify-content: center; /* Center horizontally */
+                align-items: center; /* Center vertically */
+            }</style><script defer="defer" src="main.bundle.js"></script></head><body><div class="button-div"><button id="myButton">Click To Play</button></div><div class="canvas-game"></div><script>const customEvent = new Event('startGame');
+
+            document.getElementById('myButton').addEventListener('click', function () {
+                window.dispatchEvent(customEvent);
+                this.remove();
+            });</script></body></html>
