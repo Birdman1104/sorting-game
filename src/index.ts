@@ -1,7 +1,10 @@
 import App from './App';
 
+// TODO - change to button event
 // @ts-ignore
+// window.addEventListener('load', () => {
 window.addEventListener('startGame', () => {
+    alert('startGame event');
     window.game = new App();
     window.game.init();
 

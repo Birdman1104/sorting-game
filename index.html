@@ -55,6 +55,8 @@
         </style>
     </head>
     <body>
+
+        <!-- TODO - bring back the button -->
         <div class="button-div">
             <button id="myButton">Click To Play</button>
         </div>
@@ -64,8 +66,9 @@
             const customEvent = new Event('startGame');
 
             document.getElementById('myButton').addEventListener('click', function () {
+                alert('Game is starting button click');
                 window.dispatchEvent(customEvent);
-                this.remove();
+                // this.remove();
             });
         </script>
     </body>
