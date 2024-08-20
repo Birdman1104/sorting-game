@@ -9,7 +9,6 @@ import { TIMER_SOUND } from './base64/sounds/timer';
 import { DROP_SOUND } from './base64/sounds/wrongDrop';
 import { BoardEvents, ForegroundEvents, MainGameEvents } from './events/MainEvents';
 import { GameModelEvents } from './events/ModelEvents';
-import { GameState } from './models/GameModel';
 
 class SoundControl {
     private sounds: any;
@@ -65,11 +64,11 @@ class SoundControl {
     }
 
     private onGameStateUpdate(state): void {
-        if(state === GameState.Game) {
-            this.sounds.theme.play();
-        } else {
-            this.sounds.theme.stop();
-        }
+        // if(state === GameState.Game) {
+        //     this.sounds.theme.play();
+        // } else {
+        //     this.sounds.theme.stop();
+        // }
     }
 
     private onMute(muted: boolean): void {
