@@ -38,6 +38,8 @@ class PixiStage extends Container {
         this.addChild(this.uiView);
         this.foregroundView = new ForegroundView();
         this.addChild(this.foregroundView);
+
+        this.resize();
     }
 }
 

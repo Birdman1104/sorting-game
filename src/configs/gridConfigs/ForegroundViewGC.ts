@@ -23,7 +23,7 @@ const getForegroundGridLandscapeConfig = () => {
             },
             {
                 name: 'text_left',
-                bounds: { x: -1.2, y: 0.1, width: 0.3, height: 0.8 },
+                bounds: { x: -2, y: 0.1, width: 0.3, height: 0.8 },
             },
             {
                 name: 'text_show',
