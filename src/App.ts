@@ -44,7 +44,7 @@ class App extends Application {
 
         globalThis.__PIXI_APP__ = this;
         if (process.env.NODE_ENV !== 'production') {
-            // this.initStats();
+            this.initStats();
             // this.initLego();
         }
         const { start, free } = await check();
