@@ -1,5 +1,5 @@
 import { loopRunnable, removeRunnable } from '../Utils';
-import { IDLE_TIME, TIMER } from '../configs/constants';
+import { GAME_CONFIG } from '../configs/constants';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -21,9 +21,9 @@ export class GameModel extends ObservableModel {
 
     private _timerRunnable: any;
     private _prize = '';
-    private _gameTime = TIMER; // ms
+    private _gameTime = GAME_CONFIG.TIMER; // ms
 
-    private _idleTime = IDLE_TIME;
+    private _idleTime = GAME_CONFIG.IDLE_TIME;
     private _idleState: IdleState;
 
     private _score = 0;
@@ -166,7 +166,7 @@ export class GameModel extends ObservableModel {
 
     public resetIdleTime(): void {
         this._idleState = IdleState.Play;
-        this._idleTime = IDLE_TIME;
+        this._idleTime = GAME_CONFIG.IDLE_TIME;
     }
 }
 

@@ -42,4 +42,12 @@ type AssetConfig = {
 
 type GlobalData = {
     ASSETS: AssetConfig[];
-}
+    TEXTURES: TextureConfig[];
+};
+
+type TextureConfig = {
+    key: string;
+    texture: PIXI.Texture;
+};
+
+type ServerCheck = { start: boolean; free: boolean };

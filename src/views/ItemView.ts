@@ -1,4 +1,5 @@
 import { Container, Sprite } from 'pixi.js';
+import { GLOBAL_DATA } from '../App';
 import { ItemModel, ItemType } from '../models/ItemModel';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
 
@@ -52,7 +53,9 @@ export class ItemView extends Container {
     }
 
     private build(): void {
-        this.sprite = Sprite.from(`${this.type}.png`);
+        const data = GLOBAL_DATA.TEXTURES.find((t) => t.key === this.type)
+        const texture = data?.texture;
+        this.sprite = Sprite.from(texture);
         this.sprite.anchor.set(0.5)
         this.sprite.scale.set(0.5)
         this.addChild(this.sprite);

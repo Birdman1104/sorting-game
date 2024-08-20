@@ -27,7 +27,7 @@ class SoundControl {
             .on(BoardEvents.Click, this.onClick, this);
     }
 
-    public loadSounds(): void {
+    public setupSounds(): void {
         this.sounds.timer = new Howl({ src: TIMER_SOUND, volume: 0.8 });
         this.sounds.match = new Howl({ src: MATCH_SOUND });
         this.sounds.prize = new Howl({ src: PRIZE_SOUND });

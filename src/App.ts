@@ -5,14 +5,14 @@ import PixiStage from './MainStage';
 import SoundController from './SoundController';
 import { fitDimension } from './Utils';
 import { assets } from './assets/assetsNames/assets';
-import { atlases } from './assets/assetsNames/atlas';
-import { fetchData } from './backend/fetch';
+import { check, fetchProductsData } from './backend/fetch';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
 
 export const GLOBAL_DATA: GlobalData = {
     ASSETS: [],
+    TEXTURES: [],
 };
 class App extends Application {
     public stage: PixiStage;
@@ -32,7 +32,7 @@ class App extends Application {
         this.stage = new PixiStage();
         // @ts-ignore
         this.view.classList.add('gameCss');
-        
+
         // @ts-ignore
         const div = document.getElementsByClassName('canvas-game')[0];
         // @ts-ignore
@@ -42,13 +42,38 @@ class App extends Application {
 
         globalThis.__PIXI_APP__ = this;
         if (process.env.NODE_ENV !== 'production') {
-            this.initStats();
+            // this.initStats();
             // this.initLego();
         }
-        const data = await fetchData();
-        GLOBAL_DATA.ASSETS = data.data;
+        const { start, free } = await check();
+        console.warn('start', start, 'free', free);
+
+        const { data } = await fetchProductsData();
+        GLOBAL_DATA.ASSETS = data;
         await this.loadAssets();
         this.onLoadComplete();
+    }
+
+    private async loadAssets(): Promise<void> {
+        for (const key in GLOBAL_DATA.ASSETS) {
+            const texture = await Assets.load(GLOBAL_DATA.ASSETS[key].url);
+            GLOBAL_DATA.TEXTURES[key] = {
+                key: `${parseInt(key) + 1}`,
+                texture,
+            }
+        }
+        
+        for (const asset of assets) {
+            const { name, path } = asset;
+            Assets.add(name, path);
+            await Assets.load(name);
+        }
+        // for (const atlas of atlases) {
+        //     const { name, json } = atlas;
+        //     Assets.add(name, json);
+        //     await Assets.load(name);
+        // }
+        SoundController.setupSounds();
     }
 
     public appResize(): void {
@@ -77,24 +102,6 @@ class App extends Application {
 
     public muteSound(value: boolean): void {
         lego.event.emit(MainGameEvents.Mute, value);
-    }
-
-    private async loadAssets(): Promise<void> {
-        // for (const key in GLOBAL_DATA.ASSETS) {
-        //     Assets.add(key, GLOBAL_DATA.ASSETS[key].url);
-        //     await Assets.load(key);
-        // }
-        for (const asset of assets) {
-            const { name, path } = asset;
-            Assets.add(name, path);
-            await Assets.load(name);
-        }
-        for (const atlas of atlases) {
-            const { name, json } = atlas;
-            Assets.add(name, json);
-            await Assets.load(name);
-        }
-        SoundController.loadSounds();
     }
 
     private onLoadComplete(): void {
