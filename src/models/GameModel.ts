@@ -121,6 +121,7 @@ export class GameModel extends ObservableModel {
     }
 
     public startTimer(): void {
+        if(GAME_CONFIG.FREE) return
         this._timerRunnable = loopRunnable(this.updateGameTime, this);
     }
 

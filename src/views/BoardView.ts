@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite } from 'pixi.js';
+import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
@@ -44,7 +45,7 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildBkg();
-        this.buildTimer();
+        !GAME_CONFIG.FREE && this.buildTimer();
     }
 
     private buildBkg(): void {

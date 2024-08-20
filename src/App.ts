@@ -52,7 +52,7 @@ class App extends Application {
         GAME_CONFIG.CAN_PLAY = start;
         GAME_CONFIG.FREE = free;
 
-        if(!GAME_CONFIG.CAN_PLAY) {
+        if (!GAME_CONFIG.CAN_PLAY) {
             this.showCannotPlay();
         } else {
             const { data } = await fetchProductsData();
@@ -60,7 +60,6 @@ class App extends Application {
             await this.loadAssets();
             this.startGame();
         }
-
     }
 
     private async loadAssets(): Promise<void> {
@@ -69,9 +68,9 @@ class App extends Application {
             GLOBAL_DATA.TEXTURES[key] = {
                 key: `${parseInt(key) + 1}`,
                 texture,
-            }
+            };
         }
-        
+
         for (const asset of assets) {
             const { name, path } = asset;
             Assets.add(name, path);

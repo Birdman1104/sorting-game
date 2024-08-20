@@ -5,6 +5,7 @@ import { Graphics, Sprite } from 'pixi.js';
 import { delayRunnable, tweenToCell } from '../Utils';
 import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
 import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
+import { GAME_CONFIG } from '../configs/constants';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
@@ -38,8 +39,10 @@ export class ForegroundView extends PixiGrid {
     private build(): void {
         this.buildWhiteBlocker();
         this.buildBlackBlocker();
-        this.buildIdleText();
-        this.buildTimeOverText();
+        if (!GAME_CONFIG.FREE) {
+            this.buildIdleText();
+            this.buildTimeOverText();
+        }
     }
 
     private buildWhiteBlocker(): void {
@@ -62,7 +65,7 @@ export class ForegroundView extends PixiGrid {
 
     private buildIdleText(): void {
         this.idleText = Sprite.from(IDLE_TEXT_IMAGE);
-        this.setChild('text_left', this.idleText);
+        this.setChild('text_show', this.idleText);
     }
 
     private buildTimeOverText(): void {
@@ -100,11 +103,11 @@ export class ForegroundView extends PixiGrid {
                 lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
                 this.setChild('text_left', this.timeOverText);
             });
-        })
+        });
     }
 
     private onGameResult(): void {
-        const prize = new PrizeContainer()
+        const prize = new PrizeContainer();
         lego.event.emit(ForegroundEvents.PrizeShown);
         this.setChild('prize', prize);
     }
