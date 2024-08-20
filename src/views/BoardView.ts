@@ -1,6 +1,8 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Point, Rectangle, Sprite } from 'pixi.js';
+import { Container, Point, Rectangle, Sprite, Texture } from 'pixi.js';
+import { lp } from '../Utils';
+import { BKG_IMAGE } from '../base64/images/bkg';
 import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
@@ -11,12 +13,98 @@ import { DropDownAreaInfo } from './DropDownAreaInfo';
 import { ItemView } from './ItemView';
 import { TimerView } from './TimerView';
 
+const BOUNDS = {
+    landscape: { width: 1280, height: 660 },
+    portrait: { width: 800, height: 1280 },
+};
+
+const BOXES_POSITIONS = {
+    landscape: [
+        {
+            x: 250,
+            y: 230,
+        },
+        {
+            x: 510,
+            y: 230,
+        },
+        {
+            x: 770,
+            y: 230,
+        },
+        {
+            x: 250,
+            y: 390,
+        },
+        {
+            x: 510,
+            y: 390,
+        },
+        {
+            x: 770,
+            y: 390,
+        },
+        {
+            x: 250,
+            y: 550,
+        },
+        {
+            x: 510,
+            y: 550,
+        },
+        {
+            x: 770,
+            y: 550,
+        },
+    ],
+    portrait: [
+        {
+            x: 10,
+            y: 500,
+        },
+        {
+            x: 270,
+            y: 500,
+        },
+        {
+            x: 530,
+            y: 500,
+        },
+        {
+            x: 10,
+            y: 660,
+        },
+        {
+            x: 270,
+            y: 660,
+        },
+        {
+            x: 530,
+            y: 660,
+        },
+        {
+            x: 10,
+            y: 820,
+        },
+        {
+            x: 270,
+            y: 820,
+        },
+        {
+            x: 530,
+            y: 820,
+        },
+    ],
+};
+
 export class BoardView extends Container {
     private items: ItemView[] = [];
     private boxes: BoxView[] = [];
     private canDrag = true;
     private dragPoint: Point;
     private dragStarted = false;
+
+    private bkg: Sprite;
 
     private draggingItem: ItemView | null;
 
@@ -34,13 +122,18 @@ export class BoardView extends Container {
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this);
         this.build();
-
-        // drawBounds(this);
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, 0, 800, 1280);
-        // return new Rectangle(0, 0, 1280, 661);
+        const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
+        return new Rectangle(0, 0, width, height);
+    }
+
+    public rebuild(): void {
+        this.bkg.texture = Texture.from(lp(BKG_IMAGE, 'bkgP.jpg'));
+        this.repositionBoxes();
+        this.updateDropAreas();
+        this.updateTimerPosition();
     }
 
     private build(): void {
@@ -49,15 +142,13 @@ export class BoardView extends Container {
     }
 
     private buildBkg(): void {
-        const bkg = Sprite.from('bkgP.jpg');
-        // const bkg = Sprite.from(BKG_IMAGE);
-        this.addChild(bkg);
+        this.bkg = Sprite.from(lp(BKG_IMAGE, 'bkgP.jpg'));
+        this.addChild(this.bkg);
     }
 
     private buildTimer(): void {
         this.timer = new TimerView();
-        this.timer.position.set(this.width / 2, 260);
-        // this.timer.position.set(this.width / 2, 60);
+        this.timer.position.set(this.width / 2, lp(60, 260));
         this.addChild(this.timer);
     }
 
@@ -66,13 +157,17 @@ export class BoardView extends Container {
     }
 
     private onBoxesUpdate(data: BoxModel[]): void {
+        const arr = [];
         data.forEach((b) => {
             const box = new BoxView(b.i, b.j, b.uuid);
             const { x, y } = this.getShelfPosition(box);
+            // @ts-ignore
+            arr.push({ x, y });
             box.position.set(x, y);
             this.boxes.push(box);
             this.addChild(box);
         });
+
         this.setDropAreas();
 
         data.forEach((box, j) => {
@@ -260,11 +355,47 @@ export class BoardView extends Container {
         }
     }
 
+    private repositionBoxes(): void {
+        this.boxes.forEach((box) => {
+            const { x, y } = this.getShelfPosition(box);
+            box.position.set(x, y);
+        });
+    }
+
+    private updateDropAreas(): void {
+        this.boxes.forEach((box, j) => {
+            let startingX = box.x + 10;
+            for (let i = 0; i < 3; i++) {
+                const startX = startingX + 80 * i;
+                const startY = box.y - 80;
+                const endX = startingX + 80 * i + 80;
+                const endY = box.y + 20;
+                this.finalPositions[j * 3 + i].update({ startX, startY, endX, endY });
+            }
+        });
+
+        this.finalPositions.forEach((area) => {
+            if (area.insertedItem) {
+                const { centerX, centerY } = area;
+                area.insertedItem.position.set(centerX, centerY);
+            }
+        });
+    }
+
+    private updateTimerPosition(): void {
+        const { width } = lp(BOUNDS.landscape, BOUNDS.portrait);
+        this.timer.position.set(width / 2, lp(60, 260));
+    }
+
     private getShelfPosition(box: BoxView): { x: number; y: number } {
-        const x = (box.width + 10) * box.j + 10;
-        const y = box.i * 160 + 500;
+        // P
+        // const x = (box.width + 10) * box.j + 10;
+        // const y = box.i * 160 + 500;
+        // L
         // const x = (box.width + 10) * box.j + 250;
         // const y = box.i * 160 + 230;
+        const pos = lp(BOXES_POSITIONS.landscape, BOXES_POSITIONS.portrait);
+        const { x, y } = pos[box.i * 3 + box.j];
         return { x, y };
     }
 

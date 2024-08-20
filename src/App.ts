@@ -30,7 +30,6 @@ class App extends Application {
     }
 
     public async init(): Promise<void> {
-        alert('init')
         this.stage = new PixiStage();
         // @ts-ignore
         this.view.classList.add('gameCss');

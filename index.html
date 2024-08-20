@@ -66,7 +66,6 @@
             const customEvent = new Event('startGame');
 
             document.getElementById('myButton').addEventListener('pointerdown', function () {
-                alert('Game is starting button click');
                 window.dispatchEvent(customEvent);
                 // this.remove();
             });

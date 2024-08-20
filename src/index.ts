@@ -4,7 +4,6 @@ import App from './App';
 // @ts-ignore
 // window.addEventListener('load', () => {
 window.addEventListener('startGame', () => {
-    alert('startGame event');
     window.game = new App();
     window.game.init();
 

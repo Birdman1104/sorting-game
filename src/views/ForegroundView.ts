@@ -65,7 +65,7 @@ export class ForegroundView extends PixiGrid {
 
     private buildIdleText(): void {
         this.idleText = Sprite.from(IDLE_TEXT_IMAGE);
-        this.setChild('text_show', this.idleText);
+        this.setChild('text_left', this.idleText);
     }
 
     private buildTimeOverText(): void {

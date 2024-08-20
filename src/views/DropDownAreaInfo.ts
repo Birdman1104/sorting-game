@@ -26,6 +26,13 @@ export class DropDownAreaInfo {
         return !this.insertedItem;
     }
 
+    public update(info): void {
+        this.startX = info.startX;
+        this.startY = info.startY;
+        this.endX = info.endX;
+        this.endY = info.endY;
+    }
+
     public setItem(item: ItemView): void {
         this.insertedItem = item;
     }
