@@ -44,10 +44,5 @@ module.exports = {
             template: './index.html',
             filename: 'index.html',
         }),
-        new CopyWebpackPlugin({
-            patterns: [{ from: './src/assets', to: 'assets' }],
-            // patterns: [{ from: './src/assets/uncompressed', to: 'assets/uncompressed' }],
-            // patterns: [{ from: './src/assets/atlas', to: 'assets/atlas' }],
-        }),
     ],
 };

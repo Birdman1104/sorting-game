@@ -69,16 +69,6 @@ class App extends Application {
             };
         }
 
-        for (const asset of assets) {
-            const { name, path } = asset;
-            Assets.add(name, path);
-            await Assets.load(name);
-        }
-        // for (const atlas of atlases) {
-        //     const { name, json } = atlas;
-        //     Assets.add(name, json);
-        //     await Assets.load(name);
-        // }
         SoundController.setupSounds();
     }
 

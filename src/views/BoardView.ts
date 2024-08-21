@@ -1,13 +1,14 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Point, Rectangle, Sprite, Texture } from 'pixi.js';
-import { lp } from '../Utils';
+import { Container, Graphics, Point, Rectangle, Sprite, Texture } from 'pixi.js';
+import { delayRunnable, lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
 import { GAME_CONFIG } from '../configs/constants';
-import { BoardEvents } from '../events/MainEvents';
+import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
+import { GameState, IdleState } from '../models/GameModel';
 import { ItemModel } from '../models/ItemModel';
 import { BoxView } from './BoxView';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
@@ -115,13 +116,18 @@ export class BoardView extends Container {
 
     private addingElementsQueue: { box: BoxView; elements: ItemModel[]; index: number }[] = [];
 
+    private whiteBlocker: Graphics;
+    private blackBlocker: Graphics;
+
     constructor() {
         super();
 
         lego.event
+            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
-            .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this);
+            .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this)
+            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this);
         this.build();
     }
 
@@ -135,11 +141,34 @@ export class BoardView extends Container {
         this.repositionBoxes();
         this.updateDropAreas();
         this.updateTimerPosition();
+        this.updateBlockers()
     }
 
     private build(): void {
         this.buildBkg();
         !GAME_CONFIG.FREE && this.buildTimer();
+
+        const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
+        this.buildWhiteBlocker({ width, height });
+        this.buildBlackBlocker({ width, height });
+    }
+
+    private buildWhiteBlocker({ width, height }): void {
+        this.whiteBlocker = new Graphics();
+        this.whiteBlocker.beginFill(0xaeaeae, 1);
+        this.whiteBlocker.drawRect(0, 0, width, height);
+        this.whiteBlocker.endFill();
+        this.whiteBlocker.alpha = 0;
+        this.addChild(this.whiteBlocker);
+    }
+
+    private buildBlackBlocker({ width, height }): void {
+        this.blackBlocker = new Graphics();
+        this.blackBlocker.beginFill(0x000000, 1);
+        this.blackBlocker.drawRect(0, 0, width, height);
+        this.blackBlocker.endFill();
+        this.blackBlocker.alpha = 0;
+        this.addChild(this.blackBlocker);
     }
 
     private buildBkg(): void {
@@ -184,6 +213,8 @@ export class BoardView extends Container {
             });
         });
         this.items.forEach((item) => this.addChild(item));
+
+        this.readdBlockers()
     }
 
     private setDragEvents(item: ItemView): void {
@@ -230,6 +261,8 @@ export class BoardView extends Container {
         }
 
         this.draggingItem = null;
+
+        this.readdBlockers()
     }
 
     private onDragMove(event): void {
@@ -354,6 +387,8 @@ export class BoardView extends Container {
         } else {
             this.addingElementsQueue.push({ box, elements, index });
         }
+
+        this.readdBlockers()
     }
 
     private repositionBoxes(): void {
@@ -403,5 +438,99 @@ export class BoardView extends Container {
     private checkMatch(c1: DropDownAreaInfo, c2: DropDownAreaInfo, c3: DropDownAreaInfo): boolean {
         if (!c1.insertedItem || !c2.insertedItem || !c3.insertedItem) return false;
         return c1.insertedItem?.type === c2.insertedItem?.type && c2.insertedItem?.type === c3.insertedItem?.type;
+    }
+
+    private onGameStateUpdate(state: GameState): void {
+        switch (state) {
+            case GameState.Game:
+                this.onGameStart();
+                break;
+            case GameState.TimeOver:
+                this.onTimerOver();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private onGameStart(): void {
+        this.hideWhiteBlocker();
+    }
+
+    private hideWhiteBlocker(): void {
+        anime({
+            targets: this.whiteBlocker,
+            alpha: 0,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.whiteBlocker.eventMode = 'none';
+                this.whiteBlocker.visible = false;
+            },
+        });
+    }
+
+    private hideBlackBlocker(): void {
+        anime({
+            targets: this.blackBlocker,
+            alpha: 0,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.blackBlocker.eventMode = 'none';
+                this.blackBlocker.visible = false;
+            },
+        });
+    }
+
+    private showBlackBlocker(emitEvent = true): void {
+        this.blackBlocker.visible = true;
+        anime({
+            targets: this.blackBlocker,
+            alpha: 0.7,
+            duration: 200,
+            easing: 'linear',
+            complete: () => {
+                this.blackBlocker.eventMode = 'static';
+                if (emitEvent) {
+                    this.blackBlocker.on('pointerdown', () => {
+                        lego.event.emit(ForegroundEvents.BlackBlockerClicked);
+                    });
+                }
+            },
+        });
+    }
+
+    private onGameIdleStateUpdate(state: IdleState): void {
+        if (state === IdleState.Idle) {
+            this.showBlackBlocker();
+        } else {
+            this.hideBlackBlocker();
+        }
+    }
+
+    private onTimerOver(): void {
+        this.showBlackBlocker(false);
+
+        delayRunnable(3, () => {
+            this.hideBlackBlocker();
+        });
+    }
+
+    private updateBlockers(): void {
+        const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
+        this.whiteBlocker.width = width;
+        this.whiteBlocker.height = height;
+        this.blackBlocker.width = width;
+        this.blackBlocker.height = height;
+    }
+
+    private readdBlockers(): void {
+        this.removeChild(this.blackBlocker);
+        this.addChild(this.blackBlocker);
+
+        this.removeChild(this.whiteBlocker);
+        this.addChild(this.whiteBlocker);
     }
 }
