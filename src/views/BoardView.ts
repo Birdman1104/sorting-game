@@ -4,6 +4,7 @@ import { Container, Graphics, Point, Rectangle, Sprite, Texture } from 'pixi.js'
 import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
+import { POWERED_BY } from '../base64/images/poweredBy';
 import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
@@ -107,6 +108,7 @@ export class BoardView extends Container {
     private dragStarted = false;
 
     private bkg: Sprite;
+    private poweredBy: Sprite;
 
     private draggingItem: ItemView | null;
 
@@ -159,6 +161,7 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildBkg();
+        this.buildPoweredBy()
         !GAME_CONFIG.FREE && this.buildTimer();
 
         const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
@@ -187,6 +190,15 @@ export class BoardView extends Container {
     private buildBkg(): void {
         this.bkg = Sprite.from(lp(BKG_IMAGE_L, BKG_IMAGE_P));
         this.addChild(this.bkg);
+    }
+
+    private buildPoweredBy(): void {
+        this.poweredBy = Sprite.from(POWERED_BY);
+        this.poweredBy.anchor.set(0);
+        this.poweredBy.position.set(10, 10);
+        this.poweredBy.scale.set(0.5);
+
+        this.addChild(this.poweredBy);
     }
 
     private buildTimer(): void {
