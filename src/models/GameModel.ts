@@ -1,4 +1,5 @@
 import { loopRunnable, removeRunnable } from '../Utils';
+import { getPrize } from '../backend/fetch';
 import { GAME_CONFIG } from '../configs/constants';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
@@ -20,7 +21,7 @@ export class GameModel extends ObservableModel {
     private _board: BoardModel | null = null;
 
     private _timerRunnable: any;
-    private _prize = '';
+    private _prize: any;
     private _gameTime = GAME_CONFIG.TIMER; // ms
 
     private _idleTime = GAME_CONFIG.IDLE_TIME;
@@ -31,6 +32,7 @@ export class GameModel extends ObservableModel {
     constructor() {
         super('GameModel');
 
+        this._prize = {};
         this._idleState = IdleState.Play;
         this.makeObservable();
     }
@@ -161,7 +163,13 @@ export class GameModel extends ObservableModel {
     }
 
     public async getPrize(): Promise<void> {
-        this._prize = await getPrize();
+        console.warn('getPrize');
+        
+        const data = await getPrize();
+        this._prize = data;
+
+        console.warn(this._prize);
+        
     }
 
     private setToIdleState(): void {
@@ -175,12 +183,3 @@ export class GameModel extends ObservableModel {
         this._idleTime = GAME_CONFIG.IDLE_TIME;
     }
 }
-
-const getPrize = (): Promise<string> => {
-    return new Promise((resolve) => {
-        const rnd = Math.random();
-        setTimeout(() => {
-            resolve('prize');
-        }, 1000);
-    });
-};

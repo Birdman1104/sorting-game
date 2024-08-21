@@ -187,10 +187,10 @@ async function generateUncompressedSprites() {
 }
 
 async function start() {
-    console.log('removing current sprite sheets');
-    await emptyAtlasFolder();
-    console.log('generating uncompressed sprites');
-    await generateUncompressedSprites();
+    // console.log('removing current sprite sheets');
+    // await emptyAtlasFolder();
+    // console.log('generating uncompressed sprites');
+    // await generateUncompressedSprites();
     console.log('asset generation complete');
     console.log('running the game');
 }

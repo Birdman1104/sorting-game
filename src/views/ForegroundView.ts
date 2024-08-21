@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Sprite } from 'pixi.js';
+import { GLOBAL_DATA } from '../App';
 import { delayRunnable, tweenToCell } from '../Utils';
 import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
 import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
@@ -14,12 +15,14 @@ import { PrizeContainer } from './PrizeContainer';
 export class ForegroundView extends PixiGrid {
     private idleText: Sprite;
     private timeOverText: Sprite;
+    private prize: PrizeContainer;
 
     constructor() {
         super();
 
         lego.event
             .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
+            .on(GameModelEvents.PrizeUpdate, this.onPrizeUpdate, this)
             .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this);
 
         this.build();
@@ -79,9 +82,10 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onGameResult(): void {
-        const prize = new PrizeContainer();
+        this.prize = new PrizeContainer();
+        // this.prize.visible = false;
         lego.event.emit(ForegroundEvents.PrizeShown);
-        this.setChild('prize', prize);
+        this.setChild('prize', this.prize);
     }
 
     private onGameIdleStateUpdate(state: IdleState): void {
@@ -92,5 +96,13 @@ export class ForegroundView extends PixiGrid {
                 this.setChild('text_left', this.idleText);
             });
         }
+    }
+
+
+    private onPrizeUpdate(prize: string): void {
+        console.warn(prize);
+        
+        const texture = GLOBAL_DATA.TEXTURES.find((item) => item.name === prize);
+        console.warn(texture);
     }
 }

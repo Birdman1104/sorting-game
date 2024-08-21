@@ -57,7 +57,8 @@ export class ItemView extends Container {
         const texture = data?.texture;
         this.sprite = Sprite.from(texture);
         this.sprite.anchor.set(0.5);
-        this.sprite.scale.set(0.5);
+        const scale = 75 / this.sprite.width
+        this.sprite.scale.set(scale);
         this.addChild(this.sprite);
     }
 }

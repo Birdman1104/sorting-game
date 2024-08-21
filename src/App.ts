@@ -65,6 +65,7 @@ class App extends Application {
             const texture = await Assets.load(GLOBAL_DATA.ASSETS[key].url);
             GLOBAL_DATA.TEXTURES[key] = {
                 key: `${parseInt(key) + 1}`,
+                name: GLOBAL_DATA.ASSETS[key].image,
                 texture,
             };
         }

@@ -1,6 +1,6 @@
 export const GAME_CONFIG = {
     TIMER: 120000, // milliseconds
-    IDLE_TIME: 500000, // milliseconds
+    IDLE_TIME: 5000, // milliseconds
     CAN_PLAY: true,
     FREE: false,
 };

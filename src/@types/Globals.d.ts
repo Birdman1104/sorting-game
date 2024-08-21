@@ -47,6 +47,7 @@ type GlobalData = {
 
 type TextureConfig = {
     key: string;
+    name: string;
     texture: PIXI.Texture;
 };
 

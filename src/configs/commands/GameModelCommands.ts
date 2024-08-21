@@ -8,7 +8,7 @@ export const onGameStateUpdateCommand = (state: GameState) => {
             lego.command.execute(initializeForGameCommand);
             break;
         case GameState.TimeOver:
-            // lego.command.execute(onTimerOverCommand);
+            lego.command.execute(onTimerOverCommand);
             break;
         case GameState.GameResult:
             lego.command.execute(onGameResultCommand);
@@ -35,5 +35,15 @@ const initializeForGameCommand = () => {
 
 const onGameResultCommand = () => {
     Head.gameModel.destroyBoardModel();
+    // 
+};
+
+const onTimerOverCommand = async () => {
     Head.gameModel.getPrize();
+    // const prize = await getPrize();
+    // Head.gameModel.prize = prize;
+    // console.warn(prize);
+    
+    // Head.gameModel.destroyBoardModel();
+    // Head.gameModel.getPrize();
 };
