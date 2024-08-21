@@ -38,6 +38,6 @@ export class GameView extends PixiGrid {
     }
 
     private destroyBoard(): void {
-        this.board.destroy();
+        this.board.destroyElements();
     }
 }

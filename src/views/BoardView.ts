@@ -127,8 +127,7 @@ export class BoardView extends Container {
             .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this)
-            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
-            .on(ForegroundEvents.PrizeTextureLoaded, this.hideBlackBlocker, this);
+            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this);
         this.build();
     }
 
@@ -143,6 +142,19 @@ export class BoardView extends Container {
         this.updateDropAreas();
         this.updateTimerPosition();
         this.updateBlockers();
+    }
+
+    public destroyElements(): void {
+        this.items.forEach((item) => item.destroy());
+        this.boxes.forEach((box) => box.destroy());
+        this.items = [];
+        this.boxes = [];
+        this.finalPositions = [];
+        this.addingElementsQueue = [];
+        this.draggingItem = null;
+        this.timer?.destroy();
+        // @ts-ignore
+        this.timer = null;
     }
 
     private build(): void {
@@ -393,14 +405,18 @@ export class BoardView extends Container {
     }
 
     private repositionBoxes(): void {
+        if (this.boxes.length === 0) return;
         this.boxes.forEach((box) => {
+            if (!box) return;
             const { x, y } = this.getShelfPosition(box);
-            box.position.set(x, y);
+            box?.position.set(x, y);
         });
     }
 
     private updateDropAreas(): void {
+        if (this.boxes.length === 0) return;
         this.boxes.forEach((box, j) => {
+            if (!box) return;
             let startingX = box.x + 10;
             for (let i = 0; i < 3; i++) {
                 const startX = startingX + 80 * i;
@@ -420,6 +436,7 @@ export class BoardView extends Container {
     }
 
     private updateTimerPosition(): void {
+        if (!this.timer) return;
         const { width } = lp(BOUNDS.landscape, BOUNDS.portrait);
         this.timer.position.set(width / 2, lp(60, 260));
     }
@@ -517,10 +534,15 @@ export class BoardView extends Container {
 
     private updateBlockers(): void {
         const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
-        this.whiteBlocker.width = width;
-        this.whiteBlocker.height = height;
-        this.blackBlocker.width = width;
-        this.blackBlocker.height = height;
+        if (this.whiteBlocker) {
+            this.whiteBlocker.width = width;
+            this.whiteBlocker.height = height;
+        }
+
+        if (this.blackBlocker) {
+            this.blackBlocker.width = width;
+            this.blackBlocker.height = height;
+        }
     }
 
     private readdBlockers(): void {

@@ -35,15 +35,8 @@ const initializeForGameCommand = () => {
 
 const onGameResultCommand = () => {
     Head.gameModel.destroyBoardModel();
-    // 
 };
 
 const onTimerOverCommand = async () => {
     Head.gameModel.getPrize();
-    // const prize = await getPrize();
-    // Head.gameModel.prize = prize;
-    // console.warn(prize);
-    
-    // Head.gameModel.destroyBoardModel();
-    // Head.gameModel.getPrize();
 };

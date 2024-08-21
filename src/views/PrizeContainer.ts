@@ -7,15 +7,12 @@ export class PrizeContainer extends Container {
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, 0, 400, 400);
+        return new Rectangle(0, 0, 410, 410);
     }
 
     public setPrize(texture): void {
         const prize = Sprite.from(texture);
         prize.anchor.set(0.5);
-        prize.position.set(this.width / 2, this.height / 2);
-        this.addChild(prize);
-
         const { width, height } = prize;
         let scale = 1;
         if (width > height) {
@@ -24,7 +21,9 @@ export class PrizeContainer extends Container {
             scale = 400 / height;
         }
         prize.scale.set(scale);
-
+        prize.position.set(205, 205);
+        this.addChild(prize);
+        
         anime({
             targets: prize,
             angle: [5, 0, -5, 0],
