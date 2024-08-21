@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Graphics, Point, Rectangle, Sprite, Texture } from 'pixi.js';
-import { delayRunnable, lp } from '../Utils';
+import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
 import { GAME_CONFIG } from '../configs/constants';
@@ -127,7 +127,8 @@ export class BoardView extends Container {
             .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this)
-            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this);
+            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
+            .on(ForegroundEvents.PrizeTextureLoaded, this.hideBlackBlocker, this);
         this.build();
     }
 
@@ -141,7 +142,7 @@ export class BoardView extends Container {
         this.repositionBoxes();
         this.updateDropAreas();
         this.updateTimerPosition();
-        this.updateBlockers()
+        this.updateBlockers();
     }
 
     private build(): void {
@@ -214,7 +215,7 @@ export class BoardView extends Container {
         });
         this.items.forEach((item) => this.addChild(item));
 
-        this.readdBlockers()
+        this.readdBlockers();
     }
 
     private setDragEvents(item: ItemView): void {
@@ -262,7 +263,7 @@ export class BoardView extends Container {
 
         this.draggingItem = null;
 
-        this.readdBlockers()
+        this.readdBlockers();
     }
 
     private onDragMove(event): void {
@@ -388,7 +389,7 @@ export class BoardView extends Container {
             this.addingElementsQueue.push({ box, elements, index });
         }
 
-        this.readdBlockers()
+        this.readdBlockers();
     }
 
     private repositionBoxes(): void {
@@ -512,10 +513,6 @@ export class BoardView extends Container {
 
     private onTimerOver(): void {
         this.showBlackBlocker(false);
-
-        delayRunnable(3, () => {
-            this.hideBlackBlocker();
-        });
     }
 
     private updateBlockers(): void {

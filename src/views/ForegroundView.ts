@@ -1,8 +1,7 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
-import { Sprite } from 'pixi.js';
-import { GLOBAL_DATA } from '../App';
-import { delayRunnable, tweenToCell } from '../Utils';
+import { Assets, Sprite } from 'pixi.js';
+import { tweenToCell } from '../Utils';
 import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
 import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
 import { GAME_CONFIG } from '../configs/constants';
@@ -72,13 +71,6 @@ export class ForegroundView extends PixiGrid {
 
     private onTimerOver(): void {
         tweenToCell(this, this.timeOverText, 'text_show');
-
-        delayRunnable(3, () => {
-            tweenToCell(this, this.timeOverText, 'text_right', () => {
-                lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
-                this.setChild('text_left', this.timeOverText);
-            });
-        });
     }
 
     private onGameResult(): void {
@@ -98,11 +90,17 @@ export class ForegroundView extends PixiGrid {
         }
     }
 
+    private onPrizeUpdate(prize: { image: string; url: string }): void {
+        this.loadPrizeTexture(prize.url);
+    }
 
-    private onPrizeUpdate(prize: string): void {
-        console.warn(prize);
-        
-        const texture = GLOBAL_DATA.TEXTURES.find((item) => item.name === prize);
-        console.warn(texture);
+    private async loadPrizeTexture(url: string): Promise<void> {
+        const prizeTexture = await Assets.load(url);
+        lego.event.emit(ForegroundEvents.PrizeTextureLoaded, prizeTexture);
+        tweenToCell(this, this.timeOverText, 'text_right', () => {
+            lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
+            this.setChild('text_left', this.timeOverText);
+            this.prize.setPrize(prizeTexture);
+        });
     }
 }

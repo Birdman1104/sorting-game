@@ -13,6 +13,7 @@ export const ForegroundEvents = {
     TimeOverTextHideComplete: 'ForegroundEventsTimeOverTextHideComplete',
     BlackBlockerClicked: 'ForegroundEventsBlackBlockerClicked',
     PrizeShown: 'ForegroundEventsPrizeShown',
+    PrizeTextureLoaded: 'ForegroundEventsPrizeTextureLoaded',
 };
 
 export const BoardEvents = {
