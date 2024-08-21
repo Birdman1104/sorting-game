@@ -2,7 +2,8 @@ import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Rectangle, Sprite, Texture } from 'pixi.js';
 import { lp } from '../Utils';
-import { BKG_IMAGE } from '../base64/images/bkg';
+import { BKG_IMAGE_L } from '../base64/images/bkgL';
+import { BKG_IMAGE_P } from '../base64/images/bkgP';
 import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
@@ -130,7 +131,7 @@ export class BoardView extends Container {
     }
 
     public rebuild(): void {
-        this.bkg.texture = Texture.from(lp(BKG_IMAGE, 'bkgP.jpg'));
+        this.bkg.texture = Texture.from(lp(BKG_IMAGE_L, BKG_IMAGE_P));
         this.repositionBoxes();
         this.updateDropAreas();
         this.updateTimerPosition();
@@ -142,7 +143,7 @@ export class BoardView extends Container {
     }
 
     private buildBkg(): void {
-        this.bkg = Sprite.from(lp(BKG_IMAGE, 'bkgP.jpg'));
+        this.bkg = Sprite.from(lp(BKG_IMAGE_L, BKG_IMAGE_P));
         this.addChild(this.bkg);
     }
 

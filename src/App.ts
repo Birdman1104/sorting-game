@@ -4,7 +4,6 @@ import { Application, Assets } from 'pixi.js';
 import PixiStage from './MainStage';
 import SoundController from './SoundController';
 import { fitDimension } from './Utils';
-import { assets } from './assets/assetsNames/assets';
 import { check, fetchProductsData } from './backend/fetch';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';

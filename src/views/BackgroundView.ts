@@ -1,6 +1,6 @@
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Rectangle, Sprite } from 'pixi.js';
-import { BKG_IMAGE } from '../base64/images/bkg';
+import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { getBackgroundGridConfig } from '../configs/gridConfigs/BackgroundViewGC';
 
 export class BackgroundView extends PixiGrid {
@@ -22,7 +22,7 @@ export class BackgroundView extends PixiGrid {
     }
 
     private build(): void {
-        const bkg = Sprite.from(BKG_IMAGE);
+        const bkg = Sprite.from(BKG_IMAGE_L);
         // bkg.anchor.set(0.5);
         this.setChild('bkg', bkg);
     }
