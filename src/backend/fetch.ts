@@ -1,4 +1,6 @@
+import { lego } from '@armathai/lego';
 import Cookies from 'js-cookie';
+import { MainGameEvents } from '../events/MainEvents';
 
 const URL = 'https://game.intdevels.ru';
 
@@ -9,13 +11,13 @@ export const fetchProductsData = async (): Promise<any> => {
 
         return json;
     } catch (error) {
-        throw new Error('Failed to fetch data');
+        lego.event.emit(MainGameEvents.Error, 'Failed to fetch data');
     }
 };
 
 export const getPrize = async (): Promise<any> => {
     try {
-        const response = await fetch(`${URL}/api/prize`, {
+        const response = await fetch(`${URL}/api/prizee`, {
             method: 'POST',
             body: JSON.stringify({
                 receipt: Cookies.get('intGameReceipt'),
@@ -29,7 +31,7 @@ export const getPrize = async (): Promise<any> => {
 
         return json;
     } catch (error) {
-        throw new Error('Failed to fetch data');
+        lego.event.emit(MainGameEvents.Error, 'Failed to get prize');
     }
 };
 
@@ -48,6 +50,7 @@ export const check = async (): Promise<ServerCheck> => {
         const json = await response.json();
         return json;
     } catch (error) {
+        lego.event.emit(MainGameEvents.Error, 'Failed to check');
         throw new Error('Failed to check');
     }
 };

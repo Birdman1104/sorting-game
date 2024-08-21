@@ -45,18 +45,34 @@ class App extends Application {
             this.initStats();
             // this.initLego();
         }
-        const { start, free } = await check();
+
+        this.stage.setupErrorView();
+        let start;
+        let free;
+
+        try {
+            const { start: s, free: f } = await check();
+            start = s;
+            free = f;
+        } catch (e) {
+            this.showError();
+            return;
+        }
 
         GAME_CONFIG.CAN_PLAY = start;
         GAME_CONFIG.FREE = free;
 
         if (!GAME_CONFIG.CAN_PLAY) {
-            this.showCannotPlay();
+            this.showError();
         } else {
-            const { data } = await fetchProductsData();
-            GLOBAL_DATA.ASSETS = data;
-            await this.loadAssets();
-            this.startGame();
+            try {
+                const { data } = await fetchProductsData();
+                GLOBAL_DATA.ASSETS = data;
+                await this.loadAssets();
+                this.startGame();
+            } catch (e) {
+                this.showError();
+            }
         }
     }
 
@@ -101,9 +117,9 @@ class App extends Application {
         lego.event.emit(MainGameEvents.Mute, value);
     }
 
-    private showCannotPlay(): void {
+    private showError(): void {
         this.appResize();
-        this.stage.showCannotPlay();
+        lego.event.emit(MainGameEvents.Error, 'Cannot play');
     }
 
     private startGame(): void {

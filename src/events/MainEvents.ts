@@ -7,6 +7,7 @@ export const MainGameEvents = {
     Resize: 'MainGameEventsResize',
     Mute: 'MainGameEventsMute',
     MainViewReady: 'MainGameEventsMainViewReady',
+    Error: 'MainGameEventsError',
 };
 
 export const ForegroundEvents = {

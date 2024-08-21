@@ -7,7 +7,7 @@ import { PRIZE_TEXT_IMAGE } from '../base64/images/prizeText';
 import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
 import { GAME_CONFIG } from '../configs/constants';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
-import { ForegroundEvents } from '../events/MainEvents';
+import { ForegroundEvents, MainGameEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState, IdleState } from '../models/GameModel';
 import { PrizeContainer } from './PrizeContainer';
@@ -96,20 +96,24 @@ export class ForegroundView extends PixiGrid {
     }
 
     private async loadPrizeTexture(url: string): Promise<void> {
-        const prizeTexture = await Assets.load(url);
-        delayRunnable(1, () => {
-            lego.event.emit(ForegroundEvents.PrizeTextureLoaded, prizeTexture);
-            tweenToCell(this, this.timeOverText, 'text_right', () => {
-                lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
-                this.setChild('text_left', this.timeOverText);
-                this.prize.setPrize(prizeTexture);
+        try {
+            const prizeTexture = await Assets.load(url);
+            delayRunnable(1, () => {
+                lego.event.emit(ForegroundEvents.PrizeTextureLoaded, prizeTexture);
+                tweenToCell(this, this.timeOverText, 'text_right', () => {
+                    lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
+                    this.setChild('text_left', this.timeOverText);
+                    this.prize.setPrize(prizeTexture);
 
-                const prizeText = Sprite.from(PRIZE_TEXT_IMAGE);
-                prizeText.anchor.set(0.5);
-                this.setChild('prize_text', prizeText);
+                    const prizeText = Sprite.from(PRIZE_TEXT_IMAGE);
+                    prizeText.anchor.set(0.5);
+                    this.setChild('prize_text', prizeText);
 
-                this.rebuild();
+                    this.rebuild();
+                });
             });
-        });
+        } catch (e) {
+            lego.event.emit(MainGameEvents.Error, 'Failed to load prize texture');
+        }
     }
 }
