@@ -21,3 +21,5 @@
  */
 
 /*! https://mths.be/punycode v1.4.1 by @mathias */
+
+/*! js-cookie v3.0.5 | MIT */
