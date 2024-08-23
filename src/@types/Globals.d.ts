@@ -43,6 +43,7 @@ type AssetConfig = {
 type GlobalData = {
     ASSETS: AssetConfig[];
     TEXTURES: TextureConfig[];
+    URL: string;
 };
 
 type TextureConfig = {

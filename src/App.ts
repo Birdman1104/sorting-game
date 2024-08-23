@@ -13,6 +13,7 @@ import { MainGameEvents, WindowEvent } from './events/MainEvents';
 export const GLOBAL_DATA: GlobalData = {
     ASSETS: [],
     TEXTURES: [],
+    URL: '',
 };
 class App extends Application {
     public stage: PixiStage;
@@ -34,7 +35,31 @@ class App extends Application {
         this.view.classList.add('gameCss');
 
         // @ts-ignore
-        const div = document.getElementsByClassName('canvas-game')[0];
+        const div = document.getElementsByClassName('intdevels-game')[0];
+        // @ts-ignore
+        const url = div.dataset.url;
+        if(!url) {
+            this.showError();
+            return;
+        }
+
+        console.warn(url);
+        
+        // if the last char of url is / then remove it
+        
+        if (url.charAt(url.length - 1) === '/') {
+            console.warn(url.charAt(url.length - 1));
+            // @ts-ignore
+            GLOBAL_DATA.URL = url.slice(0, -1);
+        } else {
+            // @ts-ignore
+            GLOBAL_DATA.URL = url;
+        }
+
+        console.warn('GLOBAL_DATA.URL', GLOBAL_DATA.URL);
+        
+        // @ts-ignore
+        // GLOBAL_DATA.URL = divurl;
         // @ts-ignore
         div.appendChild(this.view);
 

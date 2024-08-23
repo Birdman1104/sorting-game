@@ -1,12 +1,11 @@
 import { lego } from '@armathai/lego';
 import Cookies from 'js-cookie';
+import { GLOBAL_DATA } from '../App';
 import { MainGameEvents } from '../events/MainEvents';
-
-const URL = 'https://game.intdevels.ru';
 
 export const fetchProductsData = async (): Promise<any> => {
     try {
-        const response = await fetch(`${URL}/api/products`);
+        const response = await fetch(`${GLOBAL_DATA.URL}/api/products`);
         const json = await response.json();
 
         return json;
@@ -17,7 +16,7 @@ export const fetchProductsData = async (): Promise<any> => {
 
 export const getPrize = async (): Promise<any> => {
     try {
-        const response = await fetch(`${URL}/api/prizee`, {
+        const response = await fetch(`${GLOBAL_DATA.URL}/api/prizee`, {
             method: 'POST',
             body: JSON.stringify({
                 receipt: Cookies.get('intGameReceipt'),
@@ -37,7 +36,7 @@ export const getPrize = async (): Promise<any> => {
 
 export const check = async (): Promise<ServerCheck> => {
     try {
-        const response = await fetch(`${URL}/api/check`, {
+        const response = await fetch(`${GLOBAL_DATA.URL}/api/check`, {
             method: 'POST',
             body: JSON.stringify({
                 receipt: Cookies.get('intGameReceipt'),
