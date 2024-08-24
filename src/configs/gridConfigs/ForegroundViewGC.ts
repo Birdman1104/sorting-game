@@ -25,6 +25,7 @@ const getForegroundGridLandscapeConfig = () => {
             },
             {
                 name: 'text_left',
+                scale: CellScale.fill,
                 bounds: { x: -2, y: 0.1, width: 0.3, height: 0.8 },
             },
             {
@@ -57,6 +58,7 @@ const getForegroundGridPortraitConfig = () => {
             },
             {
                 name: 'text_left',
+                scale: CellScale.fill,
                 bounds: { x: -2, y: 0.2, width: 0.3, height: 0.6 },
             },
             {

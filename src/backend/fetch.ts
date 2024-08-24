@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import Cookies from 'js-cookie';
 import { GLOBAL_DATA } from '../App';
+import { DEFAULT_ERROR_MESSAGE } from '../configs/constants';
 import { MainGameEvents } from '../events/MainEvents';
 
 export const fetchProductsData = async (): Promise<any> => {
@@ -10,7 +11,7 @@ export const fetchProductsData = async (): Promise<any> => {
 
         return json;
     } catch (error) {
-        lego.event.emit(MainGameEvents.Error, 'Failed to fetch data');
+        lego.event.emit(MainGameEvents.Error, DEFAULT_ERROR_MESSAGE);
     }
 };
 
@@ -30,7 +31,8 @@ export const getPrize = async (): Promise<any> => {
 
         return json;
     } catch (error) {
-        lego.event.emit(MainGameEvents.Error, 'Failed to get prize');
+        // @ts-ignore
+        lego.event.emit(MainGameEvents.Error, error.message);
     }
 };
 
@@ -49,7 +51,8 @@ export const check = async (): Promise<ServerCheck> => {
         const json = await response.json();
         return json;
     } catch (error) {
-        lego.event.emit(MainGameEvents.Error, 'Failed to check');
+        // @ts-ignore
+        lego.event.emit(MainGameEvents.Error, error.message);
         throw new Error('Failed to check');
     }
 };

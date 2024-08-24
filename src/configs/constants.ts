@@ -7,3 +7,5 @@ export const GAME_CONFIG = {
 
 // in free version the player plays without rewards, no timer, no idle time
 // if CAN_PLAY is false, show a screen that the player can't play
+
+export const DEFAULT_ERROR_MESSAGE = 'Технические неполадки.\nПожалуйста попробуйте позже.';

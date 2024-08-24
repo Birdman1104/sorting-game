@@ -7,7 +7,7 @@ import { fitDimension } from './Utils';
 import { check, fetchProductsData } from './backend/fetch';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
-import { GAME_CONFIG } from './configs/constants';
+import { DEFAULT_ERROR_MESSAGE, GAME_CONFIG } from './configs/constants';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
 
 export const GLOBAL_DATA: GlobalData = {
@@ -134,7 +134,7 @@ class App extends Application {
 
     private showError(): void {
         this.appResize();
-        lego.event.emit(MainGameEvents.Error, 'Cannot play');
+        lego.event.emit(MainGameEvents.Error, DEFAULT_ERROR_MESSAGE);
     }
 
     private startGame(): void {

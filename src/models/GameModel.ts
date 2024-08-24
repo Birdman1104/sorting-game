@@ -1,8 +1,6 @@
-import { lego } from '@armathai/lego';
 import { loopRunnable, removeRunnable } from '../Utils';
 import { getPrize } from '../backend/fetch';
 import { GAME_CONFIG } from '../configs/constants';
-import { MainGameEvents } from '../events/MainEvents';
 import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -169,13 +167,8 @@ export class GameModel extends ObservableModel {
             const data = await getPrize();
             this._prize = data;
         } catch(e) {
-            lego.event.emit(MainGameEvents.Error, 'Failed to get prize');
+            // lego.event.emit(MainGameEvents.Error, 'Failed to get prize');
         }
-        // const tempData = {
-        //     image: 'products/01J5NEKP5GBTYNKF6DD7T6TC1D.png',
-        //     url: 'https://game.intdevels.ru/storage/products/01J5NEKP5GBTYNKF6DD7T6TC1D.png',
-        // };
-        // this._prize = tempData;
     }
 
     private setToIdleState(): void {

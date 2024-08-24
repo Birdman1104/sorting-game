@@ -5,7 +5,7 @@ import { delayRunnable, tweenToCell } from '../Utils';
 import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
 import { PRIZE_TEXT_IMAGE } from '../base64/images/prizeText';
 import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
-import { GAME_CONFIG } from '../configs/constants';
+import { DEFAULT_ERROR_MESSAGE, GAME_CONFIG } from '../configs/constants';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents, MainGameEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
@@ -113,7 +113,7 @@ export class ForegroundView extends PixiGrid {
                 });
             });
         } catch (e) {
-            lego.event.emit(MainGameEvents.Error, 'Failed to load prize texture');
+            lego.event.emit(MainGameEvents.Error, DEFAULT_ERROR_MESSAGE);
         }
     }
 }

@@ -1,8 +1,7 @@
-import { Container, Graphics, Rectangle, Sprite, Texture } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Text, Texture } from 'pixi.js';
 import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
-import { ERROR_TEXT_IMAGE } from '../base64/images/errorText';
 import { POWERED_BY } from '../base64/images/poweredBy';
 
 const BOUNDS = {
@@ -13,15 +12,13 @@ const BOUNDS = {
 export class ErrorMessage extends Container {
     private bkg: Sprite;
     private poweredBy: Sprite;
-    private message: Sprite;
+    private message: Text;
 
     private blackBlocker: Graphics;
 
     constructor() {
         super();
 
-        // lego.event
-        //     .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
         this.build();
     }
 
@@ -40,7 +37,7 @@ export class ErrorMessage extends Container {
     }
 
     public setMessage(message: string): void {
-        // console.warn('setMessage', message);
+        this.message.text = message;
     }
         
 
@@ -58,7 +55,6 @@ export class ErrorMessage extends Container {
         this.blackBlocker.beginFill(0x000000, 0.7);
         this.blackBlocker.drawRect(0, 0, width, height);
         this.blackBlocker.endFill();
-        // this.blackBlocker.alpha = 0;
         this.addChild(this.blackBlocker);
     }
 
@@ -69,7 +65,7 @@ export class ErrorMessage extends Container {
 
     private buildMessage(): void {
         const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
-        this.message = Sprite.from(ERROR_TEXT_IMAGE);
+        this.message = new Text('', { fill: 0xffffff, fontSize: 40, align: 'center' });
         this.message.anchor.set(0.5);
         this.message.position.set(width / 2, height / 2);
         this.addChild(this.message);
