@@ -43,23 +43,13 @@ class App extends Application {
             return;
         }
 
-        console.warn(url);
-        
-        // if the last char of url is / then remove it
-        
         if (url.charAt(url.length - 1) === '/') {
-            console.warn(url.charAt(url.length - 1));
             // @ts-ignore
             GLOBAL_DATA.URL = url.slice(0, -1);
         } else {
             // @ts-ignore
             GLOBAL_DATA.URL = url;
         }
-
-        console.warn('GLOBAL_DATA.URL', GLOBAL_DATA.URL);
-        
-        // @ts-ignore
-        // GLOBAL_DATA.URL = divurl;
         // @ts-ignore
         div.appendChild(this.view);
 
