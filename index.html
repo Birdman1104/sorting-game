@@ -13,7 +13,7 @@
                 overflow: hidden;
             }
 
-            .gameCss {
+            .intdevels-game-css {
                 /* opacity: 0; */
                 position: absolute;
                 left: 50%;
@@ -63,11 +63,11 @@
         <div class="intdevels-game" data-url="https://game.intdevels.ru/"></div>
 
         <script>
-            const customEvent = new Event('startGame');
+            const customEvent = new Event('startIntDevelsGame');
 
             document.getElementById('myButton').addEventListener('pointerdown', function () {
                 window.dispatchEvent(customEvent);
-                // this.remove();
+                this.remove();
             });
         </script>
     </body>

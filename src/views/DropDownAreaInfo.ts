@@ -31,6 +31,8 @@ export class DropDownAreaInfo {
         this.startY = info.startY;
         this.endX = info.endX;
         this.endY = info.endY;
+        this.insertedItem?.setOriginalPosition(this.centerX, this.centerY);
+        this.insertedItem?.position.set(this.centerX, this.centerY);
     }
 
     public setItem(item: ItemView): void {

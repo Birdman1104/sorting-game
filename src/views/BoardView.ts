@@ -239,7 +239,7 @@ export class BoardView extends Container {
         });
         this.items.forEach((item) => this.addChild(item));
 
-        this.readdBlockers();
+        this.reAddBlockers();
     }
 
     private setDragEvents(item: ItemView): void {
@@ -287,7 +287,7 @@ export class BoardView extends Container {
 
         this.draggingItem = null;
 
-        this.readdBlockers();
+        this.reAddBlockers();
     }
 
     private onDragMove(event): void {
@@ -339,6 +339,7 @@ export class BoardView extends Container {
     private dropItemToOriginalPosition(): void {
         if (!this.draggingItem) return;
         lego.event.emit(BoardEvents.Drop);
+        const area = this.finalPositions.find(area => area.centerX === this.draggingItem?.originalX && area.centerY === this.draggingItem?.originalY);
         anime({
             targets: this.draggingItem,
             x: this.draggingItem.originalX,
@@ -346,6 +347,8 @@ export class BoardView extends Container {
             duration: 200,
             easing: 'easeInOutSine',
         });
+        this.draggingItem.setArea(area as DropDownAreaInfo);
+        area?.setItem(this.draggingItem);
     }
 
     private checkMatches(): void {
@@ -413,7 +416,7 @@ export class BoardView extends Container {
             this.addingElementsQueue.push({ box, elements, index });
         }
 
-        this.readdBlockers();
+        this.reAddBlockers();
     }
 
     private repositionBoxes(): void {
@@ -436,13 +439,6 @@ export class BoardView extends Container {
                 const endX = startingX + 80 * i + 80;
                 const endY = box.y + 20;
                 this.finalPositions[j * 3 + i].update({ startX, startY, endX, endY });
-            }
-        });
-
-        this.finalPositions.forEach((area) => {
-            if (area.insertedItem) {
-                const { centerX, centerY } = area;
-                area.insertedItem.position.set(centerX, centerY);
             }
         });
     }
@@ -557,7 +553,7 @@ export class BoardView extends Container {
         }
     }
 
-    private readdBlockers(): void {
+    private reAddBlockers(): void {
         this.removeChild(this.blackBlocker);
         this.addChild(this.blackBlocker);
 

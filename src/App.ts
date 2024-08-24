@@ -32,7 +32,7 @@ class App extends Application {
     public async init(): Promise<void> {
         this.stage = new PixiStage();
         // @ts-ignore
-        this.view.classList.add('gameCss');
+        this.view.classList.add('intdevels-game-css');
 
         // @ts-ignore
         const div = document.getElementsByClassName('intdevels-game')[0];

@@ -22,6 +22,10 @@ export class ItemView extends Container {
         return this.config.type;
     }
 
+    get index(): number {
+        return this.config.index;
+    }
+
     get area(): DropDownAreaInfo | null {
         return this.dropArea;
     }

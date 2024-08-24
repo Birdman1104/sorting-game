@@ -9,13 +9,18 @@ export enum ItemType {
 }
 
 export class ItemModel extends ObservableModel {
-    constructor(private _type: ItemType) {
+    constructor(private _type: ItemType, private _index: number) {
+        
         super('ItemModel');
         this.makeObservable();
     }
 
     get type(): ItemType {
         return this._type;
+    }
+
+    get index(): number {
+        return this._index;
     }
 
     set type(value: ItemType) {

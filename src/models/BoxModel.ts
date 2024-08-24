@@ -37,7 +37,9 @@ export class BoxModel extends ObservableModel {
     }
 
     public initialize(): void {
-        this._elements = this.config.elements.map((element) => new ItemModel(element));
+        this._elements = this.config.elements.map(
+            (element, i) => new ItemModel(element, (this._i * 3 + this._j) * 3 + i),
+        );
     }
 
     public empty(): void {
@@ -45,7 +47,7 @@ export class BoxModel extends ObservableModel {
     }
 
     public addElements(items: ItemType[]): void {
-        const temp = items.map((item) => new ItemModel(item));
+        const temp = items.map((item, i) => new ItemModel(item, (this._i * 3 + this._j) * 3 + i));
         this._elements = temp;
     }
 }

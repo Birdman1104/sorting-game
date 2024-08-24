@@ -3,7 +3,7 @@ import App from './App';
 // TODO - change to button event
 // @ts-ignore
 // window.addEventListener('load', () => {
-window.addEventListener('startGame', () => {
+window.addEventListener('startIntDevelsGame', () => {
     window.game = new App();
     window.game.init();
 
