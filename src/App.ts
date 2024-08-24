@@ -38,7 +38,7 @@ class App extends Application {
         const div = document.getElementsByClassName('intdevels-game')[0];
         // @ts-ignore
         const url = div.dataset.url;
-        if(!url) {
+        if (!url) {
             this.showError();
             return;
         }
@@ -65,20 +65,16 @@ class App extends Application {
         let start;
         let free;
 
-        try {
-            const { start: s, free: f } = await check();
-            start = s;
-            free = f;
-        } catch (e) {
-            this.showError();
-            return;
-        }
+        const { start: s, free: f } = await check();
+
+        start = s;
+        free = f;
 
         GAME_CONFIG.CAN_PLAY = start;
         GAME_CONFIG.FREE = free;
 
         if (!GAME_CONFIG.CAN_PLAY) {
-            this.showError();
+            this.showError('Номер квитанции нельзя\nиспользовать второй раз');
         } else {
             try {
                 const { data } = await fetchProductsData();
@@ -132,9 +128,9 @@ class App extends Application {
         lego.event.emit(MainGameEvents.Mute, value);
     }
 
-    private showError(): void {
+    private showError(message = DEFAULT_ERROR_MESSAGE): void {
         this.appResize();
-        lego.event.emit(MainGameEvents.Error, DEFAULT_ERROR_MESSAGE);
+        lego.event.emit(MainGameEvents.Error, message);
     }
 
     private startGame(): void {

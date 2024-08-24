@@ -107,7 +107,9 @@ export class ForegroundView extends PixiGrid {
 
                     const prizeText = Sprite.from(PRIZE_TEXT_IMAGE);
                     prizeText.anchor.set(0.5);
-                    this.setChild('prize_text', prizeText);
+                    delayRunnable(0.01, () => {
+                        this.setChild('prize_text', prizeText);
+                    })
 
                     this.rebuild();
                 });
