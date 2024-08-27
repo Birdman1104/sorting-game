@@ -1,30 +1,21 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
-// const WebpackObfuscator = require('webpack-obfuscator');
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = merge(common, {
     mode: 'production',
-    output: {
-        filename: '[name].bundle.js',
-        // chunkFilename: '[name].chunk.js',
-    },
     optimization: {
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    filename: '[name].bundle.js',
+        minimize: false,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    compress: {
+                        // Prevents Terser from removing console.log and console.warn
+                        drop_console: false,
+                        pure_funcs: ['console.info', 'console.debug', 'console.error']
+                    },
                 },
-            },
-        },
-    },
-    plugins: [
-        // new WebpackObfuscator(
-        //     {
-        //         rotateStringArray: true,
-        //         stringArray: true,
-        //         stringArrayThreshold: 0.75,
-        //     },
-        //     ['vendors.*.js', 'sw.js'],
-        // ),
-    ],
+            }),
+        ],
+     },
 });

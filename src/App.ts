@@ -39,6 +39,8 @@ class App extends Application {
         // @ts-ignore
         const url = div.dataset.url;
         if (!url) {
+            console.warn('embedded url not found');
+            
             this.showError();
             return;
         }
@@ -57,7 +59,7 @@ class App extends Application {
 
         globalThis.__PIXI_APP__ = this;
         if (process.env.NODE_ENV !== 'production') {
-            this.initStats();
+            // this.initStats();
             // this.initLego();
         }
 
@@ -74,14 +76,19 @@ class App extends Application {
         GAME_CONFIG.FREE = free;
 
         if (!GAME_CONFIG.CAN_PLAY) {
+            console.log('GAME_CONFIG.CAN_PLAY', GAME_CONFIG.CAN_PLAY);
             this.showError('Номер квитанции нельзя\nиспользовать второй раз');
         } else {
             try {
+                console.warn('try in app js 81');
+                
                 const { data } = await fetchProductsData();
                 GLOBAL_DATA.ASSETS = data;
                 await this.loadAssets();
                 this.startGame();
             } catch (e) {
+                console.warn('try in app js 88');
+
                 this.showError();
             }
         }
@@ -129,6 +136,8 @@ class App extends Application {
     }
 
     private showError(message = DEFAULT_ERROR_MESSAGE): void {
+        console.warn('show error function');
+        
         this.appResize();
         lego.event.emit(MainGameEvents.Error, message);
     }

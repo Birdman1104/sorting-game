@@ -14,6 +14,7 @@ import { ItemModel } from '../models/ItemModel';
 import { BoxView } from './BoxView';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
 import { ItemView } from './ItemView';
+import { PrizeView } from './PrizeView';
 import { TimerView } from './TimerView';
 
 const BOUNDS = {
@@ -115,6 +116,7 @@ export class BoardView extends Container {
     private finalPositions: DropDownAreaInfo[] = [];
 
     private timer: TimerView;
+    private prizeView: PrizeView;
 
     private addingElementsQueue: { box: BoxView; elements: ItemModel[]; index: number }[] = [];
 
@@ -125,11 +127,12 @@ export class BoardView extends Container {
         super();
 
         lego.event
-            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
-            .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this)
-            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this);
+            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
+            .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
+            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
+            .on(ForegroundEvents.TimeOverTextHideComplete, this.onTimerOverTextHideComplete, this);
         this.build();
     }
 
@@ -144,6 +147,7 @@ export class BoardView extends Container {
         this.updateDropAreas();
         this.updateTimerPosition();
         this.updateBlockers();
+        this.updatePrizePosition();
     }
 
     public destroyElements(): void {
@@ -161,12 +165,18 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildBkg();
-        this.buildPoweredBy()
+        this.buildPoweredBy();
         !GAME_CONFIG.FREE && this.buildTimer();
 
         const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
         this.buildWhiteBlocker({ width, height });
         this.buildBlackBlocker({ width, height });
+    }
+
+    private buildPrizeView(): void {
+        this.prizeView = new PrizeView();
+        this.prizeView.position.set(lp(350, 125), lp(0, 300));
+        this.addChild(this.prizeView);
     }
 
     private buildWhiteBlocker({ width, height }): void {
@@ -339,7 +349,9 @@ export class BoardView extends Container {
     private dropItemToOriginalPosition(): void {
         if (!this.draggingItem) return;
         lego.event.emit(BoardEvents.Drop);
-        const area = this.finalPositions.find(area => area.centerX === this.draggingItem?.originalX && area.centerY === this.draggingItem?.originalY);
+        const area = this.finalPositions.find(
+            (area) => area.centerX === this.draggingItem?.originalX && area.centerY === this.draggingItem?.originalY,
+        );
         anime({
             targets: this.draggingItem,
             x: this.draggingItem.originalX,
@@ -529,6 +541,7 @@ export class BoardView extends Container {
     }
 
     private onGameIdleStateUpdate(state: IdleState): void {
+        this.reAddBlockers();
         if (state === IdleState.Idle) {
             this.showBlackBlocker();
         } else {
@@ -559,5 +572,17 @@ export class BoardView extends Container {
 
         this.removeChild(this.whiteBlocker);
         this.addChild(this.whiteBlocker);
+    }
+
+    private onTimerOverTextHideComplete(prizeTexture: Texture): void {
+        this.buildPrizeView();
+        this.prizeView.setPrize(prizeTexture);
+    }
+
+    private updatePrizePosition(): void {
+        if (!this.prizeView) return;
+        console.warn(this.width, this.prizeView.width);
+        
+        this.prizeView.position.set(lp(350, 125), lp(0, 300));
     }
 }

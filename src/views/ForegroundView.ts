@@ -3,19 +3,16 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Assets, Sprite } from 'pixi.js';
 import { delayRunnable, tweenToCell } from '../Utils';
 import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
-import { PRIZE_TEXT_IMAGE } from '../base64/images/prizeText';
 import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
 import { DEFAULT_ERROR_MESSAGE, GAME_CONFIG } from '../configs/constants';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents, MainGameEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState, IdleState } from '../models/GameModel';
-import { PrizeContainer } from './PrizeContainer';
 
 export class ForegroundView extends PixiGrid {
     private idleText: Sprite;
     private timeOverText: Sprite;
-    private prize: PrizeContainer;
 
     constructor() {
         super();
@@ -75,10 +72,7 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onGameResult(): void {
-        this.prize = new PrizeContainer();
-        // this.prize.visible = false;
         lego.event.emit(ForegroundEvents.PrizeShown);
-        this.setChild('prize', this.prize);
     }
 
     private onGameIdleStateUpdate(state: IdleState): void {
@@ -101,20 +95,12 @@ export class ForegroundView extends PixiGrid {
             delayRunnable(1, () => {
                 lego.event.emit(ForegroundEvents.PrizeTextureLoaded, prizeTexture);
                 tweenToCell(this, this.timeOverText, 'text_right', () => {
-                    lego.event.emit(ForegroundEvents.TimeOverTextHideComplete);
+                    lego.event.emit(ForegroundEvents.TimeOverTextHideComplete, prizeTexture);
                     this.setChild('text_left', this.timeOverText);
-                    this.prize.setPrize(prizeTexture);
-
-                    const prizeText = Sprite.from(PRIZE_TEXT_IMAGE);
-                    prizeText.anchor.set(0.5);
-                    delayRunnable(0.01, () => {
-                        this.setChild('prize_text', prizeText);
-                    })
-
                     this.rebuild();
                 });
             });
-        } catch (e) {
+        } catch (e) {            
             lego.event.emit(MainGameEvents.Error, DEFAULT_ERROR_MESSAGE);
         }
     }

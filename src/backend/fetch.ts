@@ -1,8 +1,9 @@
 import { lego } from '@armathai/lego';
-import Cookies from 'js-cookie';
 import { GLOBAL_DATA } from '../App';
 import { DEFAULT_ERROR_MESSAGE } from '../configs/constants';
 import { MainGameEvents } from '../events/MainEvents';
+
+let cook: any;
 
 export const fetchProductsData = async (): Promise<any> => {
     try {
@@ -11,6 +12,8 @@ export const fetchProductsData = async (): Promise<any> => {
 
         return json;
     } catch (error) {
+        console.warn('Failed to fetch products data');
+        
         lego.event.emit(MainGameEvents.Error, DEFAULT_ERROR_MESSAGE);
     }
 };
@@ -20,7 +23,8 @@ export const getPrize = async (): Promise<any> => {
         const response = await fetch(`${GLOBAL_DATA.URL}/api/prizee`, {
             method: 'POST',
             body: JSON.stringify({
-                receipt: Cookies.get('intGameReceipt'),
+                receipt: cook,
+                // receipt: Cookies.get('intGameReceipt'),
             }),
             headers: {
                 Accept: 'application/json',
@@ -37,11 +41,14 @@ export const getPrize = async (): Promise<any> => {
 };
 
 export const check = async (): Promise<ServerCheck> => {
+    cook = Math.floor(Math.random() * 1000000)
+    console.log('cookie, ', cook)
     try {
         const response = await fetch(`${GLOBAL_DATA.URL}/api/check`, {
             method: 'POST',
             body: JSON.stringify({
-                receipt: Cookies.get('intGameReceipt'),
+                receipt: cook,
+                // receipt: Cookies.get('intGameReceipt'),
             }),
             headers: {
                 Accept: 'application/json',
@@ -51,6 +58,8 @@ export const check = async (): Promise<ServerCheck> => {
         const json = await response.json();
         return json;
     } catch (error) {
+        console.warn('Failed to check');
+        
         // @ts-ignore
         lego.event.emit(MainGameEvents.Error, error.message);
         throw new Error('Failed to check');
