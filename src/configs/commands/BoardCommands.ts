@@ -9,3 +9,9 @@ export const onMatchCommand = (type: ItemType, index: number) => {
 export const onBoardClickCommand = () => {
     Head.gameModel.resetIdleTime();
 };
+
+export const closeButtonClickCommand = () => {
+    const customEvent = new Event('intDevelsGameCloseButtonClicked');
+
+    window.dispatchEvent(customEvent);
+};

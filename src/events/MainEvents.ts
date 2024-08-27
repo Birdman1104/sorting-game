@@ -22,4 +22,5 @@ export const BoardEvents = {
     Match: 'BoardEventsMatch',
     Move: 'BoardEventsMove',
     Drop: 'BoardEventsDrop',
+    Close: 'BoardEventsClose',
 };
