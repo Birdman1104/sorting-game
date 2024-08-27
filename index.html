@@ -43,7 +43,7 @@
                 display: flex; /* Use flexbox to center children */
                 justify-content: center; /* Center horizontally */
                 align-items: center; /* Center vertically */
-            }</style><script defer="defer" src="main.bundle.js"></script></head><body><div class="button-div"><button id="myButton">Click To Play</button></div><div class="intdevels-game" data-url="https://game.intdevels.ru/"></div><script>const customEvent = new Event('startIntDevelsGame');
+            }</style><script defer="defer" src="intDevelsGame.bundle.js"></script></head><body><div class="button-div"><button id="myButton">Click To Play</button></div><div class="intdevels-game" data-url="https://game.intdevels.ru/"></div><script>const customEvent = new Event('startIntDevelsGame');
 
             document.getElementById('myButton').addEventListener('pointerdown', function () {
                 window.dispatchEvent(customEvent);
