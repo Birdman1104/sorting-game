@@ -583,7 +583,7 @@ export class BoardView extends Container {
         delayRunnable(2, () => {
             this.closeButton = Sprite.from(CLOSE_BUTTON);
             this.closeButton.anchor.set(1, 0);
-            this.closeButton.position.set(lp(640, 780), 10);
+            this.closeButton.position.set(lp(1260, 780), 10);
             this.closeButton.eventMode = 'static';
             this.closeButton.on('pointerdown', () => {
                 lego.event.emit(BoardEvents.Close);
@@ -591,12 +591,16 @@ export class BoardView extends Container {
             delayRunnable(0.02, () => {
                 this.addChild(this.closeButton);
             });
+
+            const customEvent = new Event('intDevelsGameFinished');
+
+            window.dispatchEvent(customEvent);
         });
     }
 
     private updatePrizePosition(): void {
         if (!this.prizeView) return;
-        this.closeButton?.position.set(lp(640, 780), 10);
+        this.closeButton?.position.set(lp(1260, 780), 10);
         this.prizeView.position.set(lp(350, 125), lp(0, 300));
     }
 }
