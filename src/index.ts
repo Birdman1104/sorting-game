@@ -1,6 +1,6 @@
 import App from './App';
 
-window.addEventListener('startIntDevelsGame', () => {
+window.addEventListener('startIntDevelsGameStandalone', () => {
     window.game = new App();
     window.game.init();
 
