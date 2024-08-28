@@ -3,7 +3,7 @@ import { PixiStatsPlugin } from '@armathai/pixi-stats';
 import { Application, Assets } from 'pixi.js';
 import PixiStage from './MainStage';
 import SoundController from './SoundController';
-import { fitDimension } from './Utils';
+import { fitDimension, getWindowSize } from './Utils';
 import { check, fetchProductsData } from './backend/fetch';
 import { IMAGES } from './base64/images/images';
 import { mapCommands } from './configs/EventCommandPairs';
@@ -109,7 +109,7 @@ class App extends Application {
     }
 
     public appResize(): void {
-        const { innerWidth: w, innerHeight: h } = window
+        const { width: w, height: h } = getWindowSize()
         if (w === 0 || h === 0) return;
 
         const { min, max } = ScreenSizeConfig.size.ratio;
