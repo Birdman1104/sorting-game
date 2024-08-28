@@ -2,12 +2,12 @@ import anime from 'animejs';
 import { Graphics, Rectangle, Text } from 'pixi.js';
 
 export const lp = (l, p) => {
-    const { clientWidth: w, clientHeight: h } = document.body;
+    const { innerWidth: w, innerHeight: h } = window;
     return w > h ? l : p;
 };
 
 export const isLandscape = () => {
-    const { clientWidth: w, clientHeight: h } = document.body;
+    const { innerWidth: w, innerHeight: h } = window;
     return w > h;
 };
 
@@ -56,8 +56,8 @@ export const loopRunnable = (runnable, context?, ...args) => {
 export const removeRunnable = (runnable, context?) => window.game.ticker.remove(runnable, context);
 
 export const getGameBounds = () => {
-    const { clientWidth: width, clientHeight: height } = document.body;
-
+    const { innerWidth: width, innerHeight: height } = window;
+    
     return new Rectangle(0, 0, width, height);
 };
 
@@ -210,3 +210,13 @@ export const convertMilliseconds = (ms: number): string => {
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+
+export const getModalSize = (): { width: number; height: number } => {
+    // get width and height of element with id modalGame
+    const modal = document.getElementById('modalGame');
+    if(!modal) return { width: 0, height: 0 };
+    const width = modal.offsetWidth;
+    const height = modal.offsetHeight;
+    return { width, height };
+
+}

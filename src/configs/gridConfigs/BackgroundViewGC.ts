@@ -6,7 +6,7 @@ export const getBackgroundGridConfig = () => {
 };
 
 const getBackgroundGridLandscapeConfig = () => {
-    const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
+    const bounds = { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight };
     return {
         name: 'background',
         // debug: { color: 0xd95027 },
@@ -22,7 +22,7 @@ const getBackgroundGridLandscapeConfig = () => {
 };
 
 const getBackgroundGridPortraitConfig = () => {
-    const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
+    const bounds = { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight };
     return {
         name: 'background',
         // debug: { color: 0xd95027 },

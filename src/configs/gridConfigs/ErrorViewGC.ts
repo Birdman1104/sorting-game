@@ -1,12 +1,14 @@
 import { CellScale } from '@armathai/pixi-grid';
-import { lp } from '../../Utils';
+import { getModalSize, lp } from '../../Utils';
 
 export const getErrorViewGridConfig = () => {
     return lp(getErrorViewGridLandscapeConfig, getErrorViewGridPortraitConfig).call(null);
 };
 
 const getErrorViewGridLandscapeConfig = () => {
-    const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
+    const {width, height} = getModalSize();
+    const bounds = { x: 0, y: 0, width, height };
+
     return {
         name: 'error',
         // debug: { color: 0xd9ff27 },
@@ -22,7 +24,9 @@ const getErrorViewGridLandscapeConfig = () => {
 };
 
 const getErrorViewGridPortraitConfig = () => {
-    const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
+    const {width, height} = getModalSize();
+    const bounds = { x: 0, y: 0, width, height };
+    
     return {
         name: 'error',
         // debug: { color: 0xd9ff27 },

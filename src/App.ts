@@ -3,7 +3,7 @@ import { PixiStatsPlugin } from '@armathai/pixi-stats';
 import { Application, Assets } from 'pixi.js';
 import PixiStage from './MainStage';
 import SoundController from './SoundController';
-import { fitDimension } from './Utils';
+import { fitDimension, getModalSize } from './Utils';
 import { check, fetchProductsData } from './backend/fetch';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
@@ -40,7 +40,7 @@ class App extends Application {
         const url = div.dataset.url;
         if (!url) {
             console.warn('embedded url not found');
-            
+
             this.showError();
             return;
         }
@@ -80,14 +80,14 @@ class App extends Application {
             this.showError('Номер квитанции нельзя\nиспользовать второй раз');
         } else {
             try {
-                console.warn('try in app js 81');
-                
+                console.warn('fetching products data');
+
                 const { data } = await fetchProductsData();
                 GLOBAL_DATA.ASSETS = data;
                 await this.loadAssets();
                 this.startGame();
             } catch (e) {
-                console.warn('try in app js 88');
+                console.warn('error fetching products data');
 
                 this.showError();
             }
@@ -108,7 +108,7 @@ class App extends Application {
     }
 
     public appResize(): void {
-        const { clientWidth: w, clientHeight: h } = document.body;
+        const { width: w, height: h } = getModalSize();
         if (w === 0 || h === 0) return;
 
         const { min, max } = ScreenSizeConfig.size.ratio;
@@ -136,8 +136,8 @@ class App extends Application {
     }
 
     private showError(message = DEFAULT_ERROR_MESSAGE): void {
-        console.warn('show error function');
-        
+        console.warn('show error', message);
+
         this.appResize();
         lego.event.emit(MainGameEvents.Error, message);
     }
