@@ -4,7 +4,6 @@ import { Container, Graphics, Point, Rectangle, Sprite, Texture } from 'pixi.js'
 import { delayRunnable, lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
-import { CLOSE_BUTTON } from '../base64/images/closeButton';
 import { POWERED_BY } from '../base64/images/poweredBy';
 import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
@@ -118,7 +117,6 @@ export class BoardView extends Container {
 
     private timer: TimerView;
     private prizeView: PrizeView;
-    private closeButton: Sprite;
 
     private addingElementsQueue: { box: BoxView; elements: ItemModel[]; index: number }[] = [];
 
@@ -581,17 +579,6 @@ export class BoardView extends Container {
         this.prizeView.setPrize(prizeTexture);
 
         delayRunnable(2, () => {
-            this.closeButton = Sprite.from(CLOSE_BUTTON);
-            this.closeButton.anchor.set(1, 0);
-            this.closeButton.position.set(lp(1260, 780), 10);
-            this.closeButton.eventMode = 'static';
-            this.closeButton.on('pointerdown', () => {
-                lego.event.emit(BoardEvents.Close);
-            })
-            delayRunnable(0.02, () => {
-                this.addChild(this.closeButton);
-            });
-
             const customEvent = new Event('intDevelsGameFinished');
 
             window.dispatchEvent(customEvent);
@@ -600,7 +587,6 @@ export class BoardView extends Container {
 
     private updatePrizePosition(): void {
         if (!this.prizeView) return;
-        this.closeButton?.position.set(lp(1260, 780), 10);
         this.prizeView.position.set(lp(350, 125), lp(0, 300));
     }
 }
