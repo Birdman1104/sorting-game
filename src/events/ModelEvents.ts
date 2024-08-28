@@ -5,16 +5,7 @@ export const BoardModelEvents = {
 
 export const BoxModelEvents = { ElementsUpdate: 'BoxModelElementsUpdate' };
 
-export const GameModelEvents = {
-    ScoreUpdate: 'GameModelScoreUpdate',
-    BoardUpdate: 'GameModelBoardUpdate',
-    StateUpdate: 'GameModelStateUpdate',
-    IdleStateUpdate: 'GameModelIdleStateUpdate',
-    TimerRunnableUpdate: 'GameModelTimerRunnableUpdate',
-    PrizeUpdate: 'GameModelPrizeUpdate',
-    GameTimeUpdate: 'GameModelGameTimeUpdate',
-    IdleTimeUpdate: 'GameModelIdleTimeUpdate',
-};
+export const GameModelEvents = { BoardUpdate: 'GameModelBoardUpdate', StateUpdate: 'GameModelStateUpdate' };
 
 export const HeadModelEvents = { GameModelUpdate: 'HeadModelGameModelUpdate' };
 

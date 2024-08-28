@@ -5,17 +5,14 @@ import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
 import { IMAGES } from '../base64/images/images';
-import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
-import { GameState, IdleState } from '../models/GameModel';
+import { GameState } from '../models/GameModel';
 import { ItemModel } from '../models/ItemModel';
 import { BoxView } from './BoxView';
 import { DropDownAreaInfo } from './DropDownAreaInfo';
 import { ItemView } from './ItemView';
-import { PrizeView } from './PrizeView';
-import { TimerView } from './TimerView';
 
 const BOUNDS = {
     landscape: { width: 1280, height: 660 },
@@ -115,9 +112,6 @@ export class BoardView extends Container {
 
     private finalPositions: DropDownAreaInfo[] = [];
 
-    private timer: TimerView;
-    private prizeView: PrizeView;
-
     private addingElementsQueue: { box: BoxView; elements: ItemModel[]; index: number }[] = [];
 
     private whiteBlocker: Graphics;
@@ -128,12 +122,8 @@ export class BoardView extends Container {
 
         lego.event
             .on(BoardModelEvents.BoxesUpdate, this.onBoxesUpdate, this)
-            .on(GameModelEvents.GameTimeUpdate, this.onTimerUpdate, this)
             .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
-            .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
-            .on(ForegroundEvents.PrizeTextureLoaded, this.onPrizeTextureLoaded, this)
-            .on(ForegroundEvents.TimeOverTextHideComplete, this.onTimeOverTextHideComplete, this);
         this.build();
     }
 
@@ -146,9 +136,7 @@ export class BoardView extends Container {
         this.bkg.texture = Texture.from(lp(BKG_IMAGE_L, BKG_IMAGE_P));
         this.repositionBoxes();
         this.updateDropAreas();
-        this.updateTimerPosition();
         this.updateBlockers();
-        this.updatePrizePosition();
     }
 
     public destroyElements(): void {
@@ -159,26 +147,15 @@ export class BoardView extends Container {
         this.finalPositions = [];
         this.addingElementsQueue = [];
         this.draggingItem = null;
-        this.timer?.destroy();
-        // @ts-ignore
-        this.timer = null;
     }
 
     private build(): void {
         this.buildBkg();
         this.buildPoweredBy();
-        !GAME_CONFIG.FREE && this.buildTimer();
 
         const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
         this.buildWhiteBlocker({ width, height });
         this.buildBlackBlocker({ width, height });
-    }
-
-    private buildPrizeView(): void {
-        this.prizeView = new PrizeView();
-        this.prizeView.visible = false;
-        this.prizeView.position.set(lp(350, 125), lp(0, 300));
-        this.addChild(this.prizeView);
     }
 
     private buildWhiteBlocker({ width, height }): void {
@@ -211,16 +188,6 @@ export class BoardView extends Container {
         this.poweredBy.scale.set(0.5);
 
         this.addChild(this.poweredBy);
-    }
-
-    private buildTimer(): void {
-        this.timer = new TimerView();
-        this.timer.position.set(this.width / 2, lp(60, 260));
-        this.addChild(this.timer);
-    }
-
-    private onTimerUpdate(time: number): void {
-        this.timer?.updateTime(time);
     }
 
     private onBoxesUpdate(data: BoxModel[]): void {
@@ -457,12 +424,6 @@ export class BoardView extends Container {
         });
     }
 
-    private updateTimerPosition(): void {
-        if (!this.timer) return;
-        const { width } = lp(BOUNDS.landscape, BOUNDS.portrait);
-        this.timer.position.set(width / 2, lp(60, 260));
-    }
-
     private getShelfPosition(box: BoxView): { x: number; y: number } {
         // P
         // const x = (box.width + 10) * box.j + 10;
@@ -484,9 +445,6 @@ export class BoardView extends Container {
         switch (state) {
             case GameState.Game:
                 this.onGameStart();
-                break;
-            case GameState.TimeOver:
-                this.onTimerOver();
                 break;
 
             default:
@@ -542,20 +500,6 @@ export class BoardView extends Container {
         });
     }
 
-    private onGameIdleStateUpdate(state: IdleState): void {
-        this.reAddBlockers();
-        if (state === IdleState.Idle) {
-            this.showBlackBlocker();
-        } else {
-            this.hideBlackBlocker();
-        }
-    }
-
-    private onTimerOver(): void {
-        this.reAddBlockers()
-        this.showBlackBlocker(false);
-    }
-
     private updateBlockers(): void {
         const { width, height } = lp(BOUNDS.landscape, BOUNDS.portrait);
         if (this.whiteBlocker) {
@@ -575,20 +519,5 @@ export class BoardView extends Container {
 
         this.removeChild(this.whiteBlocker);
         this.addChild(this.whiteBlocker);
-    }
-
-    private onPrizeTextureLoaded(prizeTexture: Texture): void {
-        this.buildPrizeView();
-        this.prizeView.setPrize(prizeTexture);
-        this.prizeView.visible = false;
-    }
-
-    private onTimeOverTextHideComplete(): void {
-        this.prizeView.visible = true;
-    }
-
-    private updatePrizePosition(): void {
-        if (!this.prizeView) return;
-        this.prizeView.position.set(lp(350, 125), lp(0, 300));
     }
 }

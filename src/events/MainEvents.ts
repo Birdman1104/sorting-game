@@ -11,10 +11,7 @@ export const MainGameEvents = {
 };
 
 export const ForegroundEvents = {
-    TimeOverTextHideComplete: 'ForegroundEventsTimeOverTextHideComplete',
     BlackBlockerClicked: 'ForegroundEventsBlackBlockerClicked',
-    PrizeShown: 'ForegroundEventsPrizeShown',
-    PrizeTextureLoaded: 'ForegroundEventsPrizeTextureLoaded',
 };
 
 export const BoardEvents = {
@@ -22,5 +19,4 @@ export const BoardEvents = {
     Match: 'BoardEventsMatch',
     Move: 'BoardEventsMove',
     Drop: 'BoardEventsDrop',
-    Close: 'BoardEventsClose',
 };

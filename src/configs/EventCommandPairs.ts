@@ -2,9 +2,9 @@ import { lego } from '@armathai/lego';
 import { BoardEvents, ForegroundEvents, MainGameEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import Head from '../models/HeadModel';
-import { closeButtonClickCommand, onBoardClickCommand, onMatchCommand } from './commands/BoardCommands';
-import { onBlackBlockerClickedCommand, onTimeOverTextHideCompleteCommand } from './commands/ForegroundCommands';
-import { onGameStateUpdateCommand, onIdleStateUpdateCommand } from './commands/GameModelCommands';
+import { onBoardClickCommand, onMatchCommand } from './commands/BoardCommands';
+import { onBlackBlockerClickedCommand } from './commands/ForegroundCommands';
+import { onGameStateUpdateCommand } from './commands/GameModelCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -33,10 +33,6 @@ const eventCommandPairs = Object.freeze([
         command: onGameStateUpdateCommand,
     },
     {
-        event: GameModelEvents.IdleStateUpdate,
-        command: onIdleStateUpdateCommand,
-    },
-    {
         event: ForegroundEvents.BlackBlockerClicked,
         command: onBlackBlockerClickedCommand,
     },
@@ -49,15 +45,7 @@ const eventCommandPairs = Object.freeze([
         command: onBoardClickCommand,
     },
     {
-        event: ForegroundEvents.TimeOverTextHideComplete,
-        command: onTimeOverTextHideCompleteCommand,
-    },
-    {
         event: BoardEvents.Match,
         command: onMatchCommand,
-    },
-    {
-        event: BoardEvents.Close,
-        command: closeButtonClickCommand,
     },
 ]);

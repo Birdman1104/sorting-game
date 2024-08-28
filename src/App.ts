@@ -4,11 +4,11 @@ import { Application, Assets } from 'pixi.js';
 import PixiStage from './MainStage';
 import SoundController from './SoundController';
 import { fitDimension, getWindowSize } from './Utils';
-import { check, fetchProductsData } from './backend/fetch';
+import { fetchProductsData } from './backend/fetch';
 import { IMAGES } from './base64/images/images';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
-import { DEFAULT_ERROR_MESSAGE, GAME_CONFIG } from './configs/constants';
+import { DEFAULT_ERROR_MESSAGE } from './configs/constants';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
 
 export const GLOBAL_DATA: GlobalData = {
@@ -65,33 +65,18 @@ class App extends Application {
         }
 
         this.stage.setupErrorView();
-        let start;
-        let free;
 
-        const { start: s, free: f } = await check();
+        try {
+            console.warn('fetching products data');
 
-        start = s;
-        free = f;
+            const { data } = await fetchProductsData();
+            GLOBAL_DATA.ASSETS = data;
+            await this.loadAssets();
+            this.startGame();
+        } catch (e) {
+            console.warn('failed to fetch products data', e);
 
-        GAME_CONFIG.CAN_PLAY = start;
-        GAME_CONFIG.FREE = free;
-
-        if (!GAME_CONFIG.CAN_PLAY) {
-            console.log('GAME_CONFIG.CAN_PLAY', GAME_CONFIG.CAN_PLAY);
-            this.showError('Номер квитанции нельзя\nиспользовать второй раз');
-        } else {
-            try {
-                console.warn('fetching products data');
-
-                const { data } = await fetchProductsData();
-                GLOBAL_DATA.ASSETS = data;
-                await this.loadAssets();
-                this.startGame();
-            } catch (e) {
-                console.warn('error fetching products data');
-
-                this.showError();
-            }
+            this.showError();
         }
     }
 
