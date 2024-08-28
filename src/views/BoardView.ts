@@ -5,7 +5,7 @@ import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
 import { IMAGES } from '../base64/images/images';
-import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
+import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { BoxModel } from '../models/BoxModel';
 import { GameState } from '../models/GameModel';
@@ -465,37 +465,6 @@ export class BoardView extends Container {
             complete: () => {
                 this.whiteBlocker.eventMode = 'none';
                 this.whiteBlocker.visible = false;
-            },
-        });
-    }
-
-    private hideBlackBlocker(): void {
-        anime({
-            targets: this.blackBlocker,
-            alpha: 0,
-            duration: 200,
-            easing: 'linear',
-            complete: () => {
-                this.blackBlocker.eventMode = 'none';
-                this.blackBlocker.visible = false;
-            },
-        });
-    }
-
-    private showBlackBlocker(emitEvent = true): void {
-        this.blackBlocker.visible = true;
-        anime({
-            targets: this.blackBlocker,
-            alpha: 0.7,
-            duration: 200,
-            easing: 'linear',
-            complete: () => {
-                this.blackBlocker.eventMode = 'static';
-                if (emitEvent) {
-                    this.blackBlocker.on('pointerdown', () => {
-                        lego.event.emit(ForegroundEvents.BlackBlockerClicked);
-                    });
-                }
             },
         });
     }
