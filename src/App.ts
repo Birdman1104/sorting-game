@@ -89,7 +89,7 @@ class App extends Application {
                 texture,
             };
         }
-        IMAGES.prizeText;
+        IMAGES.shelf;
         SoundController.setupSounds();
     }
 
