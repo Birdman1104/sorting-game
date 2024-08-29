@@ -70,8 +70,6 @@ export class PrizeView extends Container {
             this.addChild(this.youWonText);
             
             this.youWonText.scale.set(123 / this.youWonText.height)
-            console.warn('you won', this.youWonText.width, this.youWonText.height);
-            
         })
     }
     
@@ -82,7 +80,6 @@ export class PrizeView extends Container {
         
         delayRunnable(0.01, () => {
             this.callText.scale.set(100 / this.callText.height)
-            console.warn('call text', this.callText.width, this.callText.height);
             this.addChild(this.callText);
         })
     }

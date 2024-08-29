@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><%= htmlWebpackPlugin.options.gameName %></title>
-        <link rel="shortcut icon" href="./src/assets/favicon.ico" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Long Scrollable Page</title>
         <style>
-            html,
-            body {
-                margin: 0;
-                height: 100%;
-                overflow: hidden;
-            }
-
-            .intdevels-game-css {
-                /* opacity: 0; */
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                -webkit-transform: translate(-50%, -50%);
-                -moz-transform: translate(-50%, -50%);
-                -ms-transform: translate(-50%, -50%);
-                -o-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%);
-                cursor: default !important;
-            }
-
             body,
-            canvas,
             html {
-                user-select: none;
+                margin: 0;
+                padding: 0;
+            }
+            header {
+                background-color: #f1f1f1;
+                padding: 20px;
+                text-align: center;
+            }
+            section {
+                min-height: 2000px;
+                padding: 20px;
+            }
+            .section-1 {
+                background-color: #d90d0d;
+            }
+            .section-2 {
+                background-color: #1c77df;
+            }
+            footer {
+                background-color: #ff9603;
+                padding: 20px;
+                text-align: center;
+                min-height: 1000px;
             }
 
             #myButton {
@@ -52,15 +52,35 @@
                 justify-content: center; /* Center horizontally */
                 align-items: center; /* Center vertically */
             }
+
+            .intdevels-game-css {
+                /* opacity: 0; */
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                -moz-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                -o-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                cursor: default !important;
+            }
         </style>
     </head>
     <body>
+        <div class="intdevels-game" data-url="https://game.intdevels.ru/"></div>
 
         <div class="button-div">
             <button id="myButton">Click To Play</button>
         </div>
-        <div class="intdevels-game" data-url="https://game.intdevels.ru/"></div>
+        <header>Header Content</header>
 
+        <section class="section-1">Section 1 Content</section>
+
+        <section class="section-2">Section 2 Content</section>
+
+        <footer>Footer Content</footer>
+        <!-- <script src="intDevelsGame.bundle.js"></script> -->
         <script>
             const customEvent = new Event('startIntDevelsGame');
 

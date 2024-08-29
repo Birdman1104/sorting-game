@@ -2,12 +2,12 @@ import anime from 'animejs';
 import { Graphics, Rectangle, Text } from 'pixi.js';
 
 export const lp = (l, p) => {
-    const { clientWidth: w, clientHeight: h } = document.body;
+    const { innerWidth: w, innerHeight: h } = window;
     return w > h ? l : p;
 };
 
 export const isLandscape = () => {
-    const { clientWidth: w, clientHeight: h } = document.body;
+    const { innerWidth: w, innerHeight: h } = window
     return w > h;
 };
 
@@ -56,8 +56,8 @@ export const loopRunnable = (runnable, context?, ...args) => {
 export const removeRunnable = (runnable, context?) => window.game.ticker.remove(runnable, context);
 
 export const getGameBounds = () => {
-    const { clientWidth: width, clientHeight: height } = document.body;
-
+    const { innerWidth: width, innerHeight: height } = window;
+    
     return new Rectangle(0, 0, width, height);
 };
 
@@ -210,3 +210,9 @@ export const convertMilliseconds = (ms: number): string => {
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+
+export const getWindowSize = (): { width: number; height: number } => {
+    const { innerWidth: width, innerHeight: height } = window
+    return { width, height };
+
+}

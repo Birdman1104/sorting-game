@@ -40,7 +40,7 @@ class App extends Application {
         const url = div.dataset.url;
         if (!url) {
             console.warn('embedded url not found');
-            
+
             this.showError();
             return;
         }
@@ -80,14 +80,14 @@ class App extends Application {
             this.showError('Номер квитанции нельзя\nиспользовать второй раз');
         } else {
             try {
-                console.warn('try in app js 81');
-                
+                console.warn('fetching products data');
+
                 const { data } = await fetchProductsData();
                 GLOBAL_DATA.ASSETS = data;
                 await this.loadAssets();
                 this.startGame();
             } catch (e) {
-                console.warn('try in app js 88');
+                console.warn('error fetching products data');
 
                 this.showError();
             }
@@ -108,7 +108,7 @@ class App extends Application {
     }
 
     public appResize(): void {
-        const { clientWidth: w, clientHeight: h } = document.body;
+        const { innerWidth: w, innerHeight: h } = window
         if (w === 0 || h === 0) return;
 
         const { min, max } = ScreenSizeConfig.size.ratio;
@@ -136,8 +136,8 @@ class App extends Application {
     }
 
     private showError(message = DEFAULT_ERROR_MESSAGE): void {
-        console.warn('show error function');
-        
+        console.warn('show error', message);
+
         this.appResize();
         lego.event.emit(MainGameEvents.Error, message);
     }

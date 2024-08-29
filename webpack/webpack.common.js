@@ -6,7 +6,7 @@ module.exports = {
     entry: ['./src/index.ts'],
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: 'intDevelsGame.bundle.js',
+        filename: 'intDevelsGame_no_modal.bundle.js',
     },
     resolve: {
         extensions: ['.ts', '.js'],

@@ -1,11 +1,13 @@
-import { lp } from '../../Utils';
+import { getWindowSize, lp } from '../../Utils';
 
 export const getUIGridConfig = () => {
     return lp(getUIGridLandscapeConfig, getUIGridPortraitConfig).call(null);
 };
 
 const getUIGridLandscapeConfig = () => {
-    const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
+    const { width, height } = getWindowSize();
+    const bounds = { x: 0, y: 0, width, height };
+
     return {
         name: 'ui',
         // debug: { color: 0xd950ff },
@@ -20,7 +22,9 @@ const getUIGridLandscapeConfig = () => {
 };
 
 const getUIGridPortraitConfig = () => {
-    const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
+    const { width, height } = getWindowSize();
+    const bounds = { x: 0, y: 0, width, height };
+
     return {
         name: 'ui',
         // debug: { color: 0xd950ff },
