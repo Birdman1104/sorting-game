@@ -2,8 +2,7 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Assets, Sprite } from 'pixi.js';
 import { delayRunnable, tweenToCell } from '../Utils';
-import { IDLE_TEXT_IMAGE } from '../base64/images/idleText';
-import { TIME_OVER_TEXT_IMAGE } from '../base64/images/timeOverText';
+import { IMAGES } from '../base64/images/images';
 import { DEFAULT_ERROR_MESSAGE, GAME_CONFIG } from '../configs/constants';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { ForegroundEvents, MainGameEvents } from '../events/MainEvents';
@@ -41,12 +40,14 @@ export class ForegroundView extends PixiGrid {
     }
 
     private buildIdleText(): void {
-        this.idleText = Sprite.from(IDLE_TEXT_IMAGE);
+        this.idleText = Sprite.from(IMAGES.idleText);
+        this.idleText.visible = false;
         this.setChild('text_left', this.idleText);
     }
 
     private buildTimeOverText(): void {
-        this.timeOverText = Sprite.from(TIME_OVER_TEXT_IMAGE);
+        this.timeOverText = Sprite.from(IMAGES.timeOverText);
+        this.timeOverText.visible = false;
         this.setChild('text_left', this.timeOverText);
     }
 
@@ -68,6 +69,7 @@ export class ForegroundView extends PixiGrid {
     }
 
     private onTimerOver(): void {
+        this.timeOverText.visible = true;
         tweenToCell(this, this.timeOverText, 'text_show');
     }
 
@@ -77,9 +79,11 @@ export class ForegroundView extends PixiGrid {
 
     private onGameIdleStateUpdate(state: IdleState): void {
         if (state === IdleState.Idle) {
+            this.idleText.visible = true;
             tweenToCell(this, this.idleText, 'text_show');
         } else {
             tweenToCell(this, this.idleText, 'text_right', () => {
+                this.idleText.visible = false;
                 this.setChild('text_left', this.idleText);
             });
         }
@@ -96,6 +100,7 @@ export class ForegroundView extends PixiGrid {
                 lego.event.emit(ForegroundEvents.PrizeTextureLoaded, prizeTexture);
                 tweenToCell(this, this.timeOverText, 'text_right', () => {
                     lego.event.emit(ForegroundEvents.TimeOverTextHideComplete, prizeTexture);
+                    this.timeOverText.visible = false;
                     this.setChild('text_left', this.timeOverText);
                     this.rebuild();
                 });

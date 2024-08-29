@@ -23,7 +23,6 @@ export const getPrize = async (): Promise<any> => {
             method: 'POST',
             body: JSON.stringify({
                 receipt: Cookies.get('intGameReceipt'),
-                // receipt: Cookies.get('intGameReceipt'),
             }),
             headers: {
                 Accept: 'application/json',

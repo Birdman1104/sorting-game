@@ -1,8 +1,7 @@
 import anime from 'animejs';
 import { Container, Rectangle, Sprite } from 'pixi.js';
 import { delayRunnable, lp } from '../Utils';
-import { CALL_TEXT_IMAGE } from '../base64/images/callText';
-import { PRIZE_TEXT_IMAGE } from '../base64/images/prizeText';
+import { IMAGES } from '../base64/images/images';
 
 const TEXT_HEIGHT = 100
 
@@ -62,24 +61,24 @@ export class PrizeView extends Container {
     }
 
     private buildYouWonText(): void {
-        this.youWonText = Sprite.from(PRIZE_TEXT_IMAGE);
+        this.youWonText = Sprite.from(IMAGES.prizeText);
         this.youWonText.anchor.set(0.5);
-        this.youWonText.position.set(this.width / 2, TEXT_HEIGHT);
         
-        delayRunnable(0.01, () => {
+        delayRunnable(1, () => {
             this.addChild(this.youWonText);
             
             this.youWonText.scale.set(123 / this.youWonText.height)
+            this.youWonText.position.set(this.width / 2, TEXT_HEIGHT);
         })
     }
     
     private buildCallText(): void {
-        this.callText = Sprite.from(CALL_TEXT_IMAGE);
+        this.callText = Sprite.from(IMAGES.callText);
         this.callText.anchor.set(0.5);
-        this.callText.position.set(this.width / 2, this.height - TEXT_HEIGHT);
         
-        delayRunnable(0.01, () => {
+        delayRunnable(1, () => {
             this.callText.scale.set(100 / this.callText.height)
+            this.callText.position.set(this.width / 2, this.height - TEXT_HEIGHT);
             this.addChild(this.callText);
         })
     }

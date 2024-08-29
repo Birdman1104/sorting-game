@@ -1,5 +1,5 @@
 import { Container, Rectangle, Sprite } from 'pixi.js';
-import { SHELF_IMAGE } from '../base64/images/shelf';
+import { IMAGES } from '../base64/images/images';
 
 export class BoxView extends Container {
     constructor(private _i: number, private _j: number, private _uuid: string) {
@@ -25,7 +25,7 @@ export class BoxView extends Container {
     }
 
     private build(): void {
-        const shelf = Sprite.from(SHELF_IMAGE);
+        const shelf = Sprite.from(IMAGES.shelf);
         this.addChild(shelf);
     }
 }

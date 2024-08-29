@@ -2,7 +2,7 @@ import { Container, Graphics, Rectangle, Sprite, Text, Texture } from 'pixi.js';
 import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
-import { POWERED_BY } from '../base64/images/poweredBy';
+import { IMAGES } from '../base64/images/images';
 
 const BOUNDS = {
     landscape: { width: 1280, height: 660 },
@@ -59,7 +59,7 @@ export class ErrorMessage extends Container {
     }
 
     private buildBkg(): void {
-        this.bkg = Sprite.from(lp(BKG_IMAGE_L, BKG_IMAGE_P));
+        this.bkg = Sprite.from(lp(IMAGES.bkgL, IMAGES.bkgP));
         this.addChild(this.bkg);
     }
 
@@ -72,7 +72,7 @@ export class ErrorMessage extends Container {
     }
 
     private buildPoweredBy(): void {
-        this.poweredBy = Sprite.from(POWERED_BY);
+        this.poweredBy = Sprite.from(IMAGES.poweredBy);
         this.poweredBy.anchor.set(0);
         this.poweredBy.position.set(10, 10);
         this.poweredBy.scale.set(0.5);

@@ -5,6 +5,7 @@ import PixiStage from './MainStage';
 import SoundController from './SoundController';
 import { fitDimension } from './Utils';
 import { check, fetchProductsData } from './backend/fetch';
+import { IMAGES } from './base64/images/images';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
 import { DEFAULT_ERROR_MESSAGE, GAME_CONFIG } from './configs/constants';
@@ -103,7 +104,7 @@ class App extends Application {
                 texture,
             };
         }
-
+        IMAGES.prizeText;
         SoundController.setupSounds();
     }
 

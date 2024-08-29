@@ -1,6 +1,6 @@
 import { Container, Sprite, Text } from 'pixi.js';
 import { convertMilliseconds } from '../Utils';
-import { TIMER_IMAGE } from '../base64/images/timer';
+import { IMAGES } from '../base64/images/images';
 import { GAME_CONFIG } from '../configs/constants';
 
 export class TimerView extends Container {
@@ -23,7 +23,7 @@ export class TimerView extends Container {
     }
 
     private build(): void {
-        this.bkg = Sprite.from(TIMER_IMAGE);
+        this.bkg = Sprite.from(IMAGES.timer);
         this.bkg.anchor.set(0.5);
         this.bkg.scale.set(0.5);
         this.addChild(this.bkg);

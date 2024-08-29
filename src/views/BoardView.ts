@@ -1,10 +1,10 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Graphics, Point, Rectangle, Sprite, Texture } from 'pixi.js';
-import { delayRunnable, lp } from '../Utils';
+import { lp } from '../Utils';
 import { BKG_IMAGE_L } from '../base64/images/bkgL';
 import { BKG_IMAGE_P } from '../base64/images/bkgP';
-import { POWERED_BY } from '../base64/images/poweredBy';
+import { IMAGES } from '../base64/images/images';
 import { GAME_CONFIG } from '../configs/constants';
 import { BoardEvents, ForegroundEvents } from '../events/MainEvents';
 import { BoardModelEvents, BoxModelEvents, GameModelEvents } from '../events/ModelEvents';
@@ -132,7 +132,8 @@ export class BoardView extends Container {
             .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(BoxModelEvents.ElementsUpdate, this.onBoxElementsUpdate, this)
             .on(GameModelEvents.IdleStateUpdate, this.onGameIdleStateUpdate, this)
-            .on(ForegroundEvents.TimeOverTextHideComplete, this.onTimerOverTextHideComplete, this);
+            .on(ForegroundEvents.PrizeTextureLoaded, this.onPrizeTextureLoaded, this)
+            .on(ForegroundEvents.TimeOverTextHideComplete, this.onTimeOverTextHideComplete, this);
         this.build();
     }
 
@@ -175,6 +176,7 @@ export class BoardView extends Container {
 
     private buildPrizeView(): void {
         this.prizeView = new PrizeView();
+        this.prizeView.visible = false;
         this.prizeView.position.set(lp(350, 125), lp(0, 300));
         this.addChild(this.prizeView);
     }
@@ -198,12 +200,12 @@ export class BoardView extends Container {
     }
 
     private buildBkg(): void {
-        this.bkg = Sprite.from(lp(BKG_IMAGE_L, BKG_IMAGE_P));
+        this.bkg = Sprite.from(lp(IMAGES.bkgL, IMAGES.bkgP));
         this.addChild(this.bkg);
     }
 
     private buildPoweredBy(): void {
-        this.poweredBy = Sprite.from(POWERED_BY);
+        this.poweredBy = Sprite.from(IMAGES.poweredBy);
         this.poweredBy.anchor.set(0);
         this.poweredBy.position.set(10, 10);
         this.poweredBy.scale.set(0.5);
@@ -550,6 +552,7 @@ export class BoardView extends Container {
     }
 
     private onTimerOver(): void {
+        this.reAddBlockers()
         this.showBlackBlocker(false);
     }
 
@@ -574,15 +577,14 @@ export class BoardView extends Container {
         this.addChild(this.whiteBlocker);
     }
 
-    private onTimerOverTextHideComplete(prizeTexture: Texture): void {
+    private onPrizeTextureLoaded(prizeTexture: Texture): void {
         this.buildPrizeView();
         this.prizeView.setPrize(prizeTexture);
+        this.prizeView.visible = false;
+    }
 
-        delayRunnable(2, () => {
-            const customEvent = new Event('intDevelsGameFinished');
-
-            window.dispatchEvent(customEvent);
-        });
+    private onTimeOverTextHideComplete(): void {
+        this.prizeView.visible = true;
     }
 
     private updatePrizePosition(): void {
